@@ -652,19 +652,44 @@
             alert(`Edit post functionality not implemented yet for ID: ${postId}`);
         }
         
-        function deletePost(postId) {
+        async function deletePost(postId) {
             if (confirm('Are you sure you want to delete this post?')) {
-                alert(`Delete post functionality not implemented yet for ID: ${postId}`);
+                try {
+                    const response = await fetch(`/admin/delete-post/${postId}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        alert('Post deleted successfully!');
+                        loadExistingPosts(); // Refresh the list
+                    } else {
+                        alert('Failed to delete post');
+                    }
+                } catch (error) {
+                    console.error('Error deleting post:', error);
+                    alert('Error deleting post - check console');
+                }
             }
-        }
-        
-        function editProject(projectId) {
-            alert(`Edit project functionality not implemented yet for ID: ${projectId}`);
         }
         
         function deleteProject(projectId) {
             if (confirm('Are you sure you want to delete this project?')) {
-                alert(`Delete project functionality not implemented yet for ID: ${projectId}`);
+                fetch(`/admin/delete-project/${projectId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Project deleted successfully!');
+                        loadExistingProjects(); // Refresh the list
+                    } else {
+                        alert('Failed to delete project');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting project:', error);
+                    alert('Error deleting project - check console');
+                });
             }
         }
 
