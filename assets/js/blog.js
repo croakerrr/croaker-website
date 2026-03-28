@@ -211,9 +211,28 @@ function createFilterOptions(containerId, values, filterType) {
 }
 
 function parseDate(dateString) {
-  // Convert DD/MM/YYYY to Date object
-  const [day, month, year] = dateString.split('/');
-  return new Date(year, month - 1, day); // month is 0-indexed in Date constructor
+  // Handle both DD/MM/YYYY and MM/DD/YYYY formats
+  console.log('Parsing date:', dateString);
+  
+  if (!dateString) return new Date(0);
+  
+  // Check if it's in DD/MM/YYYY format (day > 12) or MM/DD/YYYY format
+  const parts = dateString.split('/');
+  if (parts.length !== 3) return new Date(dateString); // fallback to native parsing
+  
+  const [first, second, year] = parts.map(Number);
+  
+  // If first part > 12, assume DD/MM/YYYY format
+  if (first > 12) {
+    const date = new Date(year, second - 1, first);
+    console.log('Parsed as DD/MM/YYYY:', date);
+    return date;
+  } else {
+    // Assume MM/DD/YYYY format or could be either
+    const date = new Date(year, first - 1, second);
+    console.log('Parsed as MM/DD/YYYY:', date);
+    return date;
+  }
 }
 
 function applyFilters() {
@@ -241,9 +260,17 @@ function applyFilters() {
   
   // Apply sorting
   if (activeFilters.sort === 'newest') {
-    filteredPosts.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+    filteredPosts.sort((a, b) => {
+      const dateA = parseDate(a.date);
+      const dateB = parseDate(b.date);
+      return dateB - dateA;
+    });
   } else if (activeFilters.sort === 'oldest') {
-    filteredPosts.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    filteredPosts.sort((a, b) => {
+      const dateA = parseDate(a.date);
+      const dateB = parseDate(b.date);
+      return dateA - dateB;
+    });
   }
   
   updateSortIndicator();
