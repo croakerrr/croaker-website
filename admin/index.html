@@ -270,6 +270,39 @@
             background: #e55555;
         }
 
+        .filter-selectors {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .filter-selectors .input-field {
+            margin-bottom: 0;
+        }
+
+        .filter-selectors label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-family: var(--font);
+            font-size: 12px;
+        }
+
         .error-text {
             display: none;
             color: #ff6b6b;
@@ -431,6 +464,37 @@
                         <label for="blog-date">date</label>
                         <input type="date" id="blog-date">
                     </div>
+                    <div class="filter-selectors">
+                        <div class="filter-row">
+                            <div class="input-field">
+                                <label for="blog-year">year</label>
+                                <select id="blog-year">
+                                    <option value="">auto-detect</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <label for="blog-language">language</label>
+                                <select id="blog-language">
+                                    <option value="">auto-detect</option>
+                                    <option value="web technologies">web technologies</option>
+                                    <option value="java">java</option>
+                                    <option value="python">python</option>
+                                </select>
+                            </div>
+                            <div class="input-field">
+                                <label for="blog-category">category</label>
+                                <select id="blog-category">
+                                    <option value="">auto-detect</option>
+                                    <option value="university">university</option>
+                                    <option value="project-update">project-update</option>
+                                    <option value="misc">misc</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="button-group">
                         <button class="save-button" onclick="saveBlogPost()">save post</button>
                         <button class="clear-button" onclick="clearBlogForm()">clear form</button>
@@ -549,22 +613,27 @@
             const content = document.getElementById('blog-content').value;
             const tags = document.getElementById('blog-tags').value;
             const date = document.getElementById('blog-date').value;
+            const yearOverride = document.getElementById('blog-year').value;
+            const languageOverride = document.getElementById('blog-language').value;
+            const categoryOverride = document.getElementById('blog-category').value;
             
             if (!title || !content) {
                 alert('Please fill in title and content');
                 return;
             }
             
+            const tagArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+            
             const post = {
                 title: title,
                 content: content,
-                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                tags: tagArray,
                 date: formatDate(date),
                 excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
                 author: "croaker",
-                year: new Date(date).getFullYear(),
-                language: determineLanguage(tags.split(',').map(tag => tag.trim())),
-                category: determineCategory(tags.split(',').map(tag => tag.trim()))
+                year: yearOverride ? parseInt(yearOverride) : new Date(date).getFullYear(),
+                language: languageOverride || determineLanguage(tagArray),
+                category: categoryOverride || determineCategory(tagArray)
             };
             
             try {
@@ -635,6 +704,9 @@
             document.getElementById('blog-title').value = '';
             document.getElementById('blog-content').value = '';
             document.getElementById('blog-tags').value = '';
+            document.getElementById('blog-year').value = '';
+            document.getElementById('blog-language').value = '';
+            document.getElementById('blog-category').value = '';
             // Clear all selected tag buttons
             document.querySelectorAll('.tag-btn').forEach(btn => {
                 btn.classList.remove('selected');
