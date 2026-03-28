@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Migration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Croaker Database Migration</h1>
+    <p>This will move your blog posts and projects from JSON files to the Redis database.</p>
+    
+    <button class="button" onclick="migrateData()">Migrate Data Now</button>
+    
+    <div id="status"></div>
+
+    <script>
+        async function migrateData() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '<div class="status">Migrating data...</div>';
+            
+            try {
+                const response = await fetch('/admin/migrate-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    statusDiv.innerHTML = `<div class="status success">✅ ${result.message}</div>`;
+                } else {
+                    statusDiv.innerHTML = `<div class="status error">❌ ${result.error || 'Migration failed'}</div>`;
+                }
+            } catch (error) {
+                console.error('Migration error:', error);
+                statusDiv.innerHTML = '<div class="status error">❌ Migration failed - check console</div>';
+            }
+        }
+    </script>
+</body>
+</html>
