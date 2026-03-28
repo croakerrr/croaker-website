@@ -29,6 +29,23 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-GB');
 }
 
+// Simple test endpoint
+app.get('/admin/test', (req, res) => {
+    res.json({ 
+        success: true, 
+        message: 'Server is working!',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.post('/admin/test', (req, res) => {
+    res.json({ 
+        success: true, 
+        message: 'POST request working!',
+        body: req.body
+    });
+});
+
 // Blog Posts API
 app.get('/api/blog', async (req, res) => {
     try {
