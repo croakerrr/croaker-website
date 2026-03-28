@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cv - croaker</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+
+<body>
+
+
+
+<button id="theme-toggle">
+    <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="3"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+</button>
+
+<main>
+    <h1>experience [cv]</h1>
+    <p></p>
+    
+    <div class="cv-panels">
+        <div class="cv-panel" data-type="education">
+            <h2 class="panel-section-title">Education</h2>
+            <div class="panel-header">
+                <img src="images/kent-logo.png" alt="University of Kent" class="panel-logo">
+                <div class="panel-info">
+                    <h3>BSc Computer Science</h3>
+                    <h4>University of Kent</h4>
+                    <span class="panel-dates">2025 - 2029</span>
+                </div>
+            </div>
+            <p class="panel-summary">Computer science degree with integrated industry placement year</p>
+            <span class="expand-hint">click to expand</span>
+        </div>
+
+        <div class="cv-panel" data-type="experience">
+            <h2 class="panel-section-title">Work Experience</h2>
+            <div class="panel-header">
+                <img src="images/outlier-logo.png" alt="Outlier AI" class="panel-logo">
+                <div class="panel-info">
+                    <h3>AI Data Trainer</h3>
+                    <h4>Outlier AI</h4>
+                    <span class="panel-dates">2025 - present</span>
+                </div>
+            </div>
+            <p class="panel-summary">Specialising in RLHF techniques and AI model training</p>
+            <span class="expand-hint">click to expand</span>
+        </div>
+    </div>
+
+    <!-- CV Modal -->
+    <div id="cv-modal" class="cv-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close-cv-modal" class="close-modal-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-cv-header">
+                    <img id="modal-logo" src="" alt="" class="modal-cv-logo">
+                    <div class="modal-cv-details">
+                        <h1 id="modal-title"></h1>
+                        <h2 id="modal-company"></h2>
+                        <span id="modal-dates" class="modal-dates"></span>
+                    </div>
+                </div>
+                <div id="modal-cv-content"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+
+<!-- Core JavaScript modules -->
+<script src="../assets/js/transitions.js"></script>
+<script src="../assets/js/navigation.js"></script>
+<script src="../assets/js/cv.js"></script>
+<script src="../assets/js/theme-toggle.js"></script>
+
+</html>

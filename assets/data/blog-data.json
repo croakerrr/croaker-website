@@ -1,0 +1,158 @@
+[
+  {
+    "id": "test-1774677388818",
+    "title": "test",
+    "date": "28/03/2026",
+    "excerpt": "hi",
+    "content": "hi",
+    "tags": [
+      "hi"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "web technologies",
+    "category": "misc"
+  },
+  {
+    "id": "first-post",
+    "title": "Welcome to my blog",
+    "date": "27/03/2026",
+    "excerpt": "This is my first blog post. I'll be sharing thoughts on coding, learning, and life as a first-year CS student.",
+    "content": "Welcome! I'm Liam, a first-year computer science student at UKC. This blog is where I'll share my thoughts, projects, and experiences as I learn to code.\n\nStay tuned for more posts about web development, algorithms, and whatever else I find interesting.",
+    "tags": [
+      "intro",
+      "welcome"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "web technologies",
+    "category": "misc"
+  },
+  {
+    "id": "second-post",
+    "title": "Building this portfolio",
+    "date": "27/03/2026",
+    "excerpt": "How I built this minimalist portfolio website with just HTML, CSS, and JavaScript.",
+    "content": "I wanted to create a simple, clean portfolio that I could easily update. No frameworks, no build tools - just vanilla HTML, CSS, and JavaScript.\n\nThe blog system uses a JSON file as storage, so I can add new posts just by editing the JSON. Pretty cool!\n\nThe hardest part was getting the dark mode toggle working smoothly across all pages. But after some CSS variable magic, it works perfectly.",
+    "tags": [
+      "web",
+      "portfolio",
+      "javascript",
+      "css"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "web technologies",
+    "category": "project-update"
+  },
+  {
+    "id": "java-basics",
+    "title": "Learning Java fundamentals",
+    "date": "25/03/2026",
+    "excerpt": "My experience diving into Java for the first time - object-oriented programming concepts and syntax differences.",
+    "content": "Coming from JavaScript, Java feels quite different. The strict typing system is both frustrating and helpful.\n\nObject-oriented programming makes so much more sense now that I'm seeing it in a language designed for it. Classes, inheritance, polymorphism - it's all clicking into place.\n\nThe syntax is verbose compared to JS, but I'm starting to appreciate the explicitness. When you have to declare types everywhere, it forces you to think about your data structures.",
+    "tags": [
+      "oop",
+      "learning",
+      "syntax"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "java",
+    "category": "university"
+  },
+  {
+    "id": "python-data-analysis",
+    "title": "Python for data analysis",
+    "date": "23/03/2026",
+    "excerpt": "Exploring pandas and matplotlib for my statistics coursework - powerful tools for data manipulation.",
+    "content": "Started using Python for data analysis in my statistics module. Pandas is incredible - makes working with CSV files and data frames so intuitive.\n\nMatplotlib took some getting used to, but once you understand the object-oriented API, creating visualizations becomes straightforward.\n\nThe combination of Jupyter notebooks, pandas, and matplotlib feels like a complete data science toolkit. Really enjoying this side of programming.",
+    "tags": [
+      "data-science",
+      "pandas",
+      "matplotlib",
+      "coursework"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "python",
+    "category": "university"
+  },
+  {
+    "id": "algorithms-complexity",
+    "title": "Understanding algorithm complexity",
+    "date": "20/03/2026",
+    "excerpt": "Big O notation finally makes sense - analysing time and space complexity of common algorithms.",
+    "content": "Big O notation was confusing at first, but it's starting to click. Understanding why some algorithms are O(n) vs O(n²) vs O(log n) is crucial for writing efficient code.\n\nBubble sort vs quicksort is a perfect example. Both solve the same problem, but quicksort's O(n log n) average case makes it much better for large datasets.\n\nPracticing with LeetCode problems is helping solidify these concepts. Each problem becomes an exercise in choosing the right approach for the constraints.",
+    "tags": [
+      "algorithms",
+      "big-o",
+      "performance",
+      "theory"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "python",
+    "category": "university"
+  },
+  {
+    "id": "web-responsive-design",
+    "title": "Responsive design principles",
+    "date": "18/03/2026",
+    "excerpt": "Learning CSS Grid and Flexbox for creating responsive layouts that work on all devices.",
+    "content": "Responsive design is more than just making things smaller on mobile. It's about creating layouts that adapt gracefully to different screen sizes and orientations.\n\nCSS Grid is incredible for two-dimensional layouts, while Flexbox excels at one-dimensional arrangements. Understanding when to use each is key.\n\nMobile-first design makes so much sense - it's easier to scale up from a simple mobile layout than to cram a complex desktop design onto a small screen.",
+    "tags": [
+      "responsive",
+      "css-grid",
+      "flexbox",
+      "mobile"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "web technologies",
+    "category": "project-update"
+  },
+  {
+    "id": "java-spring-framework",
+    "title": "Exploring Spring Framework",
+    "date": "15/03/2026",
+    "excerpt": "First look at Spring Boot for building web applications - dependency injection and auto-configuration.",
+    "content": "Spring Framework is massive, but Spring Boot makes it much more approachable. The auto-configuration features save so much boilerplate code.\n\nDependency injection took some getting used to, but it makes testing and modular design much easier. @Autowired annotations feel like magic at first.\n\nBuilding RESTful APIs with Spring Boot is surprisingly straightforward. The @RestController and @RequestMapping annotations handle most of the heavy lifting.",
+    "tags": [
+      "spring",
+      "backend",
+      "api",
+      "framework"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "java",
+    "category": "university"
+  },
+  {
+    "id": "database-optimisation",
+    "title": "Database query optimisation",
+    "date": "12/03/2026",
+    "excerpt": "Learning about indexes, query planning, and performance tuning for better database efficiency.",
+    "content": "Database performance is crucial for any application. Learning about indexes, query execution plans, and optimisation techniques has been eye-opening.\n\nProper indexing can turn a slow query into a fast one, but too many indexes can slow down writes. It's all about finding the right balance.\n\nQuery analysers are incredibly helpful for understanding what the database is actually doing. EXPLAIN plans show you exactly where the bottlenecks are.",
+    "tags": [
+      "database",
+      "optimisation",
+      "indexes",
+      "performance"
+    ],
+    "image": null,
+    "author": "croaker",
+    "year": 2026,
+    "language": "python",
+    "category": "university"
+  }
+]

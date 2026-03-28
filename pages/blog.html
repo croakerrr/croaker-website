@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blog - croaker</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+
+<body>
+
+
+
+<button id="theme-toggle">
+    <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+</button>
+
+<main>
+    <h1>blog</h1>
+
+    <p>when i learn something, or if i have a progress update for a <br> project i'm working on, i'll make sure to write about it here.</p>
+    
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <input type="text" id="search-input" placeholder="search posts...">
+            <button class="search-clear-btn" id="search-clear-btn">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="21 21-4.35-4.35"></path>
+                </svg>
+                <svg class="clear-icon" viewBox="0 0 24 24" style="display: none;">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label class="filter-label">
+                    <span class="filter-dot" data-color="gray"></span>
+                    sort
+                </label>
+                <div id="sort-options" class="filter-options">
+                    <button class="filter-option active" data-sort="newest">newest</button>
+                    <button class="filter-option" data-sort="oldest">oldest</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">
+                    <span class="filter-dot" data-color="blue"></span>
+                    year
+                </label>
+                <div id="year-options" class="filter-options"></div>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">
+                    <span class="filter-dot" data-color="orange"></span>
+                    language
+                </label>
+                <div id="language-options" class="filter-options"></div>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">
+                    <span class="filter-dot" data-color="green"></span>
+                    topic
+                </label>
+                <div id="category-options" class="filter-options"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sort-indicator">
+        <span id="sort-text">sorted by: newest</span>
+    </div>
+    
+    <div id="blog-list"></div>
+    
+    <!-- Post Modal -->
+    <div id="post-modal" class="post-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close-modal" class="close-modal-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-post-meta">
+                    <span id="modal-date"></span>
+                </div>
+                <h1 id="modal-title"></h1>
+                <div id="modal-content"></div>
+                <div class="modal-footer">
+                    <div id="modal-tags" class="modal-tags"></div>
+                    <div id="modal-author" class="modal-author"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Core JavaScript modules -->
+<script src="../assets/js/blog.js"></script>
+<script src="../assets/js/transitions.js"></script>
+<script src="../assets/js/navigation.js"></script>
+<script src="../assets/js/theme-toggle.js"></script>
+
+</body>
+</html>
+

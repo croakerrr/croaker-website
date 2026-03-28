@@ -1,0 +1,54 @@
+[
+    {
+        "id": "portfolio-website",
+        "title": "Personal Portfolio Website",
+        "description": "A minimalist portfolio website built with HTML, CSS, and JavaScript featuring dark/light mode, responsive design, and a functional blog system.",
+        "tech": ["HTML", "CSS", "JavaScript"],
+        "status": "Complete",
+        "featured": true,
+        "content": "This portfolio website showcases my journey as a first-year computer science student. Built from scratch using vanilla web technologies, it features a clean minimalist design with smooth dark/light mode toggling, responsive layouts that work on all devices, and a fully functional blog system with filtering capabilities.\n\nKey features include:\n• Responsive design that adapts to mobile, tablet, and desktop\n• Custom dark/light theme system with smooth transitions\n• Blog system with tag filtering and search functionality\n• Animated spotlight carousel for featured content\n• Clean, accessible navigation with proper semantic HTML\n\nThe entire site is built without frameworks, demonstrating fundamental web development skills and attention to performance and accessibility.",
+        "links": {
+            "github": "https://github.com/croakerrr/portfolio",
+            "live": "https://croaker.dev",
+            "blog": "building-my-first-website"
+        },
+        "image": "placeholder-project-1.jpg"
+    },
+    {
+        "id": "task-manager-app",
+        "title": "Task Manager App",
+        "description": "A React-based task management application with drag-and-drop functionality, local storage persistence, and category organisation.",
+        "tech": ["React", "TypeScript", "CSS"],
+        "status": "In Progress",
+        "featured": true,
+        "content": "A modern task management application built with React and TypeScript, designed to help students organise their coursework and personal projects efficiently.\n\nCurrent features:\n• Create, edit, and delete tasks with rich descriptions\n• Organise tasks into customisable categories\n• Drag-and-drop interface for easy task reordering\n• Local storage persistence across browser sessions\n• Responsive design optimised for desktop and mobile\n\nUpcoming features:\n• Due date tracking with notifications\n• Progress tracking and productivity metrics\n• Export functionality for task lists\n• Collaborative features for group projects\n\nThis project has been an excellent way to learn React hooks, TypeScript interfaces, and modern web development patterns while solving a real problem I face as a student.",
+        "links": {
+            "github": "https://github.com/croakerrr/task-manager"
+        },
+        "image": "placeholder-project-2.jpg"
+    },
+    {
+        "id": "weather-dashboard",
+        "title": "Weather Dashboard",
+        "description": "A Python-based weather monitoring dashboard using APIs to display current conditions and forecasts with data visualisation.",
+        "tech": ["Python", "Flask", "Chart.js"],
+        "status": "Complete",
+        "featured": false,
+        "content": "A comprehensive weather monitoring dashboard built as part of my introduction to Python programming. The application fetches real-time weather data from multiple APIs and presents it through an intuitive web interface.\n\nTechnical implementation:\n• Flask backend for API integration and data processing\n• Real-time weather data from OpenWeatherMap API\n• Interactive charts using Chart.js for temperature and precipitation trends\n• Responsive web interface with location search functionality\n• Data caching to optimise API usage and improve performance\n\nThis project taught me valuable lessons about API integration, data handling, and creating meaningful visualisations from raw data. It was also my first experience with Flask and building full-stack applications.",
+        "links": {
+            "github": "https://github.com/croakerrr/weather-dashboard"
+        },
+        "image": "placeholder-project-3.jpg"
+    },
+    {
+        "id": "study-group-finder",
+        "title": "University Study Group Finder",
+        "description": "A web application helping university students find and organise study groups for their courses and modules.",
+        "tech": ["Node.js", "Express", "MongoDB"],
+        "status": "Planning",
+        "featured": false,
+        "content": "An upcoming project aimed at solving the challenge of finding compatible study partners at university. The application will help students connect with peers taking similar modules and organise effective study sessions.\n\nPlanned features:\n• User profiles with course information and study preferences\n• Smart matching algorithm based on modules, schedules, and learning styles\n• Group scheduling with calendar integration\n• Resource sharing capabilities for notes and study materials\n• Location-based meeting suggestions around campus\n\nTechnical goals:\n• Learn Node.js and Express for backend development\n• Implement user authentication and authorisation\n• Work with MongoDB for flexible data storage\n• Practice API design and database modelling\n\nThis project will combine my growing technical skills with a real need I've observed among my fellow students.",
+        "links": {},
+        "image": "placeholder-project-4.jpg"
+    }
+]

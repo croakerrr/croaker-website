@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin login - croaker</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <style>
+        /* Admin-specific overrides only */
+        .admin-panel {
+            background: var(--bg);
+            border: 1px solid var(--fg);
+            border-radius: 8px;
+            padding: 30px;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .panel-top h1 {
+            font-size: 24px;
+            color: var(--fg);
+        }
+
+        .logout-button {
+            background: var(--fg);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            background: transparent;
+            border: 1px solid var(--fg);
+            color: var(--fg);
+            padding: 10px 20px;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .tab-button.current {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            background: var(--bg);
+            border: 1px solid var(--fg);
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .box-title {
+            font-size: 14px;
+            color: var(--fg);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .input-field {
+            margin-bottom: 15px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--fg);
+            font-size: 12px;
+        }
+
+        .input-field input,
+        .input-field textarea,
+        .input-field select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--fg);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--fg);
+            font-size: 14px;
+            font-family: var(--font);
+        }
+
+        .input-field textarea {
+            height: 200px;
+            resize: vertical;
+        }
+
+        .save-button {
+            background: var(--fg);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .clear-button {
+            background: transparent;
+            color: var(--fg);
+            border: 1px solid var(--fg);
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            color: var(--fg-light);
+            font-style: italic;
+            font-size: 12px;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-state {
+            color: var(--fg-light);
+            font-size: 12px;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .post-item {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: var(--bg);
+        }
+        
+        .post-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--fg);
+        }
+        
+        .post-meta {
+            font-size: 11px;
+            color: var(--fg-light);
+            margin-bottom: 8px;
+        }
+        
+        .post-excerpt {
+            font-size: 12px;
+            color: var(--fg);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .edit-btn, .delete-btn {
+            font-size: 10px;
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--fg);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+        
+        .edit-btn:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        
+        .delete-btn:hover {
+            background: #ff4444;
+            color: white;
+            border-color: #ff4444;
+        }
+
+        .error-text {
+            display: none;
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 1rem;
+            text-transform: lowercase;
+        }
+
+        /* Login form styling to match site */
+        .login-card {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .login-card h1 {
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--fg);
+            font-weight: 300;
+            text-transform: lowercase;
+        }
+
+        .login-card .input-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-card .input-field label {
+            margin-bottom: 0.5rem;
+            color: var(--fg-light);
+            font-size: 13px;
+            text-transform: lowercase;
+        }
+
+        .login-card .input-field input {
+            padding: 0.75rem 0;
+            border: none;
+            border-bottom: 1px solid var(--fg-light);
+            background: transparent;
+            border-radius: 0;
+        }
+
+        .login-card .input-field input:focus {
+            outline: none;
+            border-bottom-color: var(--fg);
+        }
+
+        .login-button {
+            background: transparent;
+            border: 1px solid var(--fg-light);
+            color: var(--fg-light);
+            padding: 0.75rem 2rem;
+            font-family: var(--font);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: lowercase;
+            margin-top: 1rem;
+        }
+
+        .login-button:hover {
+            border-color: var(--fg);
+            color: var(--fg);
+        }
+
+        @media (max-width: 768px) {
+            .editor-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Area -->
+    <main id="login-area">
+        <div class="login-card">
+            <h1>admin</h1>
+            <div class="input-field">
+                <label for="username">username</label>
+                <input type="text" id="username" placeholder="enter username">
+            </div>
+            <div class="input-field">
+                <label for="pass">password</label>
+                <input type="password" id="pass" placeholder="enter password">
+            </div>
+            <button onclick="checkLogin()" class="login-button">login</button>
+            <div id="error-text" class="error-text">access denied - incorrect username or password</div>
+        </div>
+    </main>
+
+    <!-- Admin Control Panel -->
+    <div id="admin-area" class="admin-panel">
+        <div class="panel-top">
+            <h1>content management system</h1>
+            <button onclick="logout()" class="logout-button">logout</button>
+        </div>
+
+        <div class="section-tabs">
+            <button class="tab-button current" onclick="showSection('blog')">blog posts</button>
+            <button class="tab-button" onclick="showSection('project')">projects</button>
+        </div>
+
+        <!-- Blog Section -->
+        <div id="blog-area" class="content-area current">
+            <div class="editor-layout">
+                <div class="input-box">
+                    <div class="box-title">new blog post</div>
+                    <div class="input-field">
+                        <label for="blog-title">title</label>
+                        <input type="text" id="blog-title" placeholder="post title">
+                    </div>
+                    <div class="input-field">
+                        <label for="blog-content">content</label>
+                        <textarea id="blog-content" placeholder="write your post content here..."></textarea>
+                    </div>
+                    <div class="input-field">
+                        <label for="blog-tags">tags (comma separated)</label>
+                        <input type="text" id="blog-tags" placeholder="javascript, coding, tutorial">
+                    </div>
+                    <div class="input-field">
+                        <label for="blog-date">date</label>
+                        <input type="date" id="blog-date">
+                    </div>
+                    <div class="button-group">
+                        <button class="save-button" onclick="saveBlogPost()">save post</button>
+                        <button class="clear-button" onclick="clearBlogForm()">clear form</button>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="box-title">recent posts</div>
+                    <div class="box-content" id="existing-posts">
+                        <div class="loading-state">loading posts...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div id="project-area" class="content-area">
+            <div class="editor-layout">
+                <div class="input-box">
+                    <div class="box-title">new project</div>
+                    <div class="input-field">
+                        <label for="project-name">project name</label>
+                        <input type="text" id="project-name" placeholder="project name">
+                    </div>
+                    <div class="input-field">
+                        <label for="project-desc">description</label>
+                        <textarea id="project-desc" placeholder="project description..."></textarea>
+                    </div>
+                    <div class="input-field">
+                        <label for="project-tech">technologies</label>
+                        <input type="text" id="project-tech" placeholder="React, Node.js, MongoDB">
+                    </div>
+                    <div class="input-field">
+                        <label for="project-github">github url</label>
+                        <input type="url" id="project-github" placeholder="https://github.com/username/repo">
+                    </div>
+                    <div class="input-field">
+                        <label for="project-status">status</label>
+                        <select id="project-status">
+                            <option value="completed">completed</option>
+                            <option value="in-progress">in progress</option>
+                            <option value="planned">planned</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button class="save-button" onclick="saveProject()">save project</button>
+                        <button class="clear-button" onclick="clearProjectForm()">clear form</button>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <div class="box-title">existing projects</div>
+                    <div class="box-content" id="existing-projects">
+                        <div class="loading-state">loading projects...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'croaker2025';
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('adminTheme', isLight ? 'light' : 'dark');
+        }
+
+        function checkLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('pass').value;
+            const errorDiv = document.getElementById('error-text');
+            
+            if (username === 'admin' && password === ADMIN_PASSWORD) {
+                localStorage.setItem('adminAccess', 'true');
+                showAdminPanel();
+                errorDiv.style.display = 'none';
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('pass').value = '';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('adminAccess');
+            showLoginScreen();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('login-area').style.display = 'flex';
+            document.getElementById('admin-area').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('pass').value = '';
+            document.getElementById('error-text').style.display = 'none';
+        }
+
+        function showAdminPanel() {
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('admin-area').style.display = 'block';
+            loadExistingPosts();
+            loadExistingProjects();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('current'));
+            document.querySelectorAll('.content-area').forEach(area => area.classList.remove('current'));
+            
+            event.target.classList.add('current');
+            document.getElementById(section + '-area').classList.add('current');
+        }
+
+        async function saveBlogPost() {
+            const title = document.getElementById('blog-title').value;
+            const content = document.getElementById('blog-content').value;
+            const tags = document.getElementById('blog-tags').value;
+            const date = document.getElementById('blog-date').value;
+            
+            if (!title || !content) {
+                alert('Please fill in title and content');
+                return;
+            }
+            
+            const post = {
+                id: `post-${Date.now()}`,
+                title: title,
+                date: formatDate(date),
+                excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
+                content: content,
+                tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                image: null,
+                author: "croaker",
+                year: new Date(date).getFullYear(),
+                language: determineLanguage(tags),
+                category: determineCategory(tags)
+            };
+            
+            try {
+                const response = await fetch('/admin/save-post', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(post)
+                });
+                
+                if (response.ok) {
+                    alert('Blog post saved successfully!');
+                    clearBlogForm();
+                    loadExistingPosts();
+                } else {
+                    alert('Failed to save post');
+                }
+            } catch (error) {
+                console.error('Error saving post:', error);
+                alert('Error saving post - check console');
+            }
+        }
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        }
+        
+        function determineLanguage(tags) {
+            const languageMap = {
+                'javascript': 'web technologies',
+                'python': 'python', 
+                'java': 'java',
+                'css': 'web technologies',
+                'html': 'web technologies',
+                'react': 'web technologies',
+                'node': 'web technologies'
+            };
+            
+            for (const tag of tags) {
+                const lower = tag.toLowerCase();
+                for (const [key, value] of Object.entries(languageMap)) {
+                    if (lower.includes(key)) return value;
+                }
+            }
+            return 'web technologies';
+        }
+        
+        function determineCategory(tags) {
+            const categoryMap = {
+                'university': 'university',
+                'coursework': 'university',
+                'project': 'project-update',
+                'portfolio': 'project-update',
+                'learning': 'university'
+            };
+            
+            for (const tag of tags) {
+                const lower = tag.toLowerCase();
+                for (const [key, value] of Object.entries(categoryMap)) {
+                    if (lower.includes(key)) return value;
+                }
+            }
+            return 'misc';
+        }
+
+        function clearBlogForm() {
+            document.getElementById('blog-title').value = '';
+            document.getElementById('blog-content').value = '';
+            document.getElementById('blog-tags').value = '';
+        }
+
+        async function saveProject() {
+            const name = document.getElementById('project-name').value;
+            const desc = document.getElementById('project-desc').value;
+            const tech = document.getElementById('project-tech').value;
+            const github = document.getElementById('project-github').value;
+            const status = document.getElementById('project-status').value;
+            
+            if (!name || !desc) {
+                alert('Please fill in project name and description');
+                return;
+            }
+            
+            const project = {
+                id: `project-${Date.now()}`,
+                name: name,
+                description: desc,
+                technologies: tech.split(',').map(t => t.trim()).filter(t => t),
+                githubUrl: github || null,
+                status: status,
+                createdDate: new Date().toISOString().split('T')[0]
+            };
+            
+            try {
+                const response = await fetch('/admin/save-project', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(project)
+                });
+                
+                if (response.ok) {
+                    alert('Project saved successfully!');
+                    clearProjectForm();
+                    loadExistingProjects();
+                } else {
+                    alert('Failed to save project');
+                }
+            } catch (error) {
+                console.error('Error saving project:', error);
+                alert('Error saving project - check console');
+            }
+        }
+
+        function clearProjectForm() {
+            document.getElementById('project-name').value = '';
+            document.getElementById('project-tech').value = '';
+            document.getElementById('project-desc').value = '';
+            document.getElementById('project-github').value = '';
+            document.getElementById('project-status').value = 'completed';
+        }
+
+        async function loadExistingPosts() {
+            try {
+                const response = await fetch('../assets/data/blog-data.json');
+                const posts = await response.json();
+                
+                const container = document.getElementById('existing-posts');
+                if (!posts || posts.length === 0) {
+                    container.innerHTML = '<div class="empty-state">no blog posts found</div>';
+                    return;
+                }
+                
+                container.innerHTML = posts.slice(0, 5).map(post => `
+                    <div class="post-item">
+                        <div class="post-title">${post.title}</div>
+                        <div class="post-meta">${post.date} • ${post.tags ? post.tags.join(', ') : 'no tags'}</div>
+                        <div class="post-excerpt">${post.excerpt}</div>
+                        <div class="post-actions">
+                            <button onclick="editPost('${post.id}')" class="edit-btn">edit</button>
+                            <button onclick="deletePost('${post.id}')" class="delete-btn">delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('existing-posts').innerHTML = 
+                    '<div class="error-state">error loading posts</div>';
+            }
+        }
+        
+        async function loadExistingProjects() {
+            try {
+                const response = await fetch('../assets/data/projects-data.json');
+                const projects = await response.json();
+                
+                const container = document.getElementById('existing-projects');
+                if (!projects || projects.length === 0) {
+                    container.innerHTML = '<div class="empty-state">no projects found</div>';
+                    return;
+                }
+                
+                container.innerHTML = projects.slice(0, 5).map(project => `
+                    <div class="post-item">
+                        <div class="post-title">${project.title || project.name}</div>
+                        <div class="post-meta">${project.status} • ${project.tech ? project.tech.join(', ') : (project.technologies ? project.technologies.join(', ') : 'no tech listed')}</div>
+                        <div class="post-excerpt">${project.description}</div>
+                        <div class="post-actions">
+                            <button onclick="editProject('${project.id}')" class="edit-btn">edit</button>
+                            <button onclick="deleteProject('${project.id}')" class="delete-btn">delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('existing-projects').innerHTML = 
+                    '<div class="empty-state">no projects created yet<br>use the editor to create your first project</div>';
+            }
+        }
+        
+        function editPost(postId) {
+            alert(`Edit post functionality not implemented yet for ID: ${postId}`);
+        }
+        
+        function deletePost(postId) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                alert(`Delete post functionality not implemented yet for ID: ${postId}`);
+            }
+        }
+        
+        function editProject(projectId) {
+            alert(`Edit project functionality not implemented yet for ID: ${projectId}`);
+        }
+        
+        function deleteProject(projectId) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                alert(`Delete project functionality not implemented yet for ID: ${projectId}`);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('adminTheme') === 'light') {
+                document.body.classList.add('light-mode');
+            }
+            if (localStorage.getItem('adminAccess') === 'true') {
+                showAdminPanel();
+                loadExistingPosts();
+                loadExistingProjects();
+            }
+            const today = new Date().toISOString().split('T')[0];
+            const blogDateEl = document.getElementById('blog-date');
+            if (blogDateEl) blogDateEl.value = today;
+            
+            // Enter key support
+            document.getElementById('pass')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkLogin();
+            });
+            document.getElementById('username')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkLogin();
+            });
+        });
+    </script>
+
+    <script src="../assets/js/navigation.js"></script>
+</body>
+</html>

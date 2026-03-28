@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>projects - croaker</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+
+<body>
+
+
+
+<button id="theme-toggle">
+    <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+</button>
+
+<main>
+    <h1>projects</h1>
+    <p></p>
+    
+    <div id="projects-grid" class="projects-grid"></div>
+    
+    <!-- Project Modal -->
+    <div id="project-modal" class="project-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close-project-modal" class="close-modal-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-project-meta">
+                    <span id="modal-tech"></span>
+                </div>
+                <h1 id="modal-project-title"></h1>
+                <div id="modal-project-content"></div>
+                <div class="modal-footer">
+                    <div id="modal-links" class="modal-links"></div>
+                    <div id="modal-status" class="modal-status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+
+<!-- Core JavaScript modules -->
+<script src="../assets/js/transitions.js"></script>
+<script src="../assets/js/navigation.js"></script>
+<script src="../assets/js/projects.js"></script>
+<script src="../assets/js/theme-toggle.js"></script>
+
+</html>
+
