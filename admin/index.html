@@ -620,7 +620,7 @@
         
         async function loadExistingProjects() {
             try {
-                const response = await fetch('../assets/data/projects-data.json');
+                const response = await fetch('/api/get-projects');
                 const projects = await response.json();
                 
                 const container = document.getElementById('existing-projects');
