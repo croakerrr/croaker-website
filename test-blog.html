@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Blog</title>
+</head>
+<body>
+    <div id="test-output">Testing...</div>
+    
+    <script>
+        async function testApi() {
+            try {
+                console.log('Testing API...');
+                const response = await fetch('/api/get-posts');
+                const posts = await response.json();
+                console.log('Posts received:', posts);
+                document.getElementById('test-output').innerHTML = 
+                    `<p>API Works! Found ${posts.length} posts:</p>
+                     <pre>${JSON.stringify(posts, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('API Error:', error);
+                document.getElementById('test-output').innerHTML = 
+                    `<p>API Error: ${error.message}</p>`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', testApi);
+    </script>
+</body>
+</html>
