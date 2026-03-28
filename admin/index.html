@@ -208,6 +208,60 @@
             border-color: #ff4444;
         }
 
+        .tag-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .predefined-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .tag-label {
+            font-size: 12px;
+            color: #666;
+            margin-right: 5px;
+        }
+
+        .tag-btn {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 4px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .tag-btn.selected {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .clear-tags-btn {
+            align-self: flex-start;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .clear-tags-btn:hover {
+            background: #e55555;
+        }
+
         .error-text {
             display: none;
             color: #ff6b6b;
@@ -328,8 +382,26 @@
                         <textarea id="blog-content" placeholder="write your post content here..."></textarea>
                     </div>
                     <div class="input-field">
-                        <label for="blog-tags">tags (comma separated)</label>
-                        <input type="text" id="blog-tags" placeholder="javascript, coding, tutorial">
+                        <label for="blog-tags">tags</label>
+                        <div class="tag-selector">
+                            <div class="predefined-tags">
+                                <span class="tag-label">Quick select:</span>
+                                <button type="button" class="tag-btn" onclick="addTag('javascript')">javascript</button>
+                                <button type="button" class="tag-btn" onclick="addTag('python')">python</button>
+                                <button type="button" class="tag-btn" onclick="addTag('java')">java</button>
+                                <button type="button" class="tag-btn" onclick="addTag('css')">css</button>
+                                <button type="button" class="tag-btn" onclick="addTag('html')">html</button>
+                                <button type="button" class="tag-btn" onclick="addTag('react')">react</button>
+                                <button type="button" class="tag-btn" onclick="addTag('node')">node</button>
+                                <button type="button" class="tag-btn" onclick="addTag('tutorial')">tutorial</button>
+                                <button type="button" class="tag-btn" onclick="addTag('university')">university</button>
+                                <button type="button" class="tag-btn" onclick="addTag('project')">project</button>
+                                <button type="button" class="tag-btn" onclick="addTag('learning')">learning</button>
+                                <button type="button" class="tag-btn" onclick="addTag('coursework')">coursework</button>
+                            </div>
+                            <input type="text" id="blog-tags" placeholder="Selected tags will appear here or type custom tags...">
+                            <button type="button" class="clear-tags-btn" onclick="clearTags()">clear all</button>
+                        </div>
                     </div>
                     <div class="input-field">
                         <label for="blog-date">date</label>
@@ -537,6 +609,39 @@
             document.getElementById('blog-title').value = '';
             document.getElementById('blog-content').value = '';
             document.getElementById('blog-tags').value = '';
+            // Clear all selected tag buttons
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+
+        // Tag selector functions
+        function addTag(tagName) {
+            const tagsInput = document.getElementById('blog-tags');
+            const tagBtn = event.target;
+            
+            let currentTags = tagsInput.value ? tagsInput.value.split(',').map(t => t.trim()).filter(t => t) : [];
+            
+            if (tagBtn.classList.contains('selected')) {
+                // Remove tag
+                currentTags = currentTags.filter(tag => tag !== tagName);
+                tagBtn.classList.remove('selected');
+            } else {
+                // Add tag
+                if (!currentTags.includes(tagName)) {
+                    currentTags.push(tagName);
+                }
+                tagBtn.classList.add('selected');
+            }
+            
+            tagsInput.value = currentTags.join(', ');
+        }
+
+        function clearTags() {
+            document.getElementById('blog-tags').value = '';
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
         }
 
         async function saveProject() {

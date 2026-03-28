@@ -44,10 +44,18 @@ async function loadBlogPosts() {
     const blogList = document.getElementById('blog-list');
     if (!blogList) return;
     
-    // Extract unique values
-    const years = [...new Set(allPosts.map(p => p.year))].sort((a, b) => b - a);
-    const languages = [...new Set(allPosts.map(p => p.language))].sort();
-    const categories = [...new Set(allPosts.map(p => p.category))].sort();
+    // Extract unique values, with fallback defaults when no posts exist
+    const years = allPosts.length > 0 ? 
+      [...new Set(allPosts.map(p => p.year))].sort((a, b) => b - a) : 
+      [2025, 2024, 2023];
+      
+    const languages = allPosts.length > 0 ?
+      [...new Set(allPosts.map(p => p.language))].sort() :
+      ['web technologies', 'python', 'java'];
+      
+    const categories = allPosts.length > 0 ?
+      [...new Set(allPosts.map(p => p.category))].sort() :
+      ['university', 'project-update', 'misc'];
     
     // Create filter options
     createFilterOptions('year-options', years, 'year');
