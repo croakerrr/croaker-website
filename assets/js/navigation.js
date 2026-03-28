@@ -43,11 +43,11 @@ class Navigation {
                 <a href="${basePath}pages/blog.html" ${currentPage === 'blog.html' ? 'class="active"' : ''}>
                     <span>blog</span>
                 </a>
-                <a href="${basePath}admin/index.html" ${window.location.pathname.includes('admin') ? 'class="active"' : ''}>
-                    <span>login</span>
-                </a>
             </div>
             <div class="nav-footer">
+                <a href="${basePath}admin/index.html" class="admin-link ${window.location.pathname.includes('admin') ? 'active' : ''}">
+                    <span>admin [cms]</span>
+                </a>
                 <button class="theme-toggle-sidebar" id="theme-toggle-nav" title="Toggle light/dark mode">
                     <svg class="theme-icon" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="5"></circle>
