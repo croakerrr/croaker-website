@@ -1,10 +1,12 @@
 const express = require('express');
-const fs = require('fs').promises;
-const path = require('path');
 const cors = require('cors');
+const { Redis } = require('@upstash/redis');
 
 const app = express();
 const PORT = 3000;
+
+// Initialize Redis client (Vercel will provide environment variables automatically)
+const redis = Redis.fromEnv();
 
 // Middleware
 app.use(cors());
@@ -24,122 +26,17 @@ function formatDate(dateString) {
     return date.toLocaleDateString('en-GB');
 }
 
-// API Routes
-
-// Get all blog posts
+// Blog Posts API
 app.get('/api/blog', async (req, res) => {
     try {
-        const data = await fs.readFile('./assets/data/blog-data.json', 'utf8');
-        res.json(JSON.parse(data));
+        const posts = await redis.get('blog-posts') || [];
+        res.json(posts);
     } catch (error) {
-        console.error('Error reading blog data:', error);
-        res.status(500).json({ error: 'Failed to load blog posts' });
+        console.error('Error loading posts:', error);
+        res.status(500).json({ error: 'Failed to load posts' });
     }
 });
 
-// Create new blog post
-app.post('/api/blog', async (req, res) => {
-    try {
-        const { title, content, tags, date } = req.body;
-        
-        if (!title || !content) {
-            return res.status(400).json({ error: 'Title and content are required' });
-        }
-
-        // Load existing posts
-        const data = await fs.readFile('./assets/data/blog-data.json', 'utf8');
-        const posts = JSON.parse(data);
-
-        // Create new post
-        const newPost = {
-            id: generateId(title),
-            title: title,
-            date: formatDate(date || new Date().toISOString()),
-            excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
-            content: content,
-            tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(t => t) : []),
-            image: null,
-            author: "croaker",
-            year: new Date().getFullYear(),
-            language: "web technologies",
-            category: "misc"
-        };
-
-        // Add to beginning of array (newest first)
-        posts.unshift(newPost);
-
-        // Save back to file
-        await fs.writeFile('./assets/data/blog-data.json', JSON.stringify(posts, null, 2));
-
-        res.json({ 
-            success: true, 
-            message: 'Blog post created successfully!', 
-            post: newPost 
-        });
-
-    } catch (error) {
-        console.error('Error creating blog post:', error);
-        res.status(500).json({ error: 'Failed to create blog post' });
-    }
-});
-
-// Get all projects
-app.get('/api/projects', async (req, res) => {
-    try {
-        const data = await fs.readFile('./assets/data/projects-data.json', 'utf8');
-        res.json(JSON.parse(data));
-    } catch (error) {
-        console.error('Error reading projects data:', error);
-        res.status(500).json({ error: 'Failed to load projects' });
-    }
-});
-
-// Create new project
-app.post('/api/projects', async (req, res) => {
-    try {
-        const { title, description, technologies, status, github, demo, content } = req.body;
-        
-        if (!title || !description || !technologies) {
-            return res.status(400).json({ error: 'Title, description, and technologies are required' });
-        }
-
-        // Load existing projects
-        const data = await fs.readFile('./assets/data/projects-data.json', 'utf8');
-        const projects = JSON.parse(data);
-
-        // Create new project
-        const newProject = {
-            id: generateId(title),
-            title: title,
-            description: description,
-            content: content || description,
-            technologies: Array.isArray(technologies) ? technologies : technologies.split(',').map(t => t.trim()).filter(t => t),
-            status: status || 'completed',
-            github: github || null,
-            demo: demo || null,
-            image: null,
-            year: new Date().getFullYear()
-        };
-
-        // Add to beginning of array (newest first)
-        projects.unshift(newProject);
-
-        // Save back to file
-        await fs.writeFile('./assets/data/projects-data.json', JSON.stringify(projects, null, 2));
-
-        res.json({ 
-            success: true, 
-            message: 'Project created successfully!', 
-            project: newProject 
-        });
-
-    } catch (error) {
-        console.error('Error creating project:', error);
-        res.status(500).json({ error: 'Failed to create project' });
-    }
-});
-
-// Admin Routes
 app.post('/admin/save-post', async (req, res) => {
     try {
         const { title, content, tags, date, excerpt, author, year, language, category } = req.body;
@@ -148,9 +45,8 @@ app.post('/admin/save-post', async (req, res) => {
             return res.status(400).json({ error: 'Title and content are required' });
         }
 
-        // Load existing posts
-        const data = await fs.readFile('./assets/data/blog-data.json', 'utf8');
-        const posts = JSON.parse(data);
+        // Get existing posts
+        const posts = await redis.get('blog-posts') || [];
 
         // Create new post
         const newPost = {
@@ -170,8 +66,8 @@ app.post('/admin/save-post', async (req, res) => {
         // Add to beginning of array (newest first)
         posts.unshift(newPost);
 
-        // Save back to file
-        await fs.writeFile('./assets/data/blog-data.json', JSON.stringify(posts, null, 2));
+        // Save to Redis
+        await redis.set('blog-posts', posts);
 
         res.json({ 
             success: true, 
@@ -185,22 +81,56 @@ app.post('/admin/save-post', async (req, res) => {
     }
 });
 
+app.delete('/admin/delete-post/:id', async (req, res) => {
+    try {
+        const postId = req.params.id;
+        
+        // Get existing posts
+        const posts = await redis.get('blog-posts') || [];
+        
+        // Find and remove the post
+        const originalLength = posts.length;
+        const filteredPosts = posts.filter(post => post.id !== postId);
+        
+        if (filteredPosts.length === originalLength) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        
+        // Save updated posts
+        await redis.set('blog-posts', filteredPosts);
+        
+        res.json({ 
+            success: true, 
+            message: 'Post deleted successfully!' 
+        });
+        
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        res.status(500).json({ error: 'Failed to delete post' });
+    }
+});
+
+// Projects API
+app.get('/api/projects', async (req, res) => {
+    try {
+        const projects = await redis.get('projects') || [];
+        res.json(projects);
+    } catch (error) {
+        console.error('Error loading projects:', error);
+        res.status(500).json({ error: 'Failed to load projects' });
+    }
+});
+
 app.post('/admin/save-project', async (req, res) => {
     try {
-        const { name, description, technologies, status, githubUrl, createdDate } = req.body;
+        const { name, description, technologies, status, githubUrl } = req.body;
         
         if (!name || !description) {
             return res.status(400).json({ error: 'Name and description are required' });
         }
 
-        // Load existing projects
-        let projects = [];
-        try {
-            const data = await fs.readFile('./assets/data/projects-data.json', 'utf8');
-            projects = JSON.parse(data);
-        } catch (e) {
-            // File doesn't exist, start with empty array
-        }
+        // Get existing projects
+        const projects = await redis.get('projects') || [];
 
         // Create new project  
         const newProject = {
@@ -220,8 +150,8 @@ app.post('/admin/save-project', async (req, res) => {
         // Add to beginning of array (newest first)
         projects.unshift(newProject);
 
-        // Save back to file
-        await fs.writeFile('./assets/data/projects-data.json', JSON.stringify(projects, null, 2));
+        // Save to Redis
+        await redis.set('projects', projects);
 
         res.json({ 
             success: true, 
@@ -235,54 +165,23 @@ app.post('/admin/save-project', async (req, res) => {
     }
 });
 
-app.delete('/admin/delete-post/:id', async (req, res) => {
-    try {
-        const postId = req.params.id;
-        
-        // Load existing posts
-        const data = await fs.readFile('./assets/data/blog-data.json', 'utf8');
-        let posts = JSON.parse(data);
-        
-        // Find and remove the post
-        const originalLength = posts.length;
-        posts = posts.filter(post => post.id !== postId);
-        
-        if (posts.length === originalLength) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
-        
-        // Save back to file
-        await fs.writeFile('./assets/data/blog-data.json', JSON.stringify(posts, null, 2));
-        
-        res.json({ 
-            success: true, 
-            message: 'Post deleted successfully!' 
-        });
-        
-    } catch (error) {
-        console.error('Error deleting post:', error);
-        res.status(500).json({ error: 'Failed to delete post' });
-    }
-});
-
 app.delete('/admin/delete-project/:id', async (req, res) => {
     try {
         const projectId = req.params.id;
         
-        // Load existing projects
-        const data = await fs.readFile('./assets/data/projects-data.json', 'utf8');
-        let projects = JSON.parse(data);
+        // Get existing projects
+        const projects = await redis.get('projects') || [];
         
         // Find and remove the project
         const originalLength = projects.length;
-        projects = projects.filter(project => project.id !== projectId);
+        const filteredProjects = projects.filter(project => project.id !== projectId);
         
-        if (projects.length === originalLength) {
+        if (filteredProjects.length === originalLength) {
             return res.status(404).json({ error: 'Project not found' });
         }
         
-        // Save back to file
-        await fs.writeFile('./assets/data/projects-data.json', JSON.stringify(projects, null, 2));
+        // Save updated projects
+        await redis.set('projects', filteredProjects);
         
         res.json({ 
             success: true, 
@@ -295,14 +194,37 @@ app.delete('/admin/delete-project/:id', async (req, res) => {
     }
 });
 
+// Migration endpoint to move JSON data to Redis
+app.post('/admin/migrate-data', async (req, res) => {
+    try {
+        // Import your existing JSON data
+        const blogData = require('./assets/data/blog-data.json');
+        const projectData = require('./assets/data/projects-data.json');
+        
+        // Save to Redis
+        await redis.set('blog-posts', blogData);
+        await redis.set('projects', projectData);
+        
+        res.json({ 
+            success: true, 
+            message: `Migrated ${blogData.length} posts and ${projectData.length} projects to database` 
+        });
+    } catch (error) {
+        console.error('Migration error:', error);
+        res.status(500).json({ error: 'Migration failed' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`
-🚀 Croaker Blog Server Running!
+🚀 Croaker Blog Server Running with Upstash Redis!
 
    📝 Website: http://localhost:${PORT}
-   🔧 Admin:   http://localhost:${PORT}/admin.html
+   🔧 Admin:   http://localhost:${PORT}/admin
    📚 API:     http://localhost:${PORT}/api/blog
 
 Press Ctrl+C to stop the server
     `);
 });
+
+module.exports = app;
