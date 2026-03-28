@@ -197,9 +197,16 @@ app.delete('/admin/delete-project/:id', async (req, res) => {
 // Migration endpoint to move JSON data to Redis
 app.post('/admin/migrate-data', async (req, res) => {
     try {
-        // Import your existing JSON data
-        const blogData = require('./assets/data/blog-data.json');
-        const projectData = require('./assets/data/projects-data.json');
+        // Import your existing JSON data from the static assets
+        const blogResponse = await fetch(`${req.protocol}://${req.get('host')}/assets/data/blog-data.json`);
+        const projectResponse = await fetch(`${req.protocol}://${req.get('host')}/assets/data/projects-data.json`);
+        
+        if (!blogResponse.ok || !projectResponse.ok) {
+            throw new Error('Could not fetch JSON data files');
+        }
+        
+        const blogData = await blogResponse.json();
+        const projectData = await projectResponse.json();
         
         // Save to Redis
         await redis.set('blog-posts', blogData);
@@ -211,7 +218,10 @@ app.post('/admin/migrate-data', async (req, res) => {
         });
     } catch (error) {
         console.error('Migration error:', error);
-        res.status(500).json({ error: 'Migration failed' });
+        res.status(500).json({ 
+            success: false, 
+            error: `Migration failed: ${error.message}` 
+        });
     }
 });
 
