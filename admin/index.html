@@ -147,6 +147,22 @@
             cursor: pointer;
         }
 
+        .cancel-edit-button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-family: var(--font);
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .cancel-edit-button:hover {
+            background: #e55555;
+        }
+
         .empty-state {
             color: var(--fg-light);
             font-style: italic;
@@ -685,6 +701,7 @@
                     <div class="button-group">
                         <button class="save-button" onclick="saveBlogPost()">save post</button>
                         <button class="clear-button" onclick="clearBlogForm()">clear form</button>
+                        <button class="cancel-edit-button" id="cancel-edit-btn" onclick="cancelEdit()" style="display: none;">cancel edit</button>
                     </div>
                 </div>
                 <div class="input-box">
@@ -836,9 +853,12 @@
                 const blogForm = document.getElementById('blog-form');
                 const editingId = blogForm.dataset.editingId;
                 
+                console.log('Save blog post called - editingId:', editingId);
+                
                 let response;
                 if (editingId) {
                     // Update existing post
+                    console.log('Updating existing post with ID:', editingId);
                     const updateData = { ...post, id: editingId };
                     response = await fetch('/api/update-post', {
                         method: 'PUT',
@@ -847,6 +867,7 @@
                     });
                 } else {
                     // Create new post
+                    console.log('Creating new post');
                     response = await fetch('/api/save-post', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -916,6 +937,7 @@
             document.getElementById('blog-title').value = '';
             document.getElementById('blog-content').value = '';
             document.getElementById('blog-tags').value = '';
+            document.getElementById('blog-date').value = '';
             document.getElementById('blog-year').value = '';
             document.getElementById('blog-language').value = '';
             document.getElementById('blog-category').value = '';
@@ -923,12 +945,18 @@
             
             // Clear editing state
             const blogForm = document.getElementById('blog-form');
-            delete blogForm.dataset.editingId;
+            if (blogForm.dataset.editingId) {
+                console.log('Clearing edit mode for post ID:', blogForm.dataset.editingId);
+                delete blogForm.dataset.editingId;
+            }
             
             // Reset button text and style
             const saveButton = document.querySelector('.save-button');
             saveButton.textContent = 'save post';
             saveButton.style.background = '';
+            
+            // Hide cancel edit button
+            document.getElementById('cancel-edit-btn').style.display = 'none';
             
             // Clear all selected tag buttons
             document.querySelectorAll('.tag-btn').forEach(btn => {
@@ -936,6 +964,12 @@
             });
             // Clear image
             removeImage();
+        }
+
+        function cancelEdit() {
+            if (confirm('Are you sure you want to cancel editing? Any changes will be lost.')) {
+                clearBlogForm();
+            }
         }
 
         // Tag selector functions
@@ -1222,6 +1256,9 @@
                 const saveButton = document.querySelector('.save-button');
                 saveButton.textContent = 'update post';
                 saveButton.style.background = '#4a9eff';
+                
+                // Show cancel edit button
+                document.getElementById('cancel-edit-btn').style.display = 'inline-block';
                 
                 alert(`Loaded post "${post.title}" for editing`);
                 
