@@ -1,20 +1,12 @@
 {
-  "rewrites": [
-    {
-      "source": "/admin",
-      "destination": "/admin/index.html"
-    },
-    {
-      "source": "/admin/save-post", 
-      "destination": "/api/admin/save-post"
-    },
-    {
-      "source": "/admin/save-project",
-      "destination": "/api/admin/save-project"  
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/server.js"
+  "functions": {
+    "server.js": {
+      "runtime": "@vercel/node@3"
     }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/admin/save-post", "destination": "/server.js" },
+    { "source": "/admin/save-project", "destination": "/server.js" }
   ]
 }
