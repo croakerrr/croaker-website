@@ -757,6 +757,12 @@
                 image: selectedImageData
             };
             
+            // Debug: Check if image data exists
+            console.log('Saving post with image:', selectedImageData ? 'Yes' : 'No');
+            if (selectedImageData) {
+                console.log('Image data size:', Math.round((selectedImageData.length * 3) / 4 / 1024), 'KB');
+            }
+            
             try {
                 const response = await fetch('/api/save-post', {
                     method: 'POST',
@@ -899,8 +905,24 @@
             const file = event.target.files[0];
             if (file && file.type.startsWith('image/')) {
                 try {
+                    // Check file size (limit to 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('Image is too large. Please select an image under 5MB.');
+                        return;
+                    }
+                    
                     // Resize and compress image to save space
-                    selectedImageData = await resizeImage(file, 800, 0.8);
+                    selectedImageData = await resizeImage(file, 600, 0.7);
+                    
+                    // Check compressed size
+                    const compressedSize = (selectedImageData.length * 3) / 4; // Approximate base64 size
+                    console.log('Compressed image size:', Math.round(compressedSize / 1024), 'KB');
+                    
+                    if (compressedSize > 2 * 1024 * 1024) { // 2MB limit
+                        alert('Image is still too large after compression. Please use a smaller image.');
+                        selectedImageData = null;
+                        return;
+                    }
                     
                     const preview = document.getElementById('image-preview');
                     preview.innerHTML = `<img src="${selectedImageData}" alt="Preview">`;
