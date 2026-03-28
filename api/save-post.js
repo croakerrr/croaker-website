@@ -20,7 +20,7 @@ function formatDate(dateString) {
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-            const { title, content, tags, date, excerpt, author, year, language, category } = req.body;
+            const { title, content, tags, date, excerpt, author, year, language, category, image } = req.body;
             
             if (!title || !content) {
                 return res.status(400).json({ error: 'Title and content are required' });
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
                 excerpt: excerpt || content.substring(0, 150) + (content.length > 150 ? '...' : ''),
                 content: content,
                 tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(t => t) : []),
-                image: null,
+                image: image || null,
                 author: author || "croaker",
                 year: year || new Date().getFullYear(),
                 language: language || "web technologies",
