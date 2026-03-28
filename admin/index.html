@@ -868,20 +868,49 @@
         // Image upload functions
         let selectedImageData = null;
 
-        function handleImageUpload(event) {
+        function resizeImage(file, maxWidth = 800, quality = 0.8) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calculate dimensions to maintain aspect ratio
+                    let { width, height } = img;
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Draw and compress
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedDataUrl);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        async function handleImageUpload(event) {
             const file = event.target.files[0];
             if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    selectedImageData = e.target.result;
+                try {
+                    // Resize and compress image to save space
+                    selectedImageData = await resizeImage(file, 800, 0.8);
                     
                     const preview = document.getElementById('image-preview');
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    preview.innerHTML = `<img src="${selectedImageData}" alt="Preview">`;
                     preview.classList.add('has-image');
                     
                     document.getElementById('remove-image-btn').style.display = 'inline-block';
-                };
-                reader.readAsDataURL(file);
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    alert('Error processing image. Please try a different file.');
+                }
             }
         }
 

@@ -131,7 +131,20 @@ function openPostModal(post) {
   
   if (modalDate) modalDate.textContent = post.date;
   if (modalTitle) modalTitle.textContent = post.title;
-  if (modalContent) modalContent.innerHTML = `<p>${post.content.replace(/\n/g, '</p><p>')}</p>`;
+  if (modalContent) {
+    let contentHTML = `<p>${post.content.replace(/\n/g, "</p><p>")}</p>`;
+    
+    if (post.image) {
+      contentHTML = `
+        <div class="blog-post-image">
+          <img src="${post.image}" alt="${post.title}">
+        </div>
+        ${contentHTML}
+      `;
+    }
+    
+    modalContent.innerHTML = contentHTML;
+  }
   if (modalTags) {
     const filterTags = [
       { value: post.year.toString(), type: 'year' },
@@ -360,7 +373,20 @@ function openPostModal(post) {
   
   if (modalDate) modalDate.textContent = post.date;
   if (modalTitle) modalTitle.textContent = post.title;
-  if (modalContent) modalContent.innerHTML = `<p>${post.content.replace(/\n/g, '</p><p>')}</p>`;
+  if (modalContent) {
+    let contentHTML = `<p>${post.content.replace(/\n/g, "</p><p>")}</p>`;
+    
+    if (post.image) {
+      contentHTML = `
+        <div class="blog-post-image">
+          <img src="${post.image}" alt="${post.title}">
+        </div>
+        ${contentHTML}
+      `;
+    }
+    
+    modalContent.innerHTML = contentHTML;
+  }
   if (modalTags) {
     const filterTags = [
       { value: post.year.toString(), type: 'year' },
