@@ -76,6 +76,8 @@ async function loadBlogPosts() {
     // Search input
     const searchInput = document.getElementById('search-input');
     const searchClearBtn = document.getElementById('search-clear-btn');
+    const searchIcon = searchClearBtn.querySelector('.search-icon');
+    const clearIcon = searchClearBtn.querySelector('.clear-icon');
     
     if (searchInput && searchClearBtn) {
       searchInput.addEventListener('input', (e) => {
@@ -91,23 +93,23 @@ async function loadBlogPosts() {
       });
     }
     
+    function updateSearchIcon() {
+      if (searchTerm) {
+        searchIcon.style.display = 'none';
+        clearIcon.style.display = 'block';
+        searchClearBtn.style.cursor = 'pointer';
+      } else {
+        searchIcon.style.display = 'block';
+        clearIcon.style.display = 'none';
+        searchClearBtn.style.cursor = 'default';
+      }
+    }
+    
     function clearSearch() {
       searchInput.value = '';
       searchTerm = '';
       applyFilters();
       updateSearchIcon();
-    }
-    
-    function updateSearchIcon() {
-      const searchIcon = searchClearBtn.querySelector('.search-icon');
-      const clearIcon = searchClearBtn.querySelector('.clear-icon');
-      if (searchTerm) {
-        if (searchIcon) searchIcon.style.display = 'none';
-        if (clearIcon) clearIcon.style.display = 'block';
-      } else {
-        if (searchIcon) searchIcon.style.display = 'block';
-        if (clearIcon) clearIcon.style.display = 'none';
-      }
     }
     
     // Initial render
@@ -129,19 +131,20 @@ function openPostModal(post) {
   
   if (modalDate) modalDate.textContent = post.date;
   if (modalTitle) modalTitle.textContent = post.title;
-  
-  // Handle content with optional image
   if (modalContent) {
-    let contentHTML = post.content.replace(/\n/g, '</p><p>');
-    contentHTML = '<p>' + contentHTML + '</p>';
+    let contentHTML = `<p>${post.content.replace(/\n/g, "</p><p>")}</p>`;
     
     if (post.image) {
-      contentHTML = '<div class="blog-post-image"><img src="' + post.image + '" alt="' + post.title + '"></div>' + contentHTML;
+      contentHTML = `
+        <div class="blog-post-image">
+          <img src="${post.image}" alt="${post.title}">
+        </div>
+        ${contentHTML}
+      `;
     }
     
     modalContent.innerHTML = contentHTML;
   }
-  
   if (modalTags) {
     const filterTags = [
       { value: post.year.toString(), type: 'year' },
@@ -151,13 +154,12 @@ function openPostModal(post) {
     
     const tagsHTML = filterTags.map(tag => {
       const tagColor = getTagColor(tag.value, tag.type);
-      return '<span class="blog-tag" data-color="' + tagColor + '">' + tag.value + '</span>';
+      return `<span class="blog-tag" data-color="${tagColor}">${tag.value}</span>`;
     }).join('');
     modalTags.innerHTML = tagsHTML;
   }
-  
   if (modalAuthor) {
-    modalAuthor.innerHTML = '@ ' + post.author + ' <span class="admin-badge">admin</span>';
+    modalAuthor.innerHTML = `@ ${post.author} <span class="admin-badge">admin</span>`;
   }
   
   // Calculate scrollbar width to prevent content jump
@@ -222,28 +224,32 @@ function applyFilters() {
     const matchesYear = !activeFilters.year || post.year == activeFilters.year;
     const matchesLanguage = !activeFilters.language || post.language === activeFilters.language;
     const matchesCategory = !activeFilters.category || post.category === activeFilters.category;
-    
-    // Search functionality
-    let matchesSearch = true;
-    if (searchTerm) {
-      const searchInTitle = post.title.toLowerCase().includes(searchTerm);
-      const searchInContent = post.content.toLowerCase().includes(searchTerm);
-      const searchInTags = post.tags && post.tags.some(tag => 
-        tag.toLowerCase().includes(searchTerm)
-      );
-      const searchInAuthor = post.author && post.author.toLowerCase().includes(searchTerm);
-      
-      matchesSearch = searchInTitle || searchInContent || searchInTags || searchInAuthor;
-    }
+    const matchesSearch = !searchTerm || 
+      post.title.toLowerCase().includes(searchTerm) || 
+      post.excerpt.toLowerCase().includes(searchTerm) ||
+      post.content.toLowerCase().includes(searchTerm);
     
     return matchesYear && matchesLanguage && matchesCategory && matchesSearch;
   });
   
-  // Apply sorting
-  if (activeFilters.sort === 'newest') {
-    filteredPosts.sort((a, b) => parseDate(b.date) - parseDate(a.date));
-  } else if (activeFilters.sort === 'oldest') {
-    filteredPosts.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+  // Sort by search relevance first if there's a search term
+  if (searchTerm) {
+    filteredPosts.sort((a, b) => {
+      const aScore = calculateSearchScore(a);
+      const bScore = calculateSearchScore(b);
+      if (aScore !== bScore) return bScore - aScore; // Higher score first
+      // Then sort by date
+      return activeFilters.sort === 'newest' 
+        ? parseDate(b.date) - parseDate(a.date)
+        : parseDate(a.date) - parseDate(b.date);
+    });
+  } else {
+    // Sort by date only
+    if (activeFilters.sort === 'newest') {
+      filteredPosts.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+    } else {
+      filteredPosts.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    }
   }
   
   updateSortIndicator();
@@ -253,8 +259,40 @@ function applyFilters() {
 function updateSortIndicator() {
   const sortText = document.getElementById('sort-text');
   if (sortText) {
-    sortText.textContent = 'sorted by: ' + activeFilters.sort;
+    sortText.textContent = `sorted by: ${activeFilters.sort}`;
   }
+}
+
+function calculateSearchScore(post) {
+  let score = 0;
+  const lower = searchTerm;
+  
+  if (post.title.toLowerCase().includes(lower)) score += 3;
+  if (post.excerpt.toLowerCase().includes(lower)) score += 2;
+  if (post.content.toLowerCase().includes(lower)) score += 1;
+  
+  return score;
+}
+
+function getTagType(tag) {
+  // Language/Technology tags
+  const languageTags = ['javascript', 'python', 'java', 'rust', 'sql', 'web', 'css', 'html', 'c', 'systems'];
+  if (languageTags.some(lang => tag.toLowerCase().includes(lang))) return 'language';
+  
+  // Learning/Educational tags  
+  const learningTags = ['learning', 'tutorial', 'basics', 'intro', 'fundamentals', 'theory', 'algorithms', 'big-o'];
+  if (learningTags.some(learn => tag.toLowerCase().includes(learn))) return 'learning';
+  
+  // Project/Development tags
+  const projectTags = ['project', 'portfolio', 'development', 'build', 'design', 'web', 'app'];
+  if (projectTags.some(proj => tag.toLowerCase().includes(proj))) return 'project';
+  
+  // Academic/University tags
+  const academicTags = ['coursework', 'university', 'assignment', 'exam', 'study', 'research', 'analysis', 'performance'];
+  if (academicTags.some(acad => tag.toLowerCase().includes(acad))) return 'academic';
+  
+  // Default to general
+  return 'general';
 }
 
 function renderPosts() {
@@ -264,12 +302,20 @@ function renderPosts() {
   blogList.innerHTML = '';
   
   if (filteredPosts.length === 0) {
-    blogList.innerHTML = '<div class="empty-state">no posts found matching your search criteria</div>';
+    blogList.innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="21 21-4.35-4.35"></path>
+        </svg>
+        <p>no posts found</p>
+      </div>
+    `;
     return;
   }
   
-  filteredPosts.forEach(post => {
-    const postElement = document.createElement('div');
+  filteredPosts.forEach((post, index) => {
+    const postElement = document.createElement('article');
     postElement.className = 'blog-post';
     postElement.dataset.postId = post.id;
     
@@ -282,23 +328,30 @@ function renderPosts() {
     
     const tagsHTML = filterTags.map(tag => {
       const tagColor = getTagColor(tag.value, tag.type);
-      return '<span class="blog-tag" data-color="' + tagColor + '">' + tag.value + '</span>';
+      return `<span class="blog-tag" data-color="${tagColor}">${tag.value}</span>`;
     }).join('');
     
     // Check if post is newest
     const newPostLabel = isNewestPost(post) ? '<span class="new-post-badge">NEW POST!</span>' : '';
     
-    postElement.innerHTML = '<div class="blog-post-header">' +
-      '<div class="blog-post-meta">' +
-        '<span>' + post.date + '</span>' + newPostLabel +
-      '</div>' +
-    '</div>' +
-    '<h2 class="blog-post-title">' + post.title + '</h2>' +
-    '<p class="blog-post-excerpt">' + post.excerpt + '</p>' +
-    '<div class="blog-post-footer">' +
-      '<div class="blog-post-tags">' + tagsHTML + '</div>' +
-      '<div class="blog-post-author">@ ' + post.author + ' <span class="admin-badge">admin</span></div>' +
-    '</div>';
+    postElement.innerHTML = `
+      <div class="blog-post-header">
+        <div class="blog-post-meta">
+          <span>${post.date}</span>
+          ${newPostLabel}
+        </div>
+      </div>
+      <h3 class="blog-post-title">${post.title}</h3>
+      <p class="blog-post-excerpt">${post.excerpt}</p>
+      <div class="blog-post-footer">
+        <div class="blog-post-tags">
+          ${tagsHTML}
+        </div>
+        <div class="blog-post-author">
+          @ ${post.author} <span class="admin-badge">admin</span>
+        </div>
+      </div>
+    `;
     
     // Add click handler for modal
     postElement.addEventListener('click', () => {
@@ -309,6 +362,65 @@ function renderPosts() {
   });
 }
 
+// Modal functionality
+function openPostModal(post) {
+  const modal = document.getElementById('post-modal');
+  const modalDate = document.getElementById('modal-date');
+  const modalTitle = document.getElementById('modal-title');
+  const modalContent = document.getElementById('modal-content');
+  const modalTags = document.getElementById('modal-tags');
+  const modalAuthor = document.getElementById('modal-author');
+  
+  if (modalDate) modalDate.textContent = post.date;
+  if (modalTitle) modalTitle.textContent = post.title;
+  if (modalContent) {
+    let contentHTML = `<p>${post.content.replace(/\n/g, "</p><p>")}</p>`;
+    
+    if (post.image) {
+      contentHTML = `
+        <div class="blog-post-image">
+          <img src="${post.image}" alt="${post.title}">
+        </div>
+        ${contentHTML}
+      `;
+    }
+    
+    modalContent.innerHTML = contentHTML;
+  }
+  if (modalTags) {
+    const filterTags = [
+      { value: post.year.toString(), type: 'year' },
+      { value: post.language, type: 'language' }, 
+      { value: post.category, type: 'topic' }
+    ];
+    
+    const tagsHTML = filterTags.map(tag => {
+      const tagColor = getTagColor(tag.value, tag.type);
+      return `<span class="blog-tag" data-color="${tagColor}">${tag.value}</span>`;
+    }).join('');
+    modalTags.innerHTML = tagsHTML;
+  }
+  if (modalAuthor) {
+    modalAuthor.innerHTML = `@ ${post.author} <span class="admin-badge">admin</span>`;
+  }
+  
+  // Calculate scrollbar width to prevent content jump
+  const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.paddingRight = scrollbarWidth + 'px';
+  
+  modal.classList.add('active');
+  document.body.classList.add('modal-open');
+}
+
+function closePostModal() {
+  const modal = document.getElementById('post-modal');
+  modal.classList.remove('active');
+  document.body.classList.remove('modal-open');
+  
+  // Remove padding compensation
+  document.body.style.paddingRight = '';
+}
+
 // Initialize modal functionality
 document.addEventListener('DOMContentLoaded', () => {
   loadBlogPosts();
@@ -316,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Modal functionality
   const modal = document.getElementById('post-modal');
   const closeModalBtn = document.getElementById('close-modal');
-  const modalBackdrop = modal && modal.querySelector('.modal-backdrop');
+  const modalBackdrop = modal?.querySelector('.modal-backdrop');
   
   if (closeModalBtn) {
     closeModalBtn.addEventListener('click', closePostModal);
