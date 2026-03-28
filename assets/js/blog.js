@@ -44,14 +44,14 @@ async function loadBlogPosts() {
     const blogList = document.getElementById('blog-list');
     if (!blogList) return;
     
-    // Extract unique values, with fallback defaults when no posts exist
+    // Extract unique values, with fallback to original blog defaults when no posts exist
     const years = allPosts.length > 0 ? 
       [...new Set(allPosts.map(p => p.year))].sort((a, b) => b - a) : 
-      [2025, 2024, 2023];
+      [2026];
       
     const languages = allPosts.length > 0 ?
       [...new Set(allPosts.map(p => p.language))].sort() :
-      ['web technologies', 'python', 'java'];
+      ['web technologies', 'java', 'python'];
       
     const categories = allPosts.length > 0 ?
       [...new Set(allPosts.map(p => p.category))].sort() :
