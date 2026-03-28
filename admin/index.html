@@ -194,7 +194,7 @@
             gap: 8px;
         }
         
-        .edit-btn, .delete-btn {
+        .edit-btn, .delete-btn, .pin-btn {
             font-size: 10px;
             padding: 4px 8px;
             border: 1px solid var(--border);
@@ -214,6 +214,25 @@
             background: #ff4444;
             color: white;
             border-color: #ff4444;
+        }
+
+        .pin-btn {
+            background: #ffa500;
+            border-color: #ff8c00;
+            color: white;
+        }
+
+        .pin-btn.pinned {
+            background: #4ade80;
+            border-color: #22c55e;
+        }
+
+        .pin-btn:hover {
+            background: #ff8c00;
+        }
+
+        .pin-btn.pinned:hover {
+            background: #22c55e;
         }
 
         .tag-selector {
@@ -354,8 +373,28 @@
             font-size: 14px;
         }
 
-        .remove-image-btn {
+        .image-controls {
+            display: flex;
+            gap: 10px;
             margin-top: 10px;
+        }
+
+        .change-image-btn {
+            background: #4a9eff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            flex: 1;
+        }
+
+        .change-image-btn:hover {
+            background: #3a8eef;
+        }
+
+        .remove-image-btn {
             background: #ff6b6b;
             color: white;
             border: none;
@@ -363,6 +402,7 @@
             border-radius: 4px;
             font-size: 12px;
             cursor: pointer;
+            flex: 1;
         }
 
         .remove-image-btn:hover {
@@ -408,6 +448,24 @@
             font-size: 12px;
             margin-top: 1rem;
             text-transform: lowercase;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-text {
+            user-select: none;
         }
 
         /* Login form styling to match site */
@@ -511,7 +569,7 @@
         <!-- Blog Section -->
         <div id="blog-area" class="content-area current">
             <div class="editor-layout">
-                <div class="input-box">
+                <div class="input-box" id="blog-form">
                     <div class="box-title">new blog post</div>
                     <div class="input-field">
                         <label for="blog-title">title</label>
@@ -528,7 +586,10 @@
                             <div class="image-preview" id="image-preview">
                                 <span class="upload-text">click to select image or drag & drop</span>
                             </div>
-                            <button type="button" class="remove-image-btn" id="remove-image-btn" onclick="removeImage()" style="display: none;">remove image</button>
+                            <div class="image-controls" id="image-controls" style="display: none;">
+                                <button type="button" class="change-image-btn" onclick="changeImage()">change image</button>
+                                <button type="button" class="remove-image-btn" onclick="removeImage()">remove image</button>
+                            </div>
                         </div>
                     </div>
                     <div class="input-field">
@@ -614,6 +675,12 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="input-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="blog-pinned">
+                            <span class="checkbox-text">📌 pin this post (appears in homepage featured section)</span>
+                        </label>
                     </div>
                     <div class="button-group">
                         <button class="save-button" onclick="saveBlogPost()">save post</button>
@@ -754,7 +821,8 @@
                 year: yearOverride ? parseInt(yearOverride) : new Date(date).getFullYear(),
                 language: languageOverride || determineLanguage(tagArray),
                 category: categoryOverride || determineCategory(tagArray),
-                image: selectedImageData
+                image: selectedImageData,
+                pinned: document.getElementById('blog-pinned').checked
             };
             
             // Debug: Check if image data exists
@@ -764,19 +832,36 @@
             }
             
             try {
-                const response = await fetch('/api/save-post', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(post)
-                });
+                // Check if we're editing an existing post
+                const blogForm = document.getElementById('blog-form');
+                const editingId = blogForm.dataset.editingId;
+                
+                let response;
+                if (editingId) {
+                    // Update existing post
+                    const updateData = { ...post, id: editingId };
+                    response = await fetch('/api/update-post', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updateData)
+                    });
+                } else {
+                    // Create new post
+                    response = await fetch('/api/save-post', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(post)
+                    });
+                }
                 
                 if (response.ok) {
-                    alert('Blog post saved successfully!');
+                    const result = await response.json();
+                    alert(editingId ? 'Blog post updated successfully!' : 'Blog post saved successfully!');
                     clearBlogForm();
                     loadExistingPosts();
                 } else {
                     const error = await response.json();
-                    alert(`Failed to save post: ${error.error}`);
+                    alert(`Failed to ${editingId ? 'update' : 'save'} post: ${error.error}`);
                 }
             } catch (error) {
                 console.error('Error saving post:', error);
@@ -834,6 +919,17 @@
             document.getElementById('blog-year').value = '';
             document.getElementById('blog-language').value = '';
             document.getElementById('blog-category').value = '';
+            document.getElementById('blog-pinned').checked = false;
+            
+            // Clear editing state
+            const blogForm = document.getElementById('blog-form');
+            delete blogForm.dataset.editingId;
+            
+            // Reset button text and style
+            const saveButton = document.querySelector('.save-button');
+            saveButton.textContent = 'save post';
+            saveButton.style.background = '';
+            
             // Clear all selected tag buttons
             document.querySelectorAll('.tag-btn').forEach(btn => {
                 btn.classList.remove('selected');
@@ -943,7 +1039,7 @@
                     preview.innerHTML = `<img src="${selectedImageData}" alt="Preview">`;
                     preview.classList.add('has-image');
                     
-                    document.getElementById('remove-image-btn').style.display = 'inline-block';
+                    document.getElementById('image-controls').style.display = 'flex';
                     console.log('Image upload complete!');
                 } catch (error) {
                     console.error('Error processing image:', error);
@@ -960,7 +1056,11 @@
             preview.innerHTML = '<span class="upload-text">click to select image or drag & drop</span>';
             preview.classList.remove('has-image');
             document.getElementById('blog-image').value = '';
-            document.getElementById('remove-image-btn').style.display = 'none';
+            document.getElementById('image-controls').style.display = 'none';
+        }
+
+        function changeImage() {
+            document.getElementById('blog-image').click();
         }
 
         async function saveProject() {
@@ -1025,10 +1125,13 @@
                 
                 container.innerHTML = posts.slice(0, 5).map(post => `
                     <div class="post-item">
-                        <div class="post-title">${post.title}</div>
+                        <div class="post-title">${post.title} ${post.pinned ? '📌' : ''}</div>
                         <div class="post-meta">${post.date} • ${post.tags ? post.tags.join(', ') : 'no tags'}</div>
                         <div class="post-excerpt">${post.excerpt}</div>
                         <div class="post-actions">
+                            <button onclick="togglePin('${post.id}')" class="pin-btn ${post.pinned ? 'pinned' : ''}">
+                                ${post.pinned ? 'unpin' : 'pin'}
+                            </button>
                             <button onclick="editPost('${post.id}')" class="edit-btn">edit</button>
                             <button onclick="deletePost('${post.id}')" class="delete-btn">delete</button>
                         </div>
@@ -1070,8 +1173,83 @@
             }
         }
         
-        function editPost(postId) {
-            alert(`Edit post functionality not implemented yet for ID: ${postId}`);
+        async function editPost(postId) {
+            try {
+                // Get the posts to find the one we're editing
+                const response = await fetch('/api/get-posts');
+                const posts = await response.json();
+                
+                const post = posts.find(p => p.id === postId);
+                if (!post) {
+                    alert('Post not found');
+                    return;
+                }
+                
+                // Populate the form with the post data
+                document.getElementById('blog-title').value = post.title || '';
+                document.getElementById('blog-content').value = post.content || '';
+                document.getElementById('blog-tags').value = post.tags ? post.tags.join(', ') : '';
+                
+                // Set date if it exists
+                if (post.date) {
+                    const dateParts = post.date.split('/');
+                    if (dateParts.length === 3) {
+                        // Convert DD/MM/YYYY to YYYY-MM-DD for date input
+                        const [day, month, year] = dateParts;
+                        document.getElementById('blog-date').value = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                    }
+                }
+                
+                // Set other fields
+                document.getElementById('blog-year').value = post.year || '';
+                document.getElementById('blog-language').value = post.language || '';
+                document.getElementById('blog-category').value = post.category || '';
+                document.getElementById('blog-pinned').checked = post.pinned || false;
+                
+                // Handle image if it exists
+                if (post.image) {
+                    selectedImageData = post.image;
+                    const preview = document.getElementById('image-preview');
+                    preview.innerHTML = `<img src="${post.image}" alt="Preview">`;
+                    preview.classList.add('has-image');
+                    document.getElementById('image-controls').style.display = 'flex';
+                }
+                
+                // Store the post ID for updating
+                document.getElementById('blog-form').dataset.editingId = postId;
+                
+                // Change button text to indicate editing
+                const saveButton = document.querySelector('.save-button');
+                saveButton.textContent = 'update post';
+                saveButton.style.background = '#4a9eff';
+                
+                alert(`Loaded post "${post.title}" for editing`);
+                
+            } catch (error) {
+                console.error('Error loading post for editing:', error);
+                alert('Error loading post - check console');
+            }
+        }
+        
+        async function togglePin(postId) {
+            try {
+                const response = await fetch('/api/toggle-pin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ postId: postId })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    loadExistingPosts(); // Refresh the list to show updated pin status
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to toggle pin: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('Error toggling pin:', error);
+                alert('Error toggling pin - check console');
+            }
         }
         
         async function deletePost(postId) {

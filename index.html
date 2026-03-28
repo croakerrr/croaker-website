@@ -68,7 +68,39 @@
     </a>
 </div>
 
+<!-- Recent Posts Section -->
+<div id="homepage-posts" class="homepage-posts-section">
+    <div id="pinned-post-section" class="post-section" style="display: none;">
+        <h2 class="section-title">📌 pinned post</h2>
+        <div id="pinned-post-container" class="post-container">
+            <!-- Pinned post will be loaded here -->
+        </div>
+    </div>
+    
+    <div id="recent-post-section" class="post-section" style="display: none;">
+        <h2 class="section-title">📝 recent post</h2>
+        <div id="recent-post-container" class="post-container">
+            <!-- Recent post will be loaded here -->
+        </div>
+    </div>
+</div>
 
+<!-- Post Modal for Homepage -->
+<div id="homepage-post-modal" class="post-modal">
+    <div class="modal-backdrop" onclick="closeHomepageModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button onclick="closeHomepageModal()" class="close-modal-btn">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-date" id="homepage-modal-date"></div>
+            <h1 class="modal-title" id="homepage-modal-title"></h1>
+            <div class="modal-tags" id="homepage-modal-tags"></div>
+            <div class="modal-content-text" id="homepage-modal-content"></div>
+            <div class="modal-author" id="homepage-modal-author"></div>
+        </div>
+    </div>
+</div>
 
 </main>
 
@@ -77,5 +109,101 @@
 <script src="assets/js/transitions.js"></script>
 <script src="assets/js/navigation.js"></script>
 <script src="assets/js/theme-toggle.js"></script>
+<script>
+// Homepage posts functionality
+async function loadHomepagePosts() {
+    try {
+        const response = await fetch('/api/get-posts');
+        const posts = await response.json();
+        
+        if (!posts || posts.length === 0) return;
+        
+        // Find pinned post (most recent pinned post)
+        const pinnedPost = posts.find(post => post.pinned);
+        
+        // Find most recent post (that's not pinned)
+        const recentPost = posts.find(post => !post.pinned);
+        
+        // Show pinned post section if there's a pinned post
+        if (pinnedPost) {
+            document.getElementById('pinned-post-section').style.display = 'block';
+            renderHomepagePost(pinnedPost, 'pinned-post-container');
+        }
+        
+        // Show recent post section if there's a recent post
+        if (recentPost) {
+            document.getElementById('recent-post-section').style.display = 'block';
+            renderHomepagePost(recentPost, 'recent-post-container');
+        }
+        
+    } catch (error) {
+        console.error('Error loading homepage posts:', error);
+    }
+}
+
+function renderHomepagePost(post, containerId) {
+    const container = document.getElementById(containerId);
+    
+    const imageHTML = post.image ? 
+        `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}"></div>` : '';
+    
+    const tagsHTML = post.tags && post.tags.length > 0 ? 
+        `<div class="homepage-post-tags">${post.tags.map(tag => 
+            `<span class="homepage-post-tag">${tag}</span>`
+        ).join('')}</div>` : '';
+    
+    container.innerHTML = `
+        <div class="homepage-post-title">${post.title}</div>
+        <div class="homepage-post-meta">${post.date} • by ${post.author}</div>
+        ${imageHTML}
+        <div class="homepage-post-excerpt">${post.excerpt}</div>
+        ${tagsHTML}
+    `;
+    
+    // Add click handler to open modal
+    container.onclick = () => openHomepagePostModal(post);
+}
+
+function openHomepagePostModal(post) {
+    const modal = document.getElementById('homepage-post-modal');
+    
+    document.getElementById('homepage-modal-date').textContent = post.date;
+    document.getElementById('homepage-modal-title').textContent = post.title;
+    document.getElementById('homepage-modal-author').textContent = `by ${post.author}`;
+    
+    // Handle content with optional image
+    let contentHTML = post.content.replace(/\\n/g, '</p><p>');
+    contentHTML = '<p>' + contentHTML + '</p>';
+    
+    if (post.image) {
+        contentHTML = '<div class="blog-post-image"><img src="' + post.image + '" alt="' + post.title + '"></div>' + contentHTML;
+    }
+    
+    document.getElementById('homepage-modal-content').innerHTML = contentHTML;
+    
+    // Handle tags
+    if (post.tags && post.tags.length > 0) {
+        document.getElementById('homepage-modal-tags').innerHTML = post.tags.map(tag => 
+            `<span class="modal-tag">${tag}</span>`
+        ).join('');
+    } else {
+        document.getElementById('homepage-modal-tags').innerHTML = '';
+    }
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeHomepageModal() {
+    const modal = document.getElementById('homepage-post-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Load posts when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    loadHomepagePosts();
+});
+</script>
 
 </html>

@@ -1,37 +1,38 @@
-const { Redis } = require('@upstash/redis');
+import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
 });
 
-function generateId(title) {
-    return title.toLowerCase()
-        .replace(/[^a-z0-9\s]/g, '')
-        .replace(/\s+/g, '-')
-        .substring(0, 50) + '-' + Date.now();
-}
-
 function formatDate(dateString) {
+    if (!dateString) return new Date().toLocaleDateString('en-GB');
     const date = new Date(dateString);
     return date.toLocaleDateString('en-GB');
 }
 
 export default async function handler(req, res) {
-    if (req.method === 'POST') {
+    if (req.method === 'PUT') {
         try {
-            const { title, content, tags, date, excerpt, author, year, language, category, image, pinned } = req.body;
+            const { id, title, content, tags, date, excerpt, author, year, language, category, image, pinned } = req.body;
             
-            if (!title || !content) {
-                return res.status(400).json({ error: 'Title and content are required' });
+            if (!id || !title || !content) {
+                return res.status(400).json({ error: 'ID, title and content are required' });
             }
 
             // Get existing posts
             const posts = await redis.get('blog-posts') || [];
+            
+            // Find the post to update
+            const postIndex = posts.findIndex(post => post.id === id);
+            
+            if (postIndex === -1) {
+                return res.status(404).json({ error: 'Post not found' });
+            }
 
-            // Create new post
-            const newPost = {
-                id: generateId(title),
+            // Update the post
+            posts[postIndex] = {
+                ...posts[postIndex], // Keep existing fields like creation date
                 title: title,
                 date: date || formatDate(new Date()),
                 excerpt: excerpt || content.substring(0, 150) + (content.length > 150 ? '...' : ''),
@@ -45,24 +46,20 @@ export default async function handler(req, res) {
                 pinned: pinned || false
             };
 
-            // Add to beginning of array (newest first)
-            posts.unshift(newPost);
-
-            // Save to Redis
+            // Save updated posts
             await redis.set('blog-posts', posts);
 
             res.json({ 
                 success: true, 
-                message: 'Blog post created successfully!', 
-                post: newPost 
+                message: 'Blog post updated successfully!', 
+                post: posts[postIndex]
             });
 
         } catch (error) {
-            console.error('Error creating blog post:', error);
-            res.status(500).json({ error: 'Failed to create blog post' });
+            console.error('Error updating blog post:', error);
+            res.status(500).json({ error: 'Failed to update blog post' });
         }
     } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+        res.status(405).json({ error: 'Method not allowed' });
     }
 }

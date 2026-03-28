@@ -804,6 +804,108 @@ main div p {
     margin-bottom: 0.8rem;
 }
 
+/* HOMEPAGE POSTS SECTION */
+.homepage-posts-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode .homepage-posts-section {
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.post-section {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--fg);
+    margin-bottom: 1.5rem;
+    text-transform: lowercase;
+}
+
+.post-container {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+body.light-mode .post-container {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.post-container:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+body.light-mode .post-container:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.homepage-post-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.homepage-post-meta {
+    font-size: 0.85rem;
+    color: var(--fg-light);
+    margin-bottom: 0.75rem;
+}
+
+.homepage-post-excerpt {
+    font-size: 0.95rem;
+    color: var(--fg-light);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.homepage-post-image {
+    width: 100%;
+    max-width: 400px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.homepage-post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.homepage-post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.homepage-post-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--fg-light);
+}
+
+body.light-mode .homepage-post-tag {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 /* SEARCH CONTAINER */
 .search-container {
     display: flex;
