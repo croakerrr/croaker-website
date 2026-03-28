@@ -315,17 +315,23 @@ function renderPosts() {
     // Check if post is newest
     const newPostLabel = isNewestPost(post) ? '<span class="new-post-badge">NEW POST!</span>' : '';
     
-    postElement.innerHTML = '<div class="blog-post-header">' +
-      '<div class="blog-post-meta">' +
-        '<span>' + post.date + '</span>' + newPostLabel +
+    // Add thumbnail image if post has one
+    const thumbnailHTML = post.image ? 
+      '<div class="blog-post-thumbnail"><img src="' + post.image + '" alt="' + post.title + '"></div>' : '';
+    
+    postElement.innerHTML = '<div class="blog-post-content">' +
+      '<div class="blog-post-header">' +
+        '<div class="blog-post-meta">' +
+          '<span>' + post.date + '</span>' + newPostLabel +
+        '</div>' +
       '</div>' +
-    '</div>' +
-    '<h2 class="blog-post-title">' + post.title + '</h2>' +
-    '<p class="blog-post-excerpt">' + post.excerpt + '</p>' +
-    '<div class="blog-post-footer">' +
-      '<div class="blog-post-tags">' + tagsHTML + '</div>' +
-      '<div class="blog-post-author">@ ' + post.author + ' <span class="admin-badge">admin</span></div>' +
-    '</div>';
+      '<h2 class="blog-post-title">' + post.title + '</h2>' +
+      '<p class="blog-post-excerpt">' + post.excerpt + '</p>' +
+      '<div class="blog-post-footer">' +
+        '<div class="blog-post-tags">' + tagsHTML + '</div>' +
+        '<div class="blog-post-author">@ ' + post.author + ' <span class="admin-badge">admin</span></div>' +
+      '</div>' +
+    '</div>' + thumbnailHTML;
     
     // Add click handler for modal
     postElement.addEventListener('click', () => {
