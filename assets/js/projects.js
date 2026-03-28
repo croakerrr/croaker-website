@@ -9,7 +9,7 @@ let projectsData = [];
 // Load and render projects from data source
 async function loadProjects() {
     try {
-        const response = await fetch('../assets/data/projects-data.json');
+        const response = await fetch('/api/get-projects');
         projectsData = await response.json();
         renderProjects();
     } catch (error) {
@@ -34,7 +34,7 @@ function createProjectCard(project) {
     card.addEventListener('click', () => openProjectModal(project));
     
     const statusClass = project.status.toLowerCase().replace(' ', '-');
-    const techTags = project.tech.map(tech => 
+    const techTags = (project.tech || project.technologies || []).map(tech => 
         `<span class="tech-tag">${tech}</span>`
     ).join('');
     

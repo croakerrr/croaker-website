@@ -270,6 +270,41 @@
             background: #e55555;
         }
 
+        .advanced-tag-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tag-groups {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .tag-group {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 10px;
+            background: #f8f8f8;
+        }
+
+        .tag-group-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
         .filter-selectors {
             margin: 15px 0;
             padding: 15px;
@@ -423,40 +458,50 @@
                         <textarea id="blog-content" placeholder="write your post content here..."></textarea>
                     </div>
                     <div class="input-field">
-                        <label for="blog-tags">tags</label>
-                        <div class="tag-selector">
-                            <div class="predefined-tags">
-                                <span class="tag-label">Quick select:</span>
-                                <button type="button" class="tag-btn" onclick="addTag('intro')">intro</button>
-                                <button type="button" class="tag-btn" onclick="addTag('welcome')">welcome</button>
-                                <button type="button" class="tag-btn" onclick="addTag('web')">web</button>
-                                <button type="button" class="tag-btn" onclick="addTag('portfolio')">portfolio</button>
-                                <button type="button" class="tag-btn" onclick="addTag('javascript')">javascript</button>
-                                <button type="button" class="tag-btn" onclick="addTag('css')">css</button>
-                                <button type="button" class="tag-btn" onclick="addTag('oop')">oop</button>
-                                <button type="button" class="tag-btn" onclick="addTag('learning')">learning</button>
-                                <button type="button" class="tag-btn" onclick="addTag('syntax')">syntax</button>
-                                <button type="button" class="tag-btn" onclick="addTag('data-science')">data-science</button>
-                                <button type="button" class="tag-btn" onclick="addTag('pandas')">pandas</button>
-                                <button type="button" class="tag-btn" onclick="addTag('matplotlib')">matplotlib</button>
-                                <button type="button" class="tag-btn" onclick="addTag('coursework')">coursework</button>
-                                <button type="button" class="tag-btn" onclick="addTag('algorithms')">algorithms</button>
-                                <button type="button" class="tag-btn" onclick="addTag('big-o')">big-o</button>
-                                <button type="button" class="tag-btn" onclick="addTag('performance')">performance</button>
-                                <button type="button" class="tag-btn" onclick="addTag('theory')">theory</button>
-                                <button type="button" class="tag-btn" onclick="addTag('responsive')">responsive</button>
-                                <button type="button" class="tag-btn" onclick="addTag('css-grid')">css-grid</button>
-                                <button type="button" class="tag-btn" onclick="addTag('flexbox')">flexbox</button>
-                                <button type="button" class="tag-btn" onclick="addTag('mobile')">mobile</button>
-                                <button type="button" class="tag-btn" onclick="addTag('spring')">spring</button>
-                                <button type="button" class="tag-btn" onclick="addTag('backend')">backend</button>
-                                <button type="button" class="tag-btn" onclick="addTag('api')">api</button>
-                                <button type="button" class="tag-btn" onclick="addTag('framework')">framework</button>
-                                <button type="button" class="tag-btn" onclick="addTag('database')">database</button>
-                                <button type="button" class="tag-btn" onclick="addTag('optimisation')">optimisation</button>
-                                <button type="button" class="tag-btn" onclick="addTag('indexes')">indexes</button>
+                        <label>tags & categories</label>
+                        <div class="advanced-tag-selector">
+                            <div class="tag-groups">
+                                <div class="tag-group">
+                                    <span class="tag-group-title">languages</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="addTag('javascript')">javascript</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('python')">python</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('java')">java</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('css')">css</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('html')">html</button>
+                                    </div>
+                                </div>
+                                <div class="tag-group">
+                                    <span class="tag-group-title">frameworks</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="addTag('react')">react</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('spring')">spring</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('node')">node</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('framework')">framework</button>
+                                    </div>
+                                </div>
+                                <div class="tag-group">
+                                    <span class="tag-group-title">topics</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="addTag('algorithms')">algorithms</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('data-science')">data-science</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('database')">database</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('api')">api</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('responsive')">responsive</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('performance')">performance</button>
+                                    </div>
+                                </div>
+                                <div class="tag-group">
+                                    <span class="tag-group-title">context</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="addTag('learning')">learning</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('coursework')">coursework</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('portfolio')">portfolio</button>
+                                        <button type="button" class="tag-btn" onclick="addTag('theory')">theory</button>
+                                    </div>
+                                </div>
                             </div>
-                            <input type="text" id="blog-tags" placeholder="Selected tags will appear here or type custom tags...">
+                            <input type="text" id="blog-tags" placeholder="Selected tags appear here, or type custom tags...">
                             <button type="button" class="clear-tags-btn" onclick="clearTags()">clear all</button>
                         </div>
                     </div>
@@ -479,6 +524,7 @@
                                 <label for="blog-language">language</label>
                                 <select id="blog-language">
                                     <option value="">auto-detect</option>
+                                    <option value="general">general</option>
                                     <option value="web technologies">web technologies</option>
                                     <option value="java">java</option>
                                     <option value="python">python</option>
@@ -679,7 +725,7 @@
                     if (lower.includes(key)) return value;
                 }
             }
-            return 'web technologies';
+            return 'general';
         }
         
         function determineCategory(tags) {
