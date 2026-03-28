@@ -235,6 +235,66 @@ app.post('/admin/save-project', async (req, res) => {
     }
 });
 
+app.delete('/admin/delete-post/:id', async (req, res) => {
+    try {
+        const postId = req.params.id;
+        
+        // Load existing posts
+        const data = await fs.readFile('./assets/data/blog-data.json', 'utf8');
+        let posts = JSON.parse(data);
+        
+        // Find and remove the post
+        const originalLength = posts.length;
+        posts = posts.filter(post => post.id !== postId);
+        
+        if (posts.length === originalLength) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        
+        // Save back to file
+        await fs.writeFile('./assets/data/blog-data.json', JSON.stringify(posts, null, 2));
+        
+        res.json({ 
+            success: true, 
+            message: 'Post deleted successfully!' 
+        });
+        
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        res.status(500).json({ error: 'Failed to delete post' });
+    }
+});
+
+app.delete('/admin/delete-project/:id', async (req, res) => {
+    try {
+        const projectId = req.params.id;
+        
+        // Load existing projects
+        const data = await fs.readFile('./assets/data/projects-data.json', 'utf8');
+        let projects = JSON.parse(data);
+        
+        // Find and remove the project
+        const originalLength = projects.length;
+        projects = projects.filter(project => project.id !== projectId);
+        
+        if (projects.length === originalLength) {
+            return res.status(404).json({ error: 'Project not found' });
+        }
+        
+        // Save back to file
+        await fs.writeFile('./assets/data/projects-data.json', JSON.stringify(projects, null, 2));
+        
+        res.json({ 
+            success: true, 
+            message: 'Project deleted successfully!' 
+        });
+        
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        res.status(500).json({ error: 'Failed to delete project' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`
 🚀 Croaker Blog Server Running!
