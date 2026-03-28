@@ -5,8 +5,11 @@ const { Redis } = require('@upstash/redis');
 const app = express();
 const PORT = 3000;
 
-// Initialize Redis client (Vercel will provide environment variables automatically)
-const redis = Redis.fromEnv();
+// Initialize Redis client with correct Vercel environment variables
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
+});
 
 // Middleware
 app.use(cors());
@@ -199,8 +202,8 @@ app.get('/admin/test-redis', async (req, res) => {
     try {
         // Check environment variables
         const envVars = {
-            UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL ? 'Set' : 'Missing',
-            UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN ? 'Set' : 'Missing'
+            KV_REST_API_URL: process.env.KV_REST_API_URL ? 'Set' : 'Missing',
+            KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? 'Set' : 'Missing'
         };
         
         // Test Redis connection
@@ -217,8 +220,8 @@ app.get('/admin/test-redis', async (req, res) => {
         res.status(500).json({
             success: false,
             environment: {
-                UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL ? 'Set' : 'Missing',
-                UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN ? 'Set' : 'Missing'
+                KV_REST_API_URL: process.env.KV_REST_API_URL ? 'Set' : 'Missing',
+                KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? 'Set' : 'Missing'
             },
             error: error.message,
             message: 'Redis connection failed'
