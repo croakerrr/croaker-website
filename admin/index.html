@@ -552,17 +552,15 @@
             }
             
             const project = {
-                id: `project-${Date.now()}`,
                 name: name,
                 description: desc,
                 technologies: tech.split(',').map(t => t.trim()).filter(t => t),
                 githubUrl: github || null,
-                status: status,
-                createdDate: new Date().toISOString().split('T')[0]
+                status: status
             };
             
             try {
-                const response = await fetch('/admin/save-project', {
+                const response = await fetch('/api/save-project', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(project)
@@ -573,7 +571,8 @@
                     clearProjectForm();
                     loadExistingProjects();
                 } else {
-                    alert('Failed to save project');
+                    const error = await response.json();
+                    alert(`Failed to save project: ${error.error}`);
                 }
             } catch (error) {
                 console.error('Error saving project:', error);
@@ -674,7 +673,7 @@
         
         function deleteProject(projectId) {
             if (confirm('Are you sure you want to delete this project?')) {
-                fetch(`/admin/delete-project/${projectId}`, {
+                fetch(`/api/delete-project?id=${projectId}`, {
                     method: 'DELETE'
                 })
                 .then(response => response.json())
@@ -683,7 +682,7 @@
                         alert('Project deleted successfully!');
                         loadExistingProjects(); // Refresh the list
                     } else {
-                        alert('Failed to delete project');
+                        alert(`Failed to delete project: ${data.error}`);
                     }
                 })
                 .catch(error => {
