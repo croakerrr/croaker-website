@@ -4,26 +4,6 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "assets/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "pages/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "admin/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "images/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -32,23 +12,19 @@
       "dest": "/server.js"
     },
     {
-      "src": "/admin/(.*)",
+      "src": "/admin/save-post",
       "dest": "/server.js"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
+      "src": "/admin/save-project", 
+      "dest": "/server.js"
     },
     {
-      "src": "/pages/(.*)",
-      "dest": "/pages/$1"
+      "src": "/admin$",
+      "dest": "/admin/index.html"
     },
     {
-      "src": "/images/(.*)",
-      "dest": "/images/$1"
-    },
-    {
-      "src": "/admin",
+      "src": "/admin/",
       "dest": "/admin/index.html"
     },
     {
