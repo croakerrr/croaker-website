@@ -261,12 +261,22 @@ function applyFilters() {
   // Apply sorting
   if (activeFilters.sort === 'newest') {
     filteredPosts.sort((a, b) => {
+      // First sort by pinned status (pinned posts first)
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      
+      // Then sort by date
       const dateA = parseDate(a.date);
       const dateB = parseDate(b.date);
       return dateB - dateA;
     });
   } else if (activeFilters.sort === 'oldest') {
     filteredPosts.sort((a, b) => {
+      // First sort by pinned status (pinned posts first)
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      
+      // Then sort by date
       const dateA = parseDate(a.date);
       const dateB = parseDate(b.date);
       return dateA - dateB;
@@ -312,8 +322,11 @@ function renderPosts() {
       return '<span class="blog-tag" data-color="' + tagColor + '">' + tag.value + '</span>';
     }).join('');
     
-    // Check if post is newest
-    const newPostLabel = isNewestPost(post) ? '<span class="new-post-badge">NEW POST!</span>' : '';
+    // Check if post is newest (and not pinned)
+    const newPostLabel = (isNewestPost(post) && !post.pinned) ? '<span class="new-post-badge">NEW POST!</span>' : '';
+    
+    // Check if post is pinned
+    const pinnedLabel = post.pinned ? '<span class="pinned-post-badge">PINNED</span>' : '';
     
     // Add thumbnail image if post has one
     const thumbnailHTML = post.image ? 
@@ -322,7 +335,7 @@ function renderPosts() {
     postElement.innerHTML = '<div class="blog-post-content">' +
       '<div class="blog-post-header">' +
         '<div class="blog-post-meta">' +
-          '<span>' + post.date + '</span>' + newPostLabel +
+          '<span>' + post.date + '</span>' + pinnedLabel + newPostLabel +
         '</div>' +
       '</div>' +
       '<h2 class="blog-post-title">' + post.title + '</h2>' +
