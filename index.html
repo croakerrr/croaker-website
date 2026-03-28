@@ -146,9 +146,12 @@ function renderHomepagePost(post, containerId, postType) {
     
     // Define badge text and class for each post type
     const badgeInfo = {
-        pinned: { text: 'PINNED POST', class: 'pinned' },
+        pinned: { text: 'PINNED', class: 'pinned' },
         recent: { text: 'NEW POST', class: 'recent' }
     };
+    
+    // Add the sticky note color class to the container
+    container.className = `post-container ${badgeInfo[postType].class}`;
     
     const imageHTML = post.image ? 
         `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}"></div>` : '';
