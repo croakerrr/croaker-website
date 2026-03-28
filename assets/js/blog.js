@@ -38,7 +38,7 @@ function isNewestPost(post) {
 
 async function loadBlogPosts() {
   try {
-    const response = await fetch('../assets/data/blog-data.json');
+    const response = await fetch('/api/get-posts');
     allPosts = await response.json();
     
     const blogList = document.getElementById('blog-list');

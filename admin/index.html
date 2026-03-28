@@ -591,7 +591,7 @@
 
         async function loadExistingPosts() {
             try {
-                const response = await fetch('../assets/data/blog-data.json');
+                const response = await fetch('/api/get-posts');
                 const posts = await response.json();
                 
                 const container = document.getElementById('existing-posts');
