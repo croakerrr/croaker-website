@@ -458,21 +458,19 @@
             }
             
             const post = {
-                id: `post-${Date.now()}`,
                 title: title,
-                date: formatDate(date),
-                excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
                 content: content,
                 tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-                image: null,
+                date: formatDate(date),
+                excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
                 author: "croaker",
                 year: new Date(date).getFullYear(),
-                language: determineLanguage(tags),
-                category: determineCategory(tags)
+                language: determineLanguage(tags.split(',').map(tag => tag.trim())),
+                category: determineCategory(tags.split(',').map(tag => tag.trim()))
             };
             
             try {
-                const response = await fetch('/admin/save-post', {
+                const response = await fetch('/api/save-post', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(post)
@@ -483,7 +481,8 @@
                     clearBlogForm();
                     loadExistingPosts();
                 } else {
-                    alert('Failed to save post');
+                    const error = await response.json();
+                    alert(`Failed to save post: ${error.error}`);
                 }
             } catch (error) {
                 console.error('Error saving post:', error);
@@ -655,7 +654,7 @@
         async function deletePost(postId) {
             if (confirm('Are you sure you want to delete this post?')) {
                 try {
-                    const response = await fetch(`/admin/delete-post/${postId}`, {
+                    const response = await fetch(`/api/delete-post?id=${postId}`, {
                         method: 'DELETE'
                     });
                     
@@ -663,7 +662,8 @@
                         alert('Post deleted successfully!');
                         loadExistingPosts(); // Refresh the list
                     } else {
-                        alert('Failed to delete post');
+                        const error = await response.json();
+                        alert(`Failed to delete post: ${error.error}`);
                     }
                 } catch (error) {
                     console.error('Error deleting post:', error);
