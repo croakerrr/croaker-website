@@ -873,24 +873,68 @@ body.light-mode .homepage-posts-section {
 }
 
 .post-container.pinned {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    background: 
+        /* Horizontal lines */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 18px,
+            rgba(146, 64, 14, 0.15) 19px,
+            rgba(146, 64, 14, 0.15) 20px,
+            transparent 21px
+        ),
+        /* Base gradient */
+        linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
     border-left: 3px solid #f59e0b;
 }
 
 .post-container.recent {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    background: 
+        /* Horizontal lines */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 18px,
+            rgba(30, 64, 175, 0.2) 19px,
+            rgba(30, 64, 175, 0.2) 20px,
+            transparent 21px
+        ),
+        /* Base gradient */
+        linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     color: #1e40af;
     border-left: 3px solid #3b82f6;
 }
 
 body.light-mode .post-container.pinned {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    background: 
+        /* Horizontal lines */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 18px,
+            rgba(146, 64, 14, 0.15) 19px,
+            rgba(146, 64, 14, 0.15) 20px,
+            transparent 21px
+        ),
+        /* Base gradient */
+        linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     color: #92400e;
 }
 
 body.light-mode .post-container.recent {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    background: 
+        /* Horizontal lines */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 18px,
+            rgba(30, 64, 175, 0.2) 19px,
+            rgba(30, 64, 175, 0.2) 20px,
+            transparent 21px
+        ),
+        /* Base gradient */
+        linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
     color: #1e40af;
 }
 
