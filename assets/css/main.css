@@ -818,7 +818,8 @@ body.light-mode .homepage-posts-section {
 .homepage-posts-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    max-width: 600px;
 }
 
 .post-section {
@@ -829,7 +830,7 @@ body.light-mode .homepage-posts-section {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1.5rem;
     transition: all 0.3s ease;
     cursor: pointer;
     aspect-ratio: 1;
@@ -857,58 +858,65 @@ body.light-mode .post-container:hover {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.post-icon {
+.post-badge {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 24px;
-    height: 24px;
-    opacity: 0.6;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.post-icon svg {
-    width: 100%;
-    height: 100%;
-    stroke: var(--fg);
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+.post-badge.pinned {
+    background: #ffa500;
+    color: white;
+}
+
+.post-badge.recent {
+    background: #4ade80;
+    color: white;
 }
 
 .homepage-post-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--fg);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     line-height: 1.3;
-    margin-top: 1rem;
+    margin-top: 2.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .homepage-post-meta {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--fg-light);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .homepage-post-excerpt {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--fg-light);
-    line-height: 1.5;
+    line-height: 1.4;
     flex: 1;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
 .homepage-post-image {
     width: 100%;
-    height: 120px;
-    border-radius: 8px;
+    height: 80px;
+    border-radius: 6px;
     overflow: hidden;
-    margin-bottom: 1rem;
     margin-top: auto;
+    margin-bottom: 0.75rem;
 }
 
 .homepage-post-image img {
@@ -920,14 +928,14 @@ body.light-mode .post-container:hover {
 .homepage-post-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 1rem;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
 }
 
 .homepage-post-tag {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 8px;
     background: rgba(255, 255, 255, 0.1);
     color: var(--fg-light);
 }
@@ -940,12 +948,13 @@ body.light-mode .homepage-post-tag {
 @media (max-width: 768px) {
     .homepage-posts-container {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
+        max-width: 100%;
     }
     
     .post-container {
         aspect-ratio: auto;
-        min-height: 280px;
+        min-height: 200px;
     }
 }
 

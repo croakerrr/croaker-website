@@ -144,29 +144,24 @@ async function loadHomepagePosts() {
 function renderHomepagePost(post, containerId, postType) {
     const container = document.getElementById(containerId);
     
-    // Define icons for each post type
-    const icons = {
-        pinned: `<svg viewBox="0 0 24 24">
-            <path d="M9.5 3A2.5 2.5 0 0 0 7 5.5c0 .5.15 1 .4 1.4L2 12.3l1.4 1.4L9 8.1V21h2V8.1l5.6 5.6 1.4-1.4L12.6 6.9c.25-.4.4-.9.4-1.4A2.5 2.5 0 0 0 10.5 3h-1z"></path>
-        </svg>`,
-        recent: `<svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12,6 12,12 16,14"></polyline>
-        </svg>`
+    // Define badge text and class for each post type
+    const badgeInfo = {
+        pinned: { text: 'PINNED POST', class: 'pinned' },
+        recent: { text: 'NEW POST', class: 'recent' }
     };
     
     const imageHTML = post.image ? 
         `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}"></div>` : '';
     
     const tagsHTML = post.tags && post.tags.length > 0 ? 
-        `<div class="homepage-post-tags">${post.tags.map(tag => 
+        `<div class="homepage-post-tags">${post.tags.slice(0, 3).map(tag => 
             `<span class="homepage-post-tag">${tag}</span>`
         ).join('')}</div>` : '';
     
     container.innerHTML = `
-        <div class="post-icon">${icons[postType]}</div>
+        <div class="post-badge ${badgeInfo[postType].class}">${badgeInfo[postType].text}</div>
         <div class="homepage-post-title">${post.title}</div>
-        <div class="homepage-post-meta">${post.date} • by ${post.author}</div>
+        <div class="homepage-post-meta">${post.date}</div>
         <div class="homepage-post-excerpt">${post.excerpt}</div>
         ${imageHTML}
         ${tagsHTML}
