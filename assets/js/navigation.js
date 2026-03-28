@@ -27,7 +27,7 @@ class Navigation {
         
         sidebar.innerHTML = `
             <div class="nav-header">
-                <img src="${basePath}images/croaker-handwritten.png" alt="Croaker" class="nav-logo-handwritten">
+                <img src="${basePath}images/croaker-logo.png" alt="Croaker" class="nav-logo-large">
             </div>
             <div class="nav-links">
                 <a href="${basePath}index.html" ${currentPage === 'index.html' && !window.location.pathname.includes('admin') ? 'class="active"' : ''}>
