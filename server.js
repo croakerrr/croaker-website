@@ -194,6 +194,38 @@ app.delete('/admin/delete-project/:id', async (req, res) => {
     }
 });
 
+// Diagnostic endpoint to check Redis connection
+app.get('/admin/test-redis', async (req, res) => {
+    try {
+        // Check environment variables
+        const envVars = {
+            UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL ? 'Set' : 'Missing',
+            UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN ? 'Set' : 'Missing'
+        };
+        
+        // Test Redis connection
+        await redis.set('test-key', 'test-value');
+        const testValue = await redis.get('test-key');
+        
+        res.json({
+            success: true,
+            environment: envVars,
+            redisTest: testValue === 'test-value' ? 'Working' : 'Failed',
+            message: 'Redis connection successful'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            environment: {
+                UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL ? 'Set' : 'Missing',
+                UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN ? 'Set' : 'Missing'
+            },
+            error: error.message,
+            message: 'Redis connection failed'
+        });
+    }
+});
+
 // Migration endpoint to move JSON data to Redis
 app.post('/admin/migrate-data', async (req, res) => {
     try {

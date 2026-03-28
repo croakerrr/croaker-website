@@ -5,6 +5,7 @@
     { "source": "/admin/save-project", "destination": "/server.js" },
     { "source": "/admin/delete-post/(.*)", "destination": "/server.js" },
     { "source": "/admin/delete-project/(.*)", "destination": "/server.js" },
-    { "source": "/admin/migrate-data", "destination": "/server.js" }
+    { "source": "/admin/migrate-data", "destination": "/server.js" },
+    { "source": "/admin/test-redis", "destination": "/server.js" }
   ]
 }
