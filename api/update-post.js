@@ -41,8 +41,8 @@ export default async function handler(req, res) {
                 image: image || null,
                 author: author || "croaker",
                 year: year || new Date().getFullYear(),
-                language: language || "web technologies",
-                category: category || "misc",
+                language: language || null, // Don't auto-assign if not provided
+                category: category || null, // Don't auto-assign if not provided
                 pinned: pinned || false
             };
 

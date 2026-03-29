@@ -56,99 +56,59 @@ class PageTransition {
     }
 
     navigateToPage(href) {
-        // Comprehensive element hiding to prevent PC rendering artifacts
-        const themeToggle = document.getElementById('theme-toggle');
-        const mobileToggle = document.querySelector('.nav-toggle');
-        const logoElements = document.querySelectorAll('.nav-logo, .nav-logo-large');
-        const sidebar = document.querySelector('.nav-sidebar-fixed');
-        const allButtons = document.querySelectorAll('button');
-        
-        // Hide theme toggle and other elements aggressively
-        if (themeToggle) {
-            themeToggle.style.transition = 'none';
-            themeToggle.style.opacity = '0';
-            themeToggle.style.visibility = 'hidden';
-            themeToggle.style.display = 'none';
-        }
-        
-        // Hide mobile toggle
-        if (mobileToggle) {
-            mobileToggle.style.opacity = '0';
-            mobileToggle.style.visibility = 'hidden';
-            mobileToggle.style.display = 'none';
-        }
-        
-        // Hide entire sidebar temporarily
-        if (sidebar) {
-            sidebar.style.opacity = '0';
-            sidebar.style.visibility = 'hidden';
-        }
-        
-        // Hide logo elements temporarily
-        logoElements.forEach(logo => {
-            logo.style.opacity = '0';
-            logo.style.visibility = 'hidden';
-        });
-        
-        // Hide all buttons temporarily to prevent any circular artifacts
-        allButtons.forEach(btn => {
-            if (!btn.closest('.page-transition')) {
-                btn.style.opacity = '0';
+        // Different approach: disable all CSS animations temporarily to prevent rendering artifacts
+        const style = document.createElement('style');
+        style.id = 'disable-animations';
+        style.textContent = `
+            *, *::before, *::after {
+                animation-duration: 0s !important;
+                animation-delay: 0s !important;
+                transition-duration: 0s !important;
+                transition-delay: 0s !important;
             }
-        });
+        `;
+        document.head.appendChild(style);
         
-        // Trigger slide in animation and logo animation
+        // Hide theme toggle only
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.style.opacity = '0';
+            themeToggle.style.pointerEvents = 'none';
+        }
+        
+        // Trigger slide in animation
         this.overlay.classList.add('active');
         
-        // Start logo animation immediately with smooth wobble effect - finishes AFTER screenwipe
+        // Start logo animation immediately
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
+            // Allow only the logo animation
             logo.style.animation = 'croakerSmoothWobble 1.2s ease-out';
         }
         
-        // Navigate after screen wipe completes (but before logo animation ends)
+        // Navigate after screen wipe completes
         setTimeout(() => {
             window.location.href = href;
-        }, 500); // Screen wipe duration - logo continues for 0.7s more
+        }, 500);
     }
 
     handlePageLoad() {
         // Start with overlay covering screen, then slide out
         this.overlay.style.transform = 'translateX(0)';
         
-        // Restore all elements on page load
-        const themeToggle = document.getElementById('theme-toggle');
-        const mobileToggle = document.querySelector('.nav-toggle');
-        const logoElements = document.querySelectorAll('.nav-logo, .nav-logo-large');
-        const sidebar = document.querySelector('.nav-sidebar-fixed');
-        const allButtons = document.querySelectorAll('button');
+        // Remove animation disabling style if it exists
+        const disableStyle = document.getElementById('disable-animations');
+        if (disableStyle) {
+            disableStyle.remove();
+        }
         
+        // Restore theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
             themeToggle.style.opacity = '1';
-            themeToggle.style.visibility = 'visible';
-            themeToggle.style.display = '';
+            themeToggle.style.pointerEvents = 'auto';
             themeToggle.style.transition = 'all 0.2s ease';
         }
-        
-        if (mobileToggle) {
-            mobileToggle.style.opacity = '1';
-            mobileToggle.style.visibility = 'visible';
-            mobileToggle.style.display = '';
-        }
-        
-        if (sidebar) {
-            sidebar.style.opacity = '1';
-            sidebar.style.visibility = 'visible';
-        }
-        
-        logoElements.forEach(logo => {
-            logo.style.opacity = '1';
-            logo.style.visibility = 'visible';
-        });
-        
-        allButtons.forEach(btn => {
-            btn.style.opacity = '1';
-        });
         
         // Start logo animation on page load too
         const logo = this.overlay.querySelector('.croaker-logo-transition');

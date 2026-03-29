@@ -188,14 +188,8 @@ function openHomepagePostModal(post) {
     
     document.getElementById('homepage-modal-content').innerHTML = contentHTML;
     
-    // Handle tags
-    if (post.tags && post.tags.length > 0) {
-        document.getElementById('homepage-modal-tags').innerHTML = post.tags.map(tag => 
-            `<span class="modal-tag">${tag}</span>`
-        ).join('');
-    } else {
-        document.getElementById('homepage-modal-tags').innerHTML = '';
-    }
+    // Remove tags from homepage modals
+    document.getElementById('homepage-modal-tags').innerHTML = '';
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

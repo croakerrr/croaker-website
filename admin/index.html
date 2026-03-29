@@ -918,6 +918,11 @@
         let customTopicTags = new Set();
         
         function determineLanguage(tags) {
+            // If no tags provided, return empty string (don't auto-assign)
+            if (!tags || tags.length === 0) {
+                return '';
+            }
+            
             const languageMap = {
                 'javascript': 'web technologies',
                 'python': 'python', 
@@ -952,10 +957,15 @@
                     if (lower.includes(key)) return value;
                 }
             }
-            return 'misc';
+            return ''; // Return empty string if no language tags found
         }
         
         function determineCategory(tags) {
+            // If no tags provided, return empty string (don't auto-assign)
+            if (!tags || tags.length === 0) {
+                return '';
+            }
+            
             const categoryMap = {
                 'university': 'university',
                 'coursework': 'university',
@@ -986,7 +996,7 @@
                     if (lower.includes(key)) return value;
                 }
             }
-            return 'misc';
+            return ''; // Return empty string if no category tags found
         }
 
         function isLanguageTag(tag) {

@@ -50,11 +50,11 @@ async function loadBlogPosts() {
       [2026];
       
     const languages = allPosts.length > 0 ?
-      [...new Set(allPosts.map(p => p.language))].sort() :
+      [...new Set(allPosts.map(p => p.language).filter(lang => lang && lang.trim()))].sort() :
       ['web technologies', 'java', 'python'];
       
     const categories = allPosts.length > 0 ?
-      [...new Set(allPosts.map(p => p.category))].sort() :
+      [...new Set(allPosts.map(p => p.category).filter(cat => cat && cat.trim()))].sort() :
       ['university', 'project-update', 'misc'];
     
     // Create filter options
@@ -130,11 +130,11 @@ function openPostModal(post) {
   if (modalDate) {
     let dateHTML = post.date;
     
-    // Add badges for pinned and newest posts
+    // Add badges for pinned and newest posts (without emojis, to the right)
     if (post.pinned) {
-      dateHTML = '<span class="pinned-post-badge">📌 PINNED</span>' + dateHTML;
+      dateHTML += ' <span class="pinned-post-badge">PINNED</span>';
     } else if (isNewestPost(post)) {
-      dateHTML = '<span class="new-post-badge">✨ NEW POST</span>' + dateHTML;
+      dateHTML += ' <span class="new-post-badge">NEW POST!</span>';
     }
     
     modalDate.innerHTML = dateHTML;
