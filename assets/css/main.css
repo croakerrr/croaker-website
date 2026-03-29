@@ -1671,6 +1671,12 @@ body.light-mode .view-full-btn:hover {
         line-height: 1.5 !important;
         max-height: none !important;
         overflow: visible !important;
+        /* Limit to 3 lines with ellipsis */
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
     .modal-actions {
@@ -3516,5 +3522,18 @@ main {
     .modal-action-btn:hover {
         background: var(--accent-hover) !important;
         transform: translateY(-1px) !important;
+    }
+    
+    /* Limit modal content to 3 lines on desktop */
+    .modal-body #modal-content,
+    .modal-body #modal-project-content,
+    .modal-body #homepage-modal-content,
+    .modal-body #homepage-project-modal-content {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.5 !important;
     }
 }
