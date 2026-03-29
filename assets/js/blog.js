@@ -141,6 +141,25 @@ function openPostModal(post) {
     
     modalDate.innerHTML = dateHTML;
   }
+  
+  // Handle tags in the meta section (moved from footer)
+  if (modalTags) {
+    const filterTags = [
+      { value: post.year.toString(), type: 'year' },
+      { value: post.language, type: 'language' }, 
+      { value: post.category, type: 'topic' }
+    ].filter(tag => tag.value && tag.value !== 'null' && tag.value !== null && tag.value.trim() !== '' && tag.value.toLowerCase() !== 'null');
+    
+    if (filterTags.length > 0) {
+      const tagsHTML = filterTags.map(tag => {
+        const tagColor = getTagColor(tag.value, tag.type);
+        return '<span class="blog-tag" data-color="' + tagColor + '">' + tag.value + '</span>';
+      }).join('');
+      modalTags.innerHTML = tagsHTML;
+    } else {
+      modalTags.innerHTML = '';
+    }
+  }
   if (modalTitle) modalTitle.textContent = post.title;
   
   // Handle content with optional image
@@ -153,20 +172,6 @@ function openPostModal(post) {
     }
     
     modalContent.innerHTML = contentHTML;
-  }
-  
-  if (modalTags) {
-    const filterTags = [
-      { value: post.year.toString(), type: 'year' },
-      { value: post.language, type: 'language' }, 
-      { value: post.category, type: 'topic' }
-    ].filter(tag => tag.value && tag.value !== 'null' && tag.value !== null && tag.value.trim() !== '' && tag.value.toLowerCase() !== 'null');
-    
-    const tagsHTML = filterTags.map(tag => {
-      const tagColor = getTagColor(tag.value, tag.type);
-      return '<span class="blog-tag" data-color="' + tagColor + '">' + tag.value + '</span>';
-    }).join('');
-    modalTags.innerHTML = tagsHTML;
   }
   
   if (modalAuthor) {
