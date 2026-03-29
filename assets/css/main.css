@@ -1672,6 +1672,29 @@ body.light-mode .view-full-btn:hover {
         padding-top: 1rem !important;
     }
     
+    /* Fix modal backdrop on mobile */
+    .modal-backdrop {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important; /* Dynamic viewport height for mobile */
+        z-index: 999 !important;
+    }
+    
+    .post-modal,
+    .project-modal,
+    .cv-modal,
+    .image-popup-modal {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important; /* Dynamic viewport height for mobile */
+    }
+    
     /* Smaller image popup on mobile */
     .image-popup-content {
         max-width: 80% !important;
