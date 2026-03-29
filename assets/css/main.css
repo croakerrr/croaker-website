@@ -1636,7 +1636,7 @@ body.light-mode .view-full-btn:hover {
         width: 85% !important;
         max-width: 400px !important;
         max-height: 60vh !important;
-        top: 30% !important;
+        top: 50% !important;
         transform: translate(-50%, -50%) scale(0.9) !important;
     }
     
