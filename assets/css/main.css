@@ -689,8 +689,8 @@ p {
 }
 
 .featured-badge-inline::before {
-    content: '★';
-    margin-right: 0.3rem;
+    content: '';
+    margin-right: 0;
     font-size: 12px;
 }
 
@@ -850,8 +850,8 @@ p {
 }
 
 .modal-featured-badge::before {
-    content: '★';
-    margin-right: 0.3rem;
+    content: '';
+    margin-right: 0;
     font-size: 14px;
 }
 
@@ -1399,6 +1399,7 @@ body.light-mode .post-container.recent-project {
     letter-spacing: 0.05em;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(4px);
+    transform: rotate(3deg); /* Counter-rotate to make badge straight */
 }
 
 .post-badge.pinned {
