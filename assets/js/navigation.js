@@ -57,7 +57,7 @@ class Navigation {
         
         sidebar.innerHTML = `
             <div class="nav-header">
-                <img src="${basePath}images/croaker-logo.png" alt="Croaker" class="nav-logo-large">
+                <img src="${basePath}images/croaker-logo.png" alt="Croaker" class="nav-logo-large" onclick="window.navigation.navigateHome(event)">
             </div>
             <div class="nav-links">
                 <a href="${basePath}index.html" ${currentPage === 'index.html' && !window.location.pathname.includes('admin') ? 'class="active"' : ''}>
@@ -212,6 +212,23 @@ class Navigation {
         const normalizedTarget = targetPage === '' ? 'index.html' : targetPage;
         
         return normalizedCurrent === normalizedTarget;
+    }
+
+    // Navigate to home page when logo is clicked
+    navigateHome(event) {
+        event.preventDefault();
+        const basePath = this.getBasePath();
+        const homeUrl = basePath + 'index.html';
+        
+        // Close mobile nav if open
+        this.closeMobileNav();
+        
+        // Use page transition if available
+        if (window.pageTransition) {
+            window.pageTransition.navigateToPage(homeUrl);
+        } else {
+            window.location.href = homeUrl;
+        }
     }
 }
 
