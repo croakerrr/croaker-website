@@ -1188,74 +1188,44 @@ body.light-mode .homepage-posts-section {
     user-select: none;
 }
 
-/* Corner fold effect - realistic paper fold with visible crease */
+/* Realistic thumbtack in center of sticky note */
 .post-container::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 25px;
-    height: 25px;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
     background: 
-        linear-gradient(225deg, 
-            #f1f1f1 0%,
-            #e0e0e0 50%,
-            #d0d0d0 100%);
-    clip-path: polygon(100% 0, 0 100%, 100% 100%);
-    transform: rotate(0deg);
-    z-index: 4;
+        radial-gradient(circle at 30% 30%, 
+            #e5e7eb 0%,
+            #d1d5db 40%,
+            #9ca3af  70%,
+            #6b7280 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(25deg);
+    z-index: 5;
     box-shadow: 
-        -1px -1px 3px rgba(0, 0, 0, 0.2),
-        1px 1px 2px rgba(0, 0, 0, 0.1);
-    border-left: 1px solid rgba(0, 0, 0, 0.1);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 2px rgba(0, 0, 0, 0.2),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-/* Add fold crease line */
+/* Thumbtack needle shadow */
 .post-container::before {
     content: '';
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 35px;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.15);
-    transform: rotate(-45deg);
-    transform-origin: 100% 100%;
-    z-index: 3;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 8px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+    transform: translate(-50%, -50%) rotate(25deg);
+    z-index: 4;
+    border-radius: 1px;
 }
 
-.post-container.pinned::after {
-    background: 
-        linear-gradient(225deg, 
-            #f4e4d6 0%,
-            #e8d0b8 50%,
-            #d4b896 100%);
-}
 
-.post-container.recent::after {
-    background: 
-        linear-gradient(225deg, 
-            #e1eaff 0%,
-            #c9d8f5 50%,
-            #b0c4e8 100%);
-}
-
-.post-container.featured-project::after {
-    background: 
-        linear-gradient(225deg, 
-            #e8f5e8 0%,
-            #d0e6d0 50%,
-            #b8d4b8 100%);
-}
-
-.post-container.recent-project::after {
-    background: 
-        linear-gradient(225deg, 
-            #f0e8ff 0%,
-            #e0d0f5 50%,
-            #d0b8e8 100%);
-}
 
 .post-container.pinned {
     background: 
