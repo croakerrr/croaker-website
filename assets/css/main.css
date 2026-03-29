@@ -2461,3 +2461,525 @@ main {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.05);
 }
+
+/* ADMIN PANEL STYLING */
+.admin-container {
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.admin-header {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    background: transparent;
+    border: none;
+    color: var(--fg-light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: lowercase;
+}
+
+.tab-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--fg);
+}
+
+.tab-button.current {
+    background: var(--fg-light);
+    color: var(--bg);
+    font-weight: 600;
+}
+
+.content-area {
+    display: none;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.content-area.current {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.input-box {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.box-title {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: lowercase;
+    color: var(--fg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.box-content {
+    padding: 1.5rem;
+}
+
+.input-field {
+    margin-bottom: 1.25rem;
+}
+
+.input-field label {
+    display: block;
+    color: var(--fg-light);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    text-transform: lowercase;
+}
+
+.input-field input,
+.input-field textarea,
+.input-field select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: var(--fg);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.input-field input:focus,
+.input-field textarea:focus,
+.input-field select:focus {
+    outline: none;
+    border-color: var(--fg-light);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.input-field textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.input-with-help {
+    display: flex;
+    gap: 0.75rem;
+    align-items: end;
+}
+
+.input-with-help input {
+    flex: 1;
+}
+
+.help-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--fg-light);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.help-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--fg);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.checkbox-text {
+    font-size: 14px;
+    color: var(--fg-light);
+}
+
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.save-button,
+.update-button,
+.clear-button {
+    background: var(--fg-light);
+    color: var(--bg);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: lowercase;
+}
+
+.save-button:hover,
+.update-button:hover {
+    background: var(--fg);
+    transform: translateY(-1px);
+}
+
+.clear-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--fg-light);
+}
+
+.clear-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--fg);
+}
+
+.post-item,
+.project-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.post-item:hover,
+.project-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.post-title {
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 0.25rem;
+    font-size: 15px;
+}
+
+.post-meta {
+    color: var(--fg-light);
+    font-size: 12px;
+    margin-bottom: 0.5rem;
+}
+
+.post-excerpt {
+    color: var(--fg-light);
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-btn,
+.delete-btn,
+.pin-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--fg-light);
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: lowercase;
+}
+
+.edit-btn:hover {
+    background: rgba(74, 222, 128, 0.2);
+    border-color: rgba(74, 222, 128, 0.3);
+    color: rgb(74, 222, 128);
+}
+
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: rgb(239, 68, 68);
+}
+
+.pin-btn:hover {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.3);
+    color: rgb(251, 191, 36);
+}
+
+.pin-btn.pinned {
+    background: rgba(251, 191, 36, 0.15);
+    color: rgb(251, 191, 36);
+    border-color: rgba(251, 191, 36, 0.2);
+}
+
+.empty-state,
+.loading-state {
+    text-align: center;
+    color: var(--fg-light);
+    font-style: italic;
+    padding: 2rem;
+    font-size: 14px;
+}
+
+/* Help Modal */
+.help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.help-modal-content {
+    background: var(--bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.help-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px 12px 0 0;
+}
+
+.help-modal-header h3 {
+    margin: 0;
+    color: var(--fg);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.help-modal-close {
+    background: none;
+    border: none;
+    color: var(--fg-light);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.help-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--fg);
+}
+
+.help-modal-body {
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+.help-modal-body h4 {
+    color: var(--fg);
+    margin: 1.5rem 0 0.75rem 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.help-modal-body h4:first-child {
+    margin-top: 0;
+}
+
+.help-modal-body ol {
+    margin: 0.75rem 0 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.help-modal-body li {
+    color: var(--fg-light);
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+}
+
+.help-modal-body p {
+    color: var(--fg-light);
+    margin: 1rem 0;
+    font-size: 14px;
+}
+
+.code-block {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--fg);
+    word-wrap: break-word;
+    overflow-x: auto;
+}
+
+/* Light Mode Admin Styles */
+.light-mode .admin-header {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .admin-tabs {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.light-mode .tab-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .content-area {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .input-box {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .box-title {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .input-field input,
+.light-mode .input-field textarea,
+.light-mode .input-field select {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .input-field input:focus,
+.light-mode .input-field textarea:focus,
+.light-mode .input-field select:focus {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.light-mode .help-button {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.light-mode .help-button:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.light-mode .post-item,
+.light-mode .project-item {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .post-item:hover,
+.light-mode .project-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .help-modal-content {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .help-modal-header {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.light-mode .code-block {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Admin Panel */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 1rem;
+    }
+    
+    .content-area.current {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .admin-tabs {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .tab-button {
+        padding: 0.5rem 1rem;
+        font-size: 13px;
+    }
+    
+    .help-modal-content {
+        width: 95%;
+        margin: 2.5% auto;
+    }
+    
+    .help-modal-body {
+        padding: 1.5rem;
+    }
+    
+    .input-with-help {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .help-button {
+        align-self: stretch;
+    }
+}

@@ -754,7 +754,7 @@
                     <div class="input-field">
                         <label class="checkbox-label">
                             <input type="checkbox" id="blog-pinned">
-                            <span class="checkbox-text">📌 pin this post</span>
+                            <span class="checkbox-text">pin this post</span>
                         </label>
                     </div>
                     <div class="button-group">
@@ -803,7 +803,10 @@
                     </div>
                     <div class="input-field">
                         <label for="project-blog">related blog post</label>
-                        <input type="text" id="project-blog" placeholder="blog-post-id">
+                        <div class="input-with-help">
+                            <input type="text" id="project-blog" placeholder="blog-post-id">
+                            <button type="button" class="help-button" onclick="showBlogIdHelp()">how to find blog-id</button>
+                        </div>
                     </div>
                     <div class="input-field">
                         <label for="project-status">status</label>
@@ -1741,7 +1744,7 @@
                 
                 container.innerHTML = posts.slice(0, 5).map(post => `
                     <div class="post-item">
-                        <div class="post-title">${post.title} ${post.pinned ? '📌' : ''}</div>
+                        <div class="post-title">${post.title} ${post.pinned ? '(pinned)' : ''}</div>
                         <div class="post-meta">${post.date} • ${post.tags ? post.tags.join(', ') : 'no tags'}</div>
                         <div class="post-excerpt">${post.excerpt}</div>
                         <div class="post-actions">
@@ -2161,7 +2164,66 @@
                 topicButtons.appendChild(button);
             });
         }
+
+        // Blog ID Help Modal Functions
+        function showBlogIdHelp() {
+            document.getElementById('blog-id-help-modal').style.display = 'flex';
+        }
+
+        function closeBlogIdHelp() {
+            document.getElementById('blog-id-help-modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('blog-id-help-modal');
+            if (event.target === modal) {
+                closeBlogIdHelp();
+            }
+        }
     </script>
+
+    <!-- Blog ID Help Modal -->
+    <div id="blog-id-help-modal" class="help-modal">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h3>How to Find Blog Post ID</h3>
+                <button class="help-modal-close" onclick="closeBlogIdHelp()">×</button>
+            </div>
+            <div class="help-modal-body">
+                <h4>Method 1: Developer Tools (Easiest)</h4>
+                <ol>
+                    <li>Go to your live blog page: croaker-web.vercel.app/pages/blog.html</li>
+                    <li>Right-click on any blog post and select "Inspect Element" (or press F12)</li>
+                    <li>Look for the div element with class "blog-post"</li>
+                    <li>Find the data-post-id attribute: data-post-id="your-post-id-here"</li>
+                    <li>Copy the ID value from the quotes</li>
+                </ol>
+                
+                <h4>Method 2: Browser Console</h4>
+                <ol>
+                    <li>Go to your blog page</li>
+                    <li>Press F12 to open Developer Tools</li>
+                    <li>Click the Console tab</li>
+                    <li>Paste this command and press Enter:</li>
+                </ol>
+                <div class="code-block">
+                    fetch('/api/get-posts').then(r => r.json()).then(posts => console.table(posts.map(p => ({id: p.id, title: p.title}))))
+                </div>
+                <p>This will show a table with all blog post IDs and titles.</p>
+                
+                <h4>Method 3: Admin Panel</h4>
+                <ol>
+                    <li>In this admin panel, go to the "blog" tab</li>
+                    <li>Right-click on any "edit" or "delete" button and select "Inspect"</li>
+                    <li>Look at the onclick attribute in the HTML</li>
+                    <li>The ID will be shown like: onclick="editPost('your-post-id-here')"</li>
+                </ol>
+                
+                <p><strong>Note:</strong> Blog IDs are usually in format: "post-title-timestamp" (e.g., "my-first-post-1638000000")</p>
+            </div>
+        </div>
+    </div>
 
     <script src="../assets/js/navigation.js"></script>
 </body>
