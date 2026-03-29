@@ -274,12 +274,24 @@ function renderHomepagePost(post, containerId, postType) {
     
     // Add click handler to open modal with proper event handling
     container._clickHandler = (event) => {
-        // Don't open modal if clicking on image (it has its own handler)
+        // Prevent other handlers and default navigation from firing
+        event.stopPropagation();
+        event.preventDefault();
+        // If clicking on an image, allow image handler to run (it already stops propagation)
         if (event.target.tagName === 'IMG') {
             return;
         }
         openHomepagePostModal(post);
     };
+    
+    // Also ensure any internal anchors do not trigger navigation
+    const anchors = container.querySelectorAll('a');
+    anchors.forEach(a => {
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
     
     container.addEventListener('click', container._clickHandler);
 }
@@ -315,12 +327,24 @@ function renderHomepageProject(project, containerId, projectType) {
     
     // Add click handler to open modal with proper event handling
     container._clickHandler = (event) => {
-        // Don't open modal if clicking on image (it has its own handler)
+        // Prevent other handlers and default navigation from firing
+        event.stopPropagation();
+        event.preventDefault();
+        // If clicking on an image, allow image handler to run (it already stops propagation)
         if (event.target.tagName === 'IMG') {
             return;
         }
         openHomepageProjectModal(project);
     };
+    
+    // Also ensure any internal anchors do not trigger navigation
+    const anchors = container.querySelectorAll('a');
+    anchors.forEach(a => {
+        a.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
     
     container.addEventListener('click', container._clickHandler);
 }
