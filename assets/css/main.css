@@ -1453,6 +1453,7 @@ body.light-mode .post-container.recent-project {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
     opacity: 0.9;
     padding-right: 90px; /* Make space for the photo */
     padding-bottom: 10px; /* Make space for the photo */
@@ -1781,6 +1782,7 @@ body.light-mode .view-full-btn:hover {
         font-size: 0.65rem;
         line-height: 1.2;
         -webkit-line-clamp: 3;
+        text-overflow: ellipsis;
         padding-right: 10px;
         padding-bottom: 5px;
     }
