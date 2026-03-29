@@ -321,12 +321,12 @@ function renderPosts() {
     postElement.className = 'blog-post';
     postElement.dataset.postId = post.id;
     
-    // Generate tags only for filter categories (year, language, topic)
+    // Generate tags only for filter categories (year, language, topic) that have values
     const filterTags = [
       { value: post.year.toString(), type: 'year' },
       { value: post.language, type: 'language' }, 
       { value: post.category, type: 'topic' }
-    ];
+    ].filter(tag => tag.value && tag.value !== 'null' && tag.value.trim() !== '');
     
     const tagsHTML = filterTags.map(tag => {
       const tagColor = getTagColor(tag.value, tag.type);

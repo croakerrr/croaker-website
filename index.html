@@ -121,8 +121,24 @@ async function loadHomepagePosts() {
         // Find pinned post (most recent pinned post)
         const pinnedPost = posts.find(post => post.pinned);
         
-        // Find most recent post (that's not pinned)
-        const recentPost = posts.find(post => !post.pinned);
+        // Find most recent post (that's not pinned) by sorting by date
+        const nonPinnedPosts = posts.filter(post => !post.pinned);
+        let recentPost = null;
+        
+        if (nonPinnedPosts.length > 0) {
+            // Sort by date and take the most recent
+            recentPost = nonPinnedPosts.reduce((newest, current) => {
+                const parseDate = (dateString) => {
+                    if (!dateString) return new Date(0);
+                    const [day, month, year] = dateString.split('/');
+                    return new Date(year, month - 1, day);
+                };
+                
+                const newestDate = parseDate(newest.date);
+                const currentDate = parseDate(current.date);
+                return currentDate > newestDate ? current : newest;
+            });
+        }
         
         // Show pinned post section if there's a pinned post
         if (pinnedPost) {

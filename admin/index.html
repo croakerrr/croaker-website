@@ -290,6 +290,42 @@
             border-color: #4a90e2;
         }
 
+        .tag-management-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .tag-management-item {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tag-management-item .tag-name {
+            font-size: 14px;
+            color: var(--fg);
+        }
+
+        .tag-management-item .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            font-size: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .tag-management-item .delete-btn:hover {
+            background: #c82333;
+        }
+
         .clear-tags-btn {
             align-self: flex-start;
             background: #ff6b6b;
@@ -656,6 +692,7 @@
         <div class="section-tabs">
             <button class="tab-button current" onclick="showSection('blog')">blog posts</button>
             <button class="tab-button" onclick="showSection('project')">projects</button>
+            <button class="tab-button" onclick="showSection('tags')">filter tags</button>
         </div>
 
         <!-- Blog Section -->
@@ -775,6 +812,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- Filter Tags Section -->
+        <div id="tags-area" class="content-area">
+            <div class="editor-layout">
+                <div class="input-box">
+                    <div class="box-title">manage language tags</div>
+                    <div class="input-field">
+                        <label for="new-language">add new language</label>
+                        <input type="text" id="new-language" placeholder="e.g. typescript, rust, c++">
+                        <button onclick="addLanguageTag()">add language</button>
+                    </div>
+                    <div class="box-content">
+                        <div class="box-subtitle">existing languages:</div>
+                        <div id="language-tags-list"></div>
+                    </div>
+                </div>
+                
+                <div class="input-box">
+                    <div class="box-title">manage topic tags</div>
+                    <div class="input-field">
+                        <label for="new-topic">add new topic</label>
+                        <input type="text" id="new-topic" placeholder="e.g. ai/ml, internship, tutorial">
+                        <button onclick="addTopicTag()">add topic</button>
+                    </div>
+                    <div class="box-content">
+                        <div class="box-subtitle">existing topics:</div>
+                        <div id="topic-tags-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -821,6 +889,7 @@
             loadExistingPosts();
             loadExistingProjects();
             initializeCustomTags();
+            loadTagManagement();
         }
 
         function showSection(section) {
@@ -1592,6 +1661,130 @@
                 if (e.key === 'Enter') checkLogin();
             });
         });
+        
+        // Tag Management Functions
+        function loadTagManagement() {
+            loadLanguageTagsList();
+            loadTopicTagsList();
+        }
+        
+        function loadLanguageTagsList() {
+            const container = document.getElementById('language-tags-list');
+            const predefinedLanguages = ['web technologies', 'python', 'java'];
+            
+            // Get custom languages from localStorage
+            const customLanguages = Array.from(customLanguageTags);
+            const allLanguages = [...predefinedLanguages, ...customLanguages];
+            
+            container.innerHTML = allLanguages.map(lang => {
+                const canDelete = !predefinedLanguages.includes(lang);
+                return `
+                    <div class="tag-management-item">
+                        <span class="tag-name">${lang}</span>
+                        ${canDelete ? `<button class="delete-btn" onclick="deleteLanguageTag('${lang}')">delete</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function loadTopicTagsList() {
+            const container = document.getElementById('topic-tags-list');
+            const predefinedTopics = ['university', 'project-update', 'misc'];
+            
+            // Get custom topics from localStorage
+            const customTopics = Array.from(customTopicTags);
+            const allTopics = [...predefinedTopics, ...customTopics];
+            
+            container.innerHTML = allTopics.map(topic => {
+                const canDelete = !predefinedTopics.includes(topic);
+                return `
+                    <div class="tag-management-item">
+                        <span class="tag-name">${topic}</span>
+                        ${canDelete ? `<button class="delete-btn" onclick="deleteTopicTag('${topic}')">delete</button>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function addLanguageTag() {
+            const input = document.getElementById('new-language');
+            const newLanguage = input.value.trim().toLowerCase();
+            
+            if (!newLanguage) {
+                alert('Please enter a language name');
+                return;
+            }
+            
+            // Add to custom language tags
+            customLanguageTags.add(newLanguage);
+            
+            // Save to localStorage
+            localStorage.setItem('customLanguageTags', JSON.stringify(Array.from(customLanguageTags)));
+            
+            // Refresh the display
+            loadLanguageTagsList();
+            updateTagButtons();
+            
+            // Clear input
+            input.value = '';
+            
+            alert(`Added "${newLanguage}" to language tags`);
+        }
+        
+        function addTopicTag() {
+            const input = document.getElementById('new-topic');
+            const newTopic = input.value.trim().toLowerCase();
+            
+            if (!newTopic) {
+                alert('Please enter a topic name');
+                return;
+            }
+            
+            // Add to custom topic tags
+            customTopicTags.add(newTopic);
+            
+            // Save to localStorage
+            localStorage.setItem('customTopicTags', JSON.stringify(Array.from(customTopicTags)));
+            
+            // Refresh the display
+            loadTopicTagsList();
+            updateTagButtons();
+            
+            // Clear input
+            input.value = '';
+            
+            alert(`Added "${newTopic}" to topic tags`);
+        }
+        
+        function deleteLanguageTag(language) {
+            if (confirm(`Delete "${language}" from language tags?`)) {
+                customLanguageTags.delete(language.toLowerCase());
+                
+                // Save to localStorage
+                localStorage.setItem('customLanguageTags', JSON.stringify(Array.from(customLanguageTags)));
+                
+                // Refresh the display
+                loadLanguageTagsList();
+                updateTagButtons();
+                
+                alert(`Deleted "${language}" from language tags`);
+            }
+        }
+        
+        function deleteTopicTag(topic) {
+            if (confirm(`Delete "${topic}" from topic tags?`)) {
+                customTopicTags.delete(topic.toLowerCase());
+                
+                // Save to localStorage
+                localStorage.setItem('customTopicTags', JSON.stringify(Array.from(customTopicTags)));
+                
+                // Refresh the display
+                loadTopicTagsList();
+                updateTagButtons();
+                
+                alert(`Deleted "${topic}" from topic tags`);
+            }
+        }
     </script>
 
     <script src="../assets/js/navigation.js"></script>
