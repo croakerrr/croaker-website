@@ -9,6 +9,14 @@ class PageTransition {
         // Create transition overlay
         this.overlay = document.createElement('div');
         this.overlay.className = 'page-transition';
+        
+        // Add croaker logo to transition
+        const logo = document.createElement('img');
+        logo.src = '/images/croaker-logo.png';
+        logo.alt = 'Croaker Logo';
+        logo.className = 'croaker-logo-transition';
+        this.overlay.appendChild(logo);
+        
         document.body.appendChild(this.overlay);
 
         // Handle navigation clicks

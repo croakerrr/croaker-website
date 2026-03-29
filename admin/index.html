@@ -440,6 +440,7 @@
             height: 100%;
             cursor: pointer;
             z-index: 1;
+            pointer-events: none; /* Prevent file input from intercepting button clicks */
         }
 
         .image-preview {
@@ -454,6 +455,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            pointer-events: auto; /* Allow clicks on preview area */
         }
 
         .image-preview:hover {
@@ -476,6 +478,14 @@
         .upload-text {
             color: #666;
             font-size: 14px;
+        }
+
+        .image-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 10; /* Ensure controls are above the file input */
         }
 
         .image-controls {
@@ -1280,6 +1290,19 @@
             document.getElementById('blog-image').click();
         }
 
+        // Add click handler for image preview area to trigger file selection
+        function initializeImageUpload() {
+            const preview = document.getElementById('image-preview');
+            const fileInput = document.getElementById('blog-image');
+            
+            preview.addEventListener('click', function(e) {
+                // Only trigger file input if clicking on the preview area itself, not the buttons
+                if (e.target === preview || e.target.classList.contains('upload-text')) {
+                    fileInput.click();
+                }
+            });
+        }
+
         async function saveProject() {
             const name = document.getElementById('project-name').value;
             const desc = document.getElementById('project-desc').value;
@@ -1547,6 +1570,9 @@
             const today = new Date().toISOString().split('T')[0];
             const blogDateEl = document.getElementById('blog-date');
             if (blogDateEl) blogDateEl.value = today;
+            
+            // Initialize image upload functionality
+            initializeImageUpload();
             
             // Enter key support
             document.getElementById('pass')?.addEventListener('keypress', function(e) {
