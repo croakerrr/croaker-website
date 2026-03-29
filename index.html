@@ -289,11 +289,15 @@ function renderHomepageProject(project, containerId, projectType) {
     const imageHTML = project.image ? 
         `<div class="homepage-post-image"><img src="${project.image}" alt="${project.name}" onclick="openImagePopup('${project.image}', '${project.name || project.title || 'Project'}', event)"></div>` : '';
     
+    // Format project description for better display (remove excessive newlines, clean up text)
+    let cleanDescription = project.description || '';
+    cleanDescription = cleanDescription.replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
+    
     container.innerHTML = `
         <div class="post-badge ${badgeInfo[projectType].class}">${badgeInfo[projectType].text}</div>
         <div class="homepage-post-title">${project.name || project.title || 'Untitled Project'}</div>
         <div class="homepage-post-meta">${project.status || 'Complete'}</div>
-        <div class="homepage-post-excerpt">${project.description}</div>
+        <div class="homepage-post-excerpt">${cleanDescription}</div>
         ${imageHTML}
     `;
     
@@ -350,15 +354,12 @@ function openHomepageProjectModal(project) {
     }
     document.getElementById('homepage-project-modal-tech').innerHTML = techHTML;
     
-    // Handle content with optional image
-    let contentHTML = (project.content || project.description || '').replace(/\\n/g, '</p><p>');
-    contentHTML = '<p>' + contentHTML + '</p>';
+    // For ellipsis to work, we need plain text content, not HTML elements
+    // Convert content to plain text by removing HTML and replacing \\n with spaces
+    let plainTextContent = (project.content || project.description || '').replace(/\\n/g, ' ');
     
-    if (project.image) {
-        contentHTML = '<div class="blog-post-image"><img src="' + project.image + '" alt="' + (project.name || project.title || 'Project') + '"></div>' + contentHTML;
-    }
-    
-    document.getElementById('homepage-project-modal-content').innerHTML = contentHTML;
+    // Use textContent instead of innerHTML for line clamping to work
+    document.getElementById('homepage-project-modal-content').textContent = plainTextContent;
     
     // Handle project links
     let linksHTML = '';
