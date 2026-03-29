@@ -2025,7 +2025,19 @@ body.modal-open {
 }
 
 .modal-body #modal-content p {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-body #modal-content p:last-child {
+    margin-bottom: 0;
+}
+
+.modal-body #modal-project-content p {
+    margin-bottom: 0.5rem;
+}
+
+.modal-body #modal-project-content p:last-child {
+    margin-bottom: 0;
 }
 
 .modal-footer {

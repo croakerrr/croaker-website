@@ -74,7 +74,9 @@ function openProjectModal(project) {
     
     // Use content field if available, otherwise fall back to description
     const content = project.content || project.description || 'No detailed description available.';
-    document.getElementById('modal-project-content').innerHTML = content.replace(/\n/g, '<br><br>');
+    let contentHTML = content.replace(/\n/g, '</p><p>');
+    contentHTML = '<p>' + contentHTML + '</p>';
+    document.getElementById('modal-project-content').innerHTML = contentHTML;
     
     // Handle project image in modal
     const modalImage = document.getElementById('modal-project-image');
