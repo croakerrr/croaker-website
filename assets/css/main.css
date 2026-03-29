@@ -1497,6 +1497,42 @@ body.light-mode .post-container.recent-project {
     color: #9333ea;
 }
 
+/* View full post/project button */
+.view-full-btn {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--fg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+    text-transform: lowercase;
+    font-family: inherit;
+}
+
+.view-full-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+body.light-mode .view-full-btn {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.light-mode .view-full-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
 /* Responsive design for homepage posts */
 @media (max-width: 768px) {
     .homepage-posts-container {

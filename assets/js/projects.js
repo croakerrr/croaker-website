@@ -123,12 +123,22 @@ function openProjectModal(project) {
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
+    
+    // Set the hash in URL to reflect the current project (without triggering hashchange)
+    if (project.id && !window.location.hash.includes(project.id)) {
+        history.replaceState(null, null, window.location.pathname + window.location.search + '#' + project.id);
+    }
 }
 
 function closeProjectModal() {
     const modal = document.getElementById('project-modal');
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    
+    // Clear the hash from URL without triggering hashchange event
+    if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+    }
 }
 
 // Event listeners
@@ -145,4 +155,31 @@ document.addEventListener('DOMContentLoaded', () => {
             closeProjectModal();
         }
     });
+
+    // Check for hash in URL to auto-open specific project
+    checkForProjectHash();
+
+    // Listen for hash changes to open projects when navigating with browser back/forward
+    window.addEventListener('hashchange', checkForProjectHash);
 });
+
+// Function to check if URL has a project hash and open that project
+function checkForProjectHash() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#')) {
+        const projectId = hash.substring(1);
+        // Wait a bit for projects to load, then try to open the modal
+        setTimeout(() => {
+            openProjectModalById(projectId);
+        }, 500);
+    }
+}
+
+// Function to open a specific project modal by ID
+function openProjectModalById(projectId) {
+    // Find the project with the matching ID
+    const project = projectsData.find(p => p.id === projectId);
+    if (project) {
+        openProjectModal(project);
+    }
+}

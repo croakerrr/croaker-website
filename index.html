@@ -247,6 +247,7 @@ function renderHomepagePost(post, containerId, postType) {
         <div class="homepage-post-excerpt">${post.excerpt}</div>
         ${imageHTML}
         ${tagsHTML}
+        <button class="view-full-btn" onclick="event.stopPropagation(); viewFullPost('${post.id}')">view full post</button>
     `;
     
     // Add click handler to open modal
@@ -276,6 +277,7 @@ function renderHomepageProject(project, containerId, projectType) {
         <div class="homepage-post-meta">${project.status || 'Complete'}</div>
         <div class="homepage-post-excerpt">${project.description}</div>
         ${imageHTML}
+        <button class="view-full-btn" onclick="event.stopPropagation(); viewFullProject('${project.id}')">view full project</button>
     `;
     
     // Add click handler to open modal
@@ -368,6 +370,25 @@ function closeHomepageProjectModal() {
 document.addEventListener('DOMContentLoaded', function() {
     loadHomepagePosts();
 });
+
+// Navigation functions for view full buttons
+function viewFullPost(postId) {
+    const url = 'pages/blog.html#' + postId;
+    if (window.pageTransition) {
+        window.pageTransition.navigateToPage(url);
+    } else {
+        window.location.href = url;
+    }
+}
+
+function viewFullProject(projectId) {
+    const url = 'pages/projects.html#' + projectId;
+    if (window.pageTransition) {
+        window.pageTransition.navigateToPage(url);
+    } else {
+        window.location.href = url;
+    }
+}
 </script>
 
 </html>
