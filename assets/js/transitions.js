@@ -66,16 +66,16 @@ class PageTransition {
         // Trigger slide in animation and logo animation
         this.overlay.classList.add('active');
         
-        // Start logo animation immediately
+        // Start logo animation immediately with bouncy wobble effect
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
-            logo.style.animation = 'croakerFadeGrow 1.0s ease-in-out';
+            logo.style.animation = 'croakerBouncyWobble 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
         }
         
-        // Navigate after animation completes
+        // Navigate after screen wipe completes
         setTimeout(() => {
             window.location.href = href;
-        }, 500); // Wait for full animation
+        }, 500); // Screen wipe duration
     }
 
     handlePageLoad() {
@@ -92,7 +92,7 @@ class PageTransition {
         // Start logo animation on page load too
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
-            logo.style.animation = 'croakerFadeGrow 1.0s ease-in-out';
+            logo.style.animation = 'croakerBouncyWobble 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
         }
         
         // Slide out overlay on page load

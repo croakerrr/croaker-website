@@ -156,8 +156,20 @@ function renderHomepagePost(post, containerId, postType) {
     const imageHTML = post.image ? 
         `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}"></div>` : '';
     
-    const tagsHTML = post.tags && post.tags.length > 0 ? 
-        `<div class="homepage-post-tags">${post.tags.slice(0, 3).map(tag => 
+    // Filter tags for homepage display - only show main category tags, not custom ones
+    const filteredTags = post.tags ? post.tags.filter(tag => {
+        const normalizedTag = tag.toLowerCase();
+        const allowedTags = [
+            // Languages
+            'javascript', 'python', 'java', 'css', 'html', 'react', 'node',
+            // Topics
+            'university', 'coursework', 'learning', 'project', 'portfolio', 'algorithms', 'database', 'api'
+        ];
+        return allowedTags.includes(normalizedTag);
+    }) : [];
+    
+    const tagsHTML = filteredTags.length > 0 ? 
+        `<div class="homepage-post-tags">${filteredTags.slice(0, 3).map(tag => 
             `<span class="homepage-post-tag">${tag}</span>`
         ).join('')}</div>` : '';
     
