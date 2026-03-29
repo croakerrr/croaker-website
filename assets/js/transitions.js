@@ -78,11 +78,7 @@ class PageTransition {
         // Start logo animation immediately
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
-            // Reset any previous animation
-            logo.style.animation = 'none';
-            // Force reflow then apply animation
-            logo.offsetHeight;
-            logo.style.animation = 'croakerSmoothWobble 1.2s ease-out';
+            this.animateLogoGSAP(logo);
         }
         
         // Navigate after screen wipe completes
@@ -114,11 +110,7 @@ class PageTransition {
         // Start logo animation on page load too
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
-            // Reset any previous animation
-            logo.style.animation = 'none';
-            // Force reflow then apply animation
-            logo.offsetHeight;
-            logo.style.animation = 'croakerSmoothWobble 1.2s ease-out';
+            this.animateLogoGSAP(logo);
         }
         
         // Slide out overlay on page load
@@ -132,10 +124,75 @@ class PageTransition {
                 this.overlay.style.transform = '';
                 // Reset logo animation after it completes
                 if (logo) {
-                    logo.style.animation = '';
+                    gsap.set(logo, { opacity: 0, scale: 0.1, rotation: 0 });
                 }
             }, 500);
         }, 50);
+    }
+
+    animateLogoGSAP(logo) {
+        // Reset logo to starting state
+        gsap.set(logo, { opacity: 0, scale: 0.1, rotation: 0 });
+        
+        // Create the bouncy animation timeline
+        const tl = gsap.timeline();
+        
+        tl.to(logo, {
+            opacity: 0.3,
+            scale: 0.4,
+            rotation: -1,
+            duration: 0.12,
+            ease: "power2.out"
+        })
+        .to(logo, {
+            opacity: 0.7,
+            scale: 0.9,
+            rotation: 1,
+            duration: 0.18,
+            ease: "back.out(1.2)"
+        })
+        .to(logo, {
+            opacity: 1,
+            scale: 1.15,
+            rotation: -0.5,
+            duration: 0.18,
+            ease: "elastic.out(1, 0.3)"
+        })
+        .to(logo, {
+            scale: 1.05,
+            rotation: 0.5,
+            duration: 0.18,
+            ease: "power2.inOut"
+        })
+        .to(logo, {
+            scale: 1.1,
+            rotation: -0.3,
+            duration: 0.18,
+            ease: "power2.inOut"
+        })
+        .to(logo, {
+            opacity: 0.8,
+            scale: 0.7,
+            rotation: 0.2,
+            duration: 0.18,
+            ease: "power2.in"
+        })
+        .to(logo, {
+            opacity: 0.2,
+            scale: 0.3,
+            rotation: 0,
+            duration: 0.12,
+            ease: "power2.in"
+        })
+        .to(logo, {
+            opacity: 0,
+            scale: 0.1,
+            rotation: 0,
+            duration: 0.06,
+            ease: "power2.in"
+        });
+        
+        return tl;
     }
 }
 
