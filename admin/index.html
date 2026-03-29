@@ -782,8 +782,12 @@
                         <input type="text" id="project-name" placeholder="project name">
                     </div>
                     <div class="input-field">
-                        <label for="project-desc">description</label>
-                        <textarea id="project-desc" placeholder="project description..."></textarea>
+                        <label for="project-desc">short description</label>
+                        <textarea id="project-desc" placeholder="brief project description for cards..."></textarea>
+                    </div>
+                    <div class="input-field">
+                        <label for="project-content">detailed content</label>
+                        <textarea id="project-content" placeholder="full project description and details..." rows="8"></textarea>
                     </div>
                     <div class="input-field">
                         <label for="project-tech">technologies</label>
@@ -794,17 +798,48 @@
                         <input type="url" id="project-github" placeholder="https://github.com/username/repo">
                     </div>
                     <div class="input-field">
+                        <label for="project-live">live url</label>
+                        <input type="url" id="project-live" placeholder="https://example.com">
+                    </div>
+                    <div class="input-field">
+                        <label for="project-blog">related blog post</label>
+                        <input type="text" id="project-blog" placeholder="blog-post-id">
+                    </div>
+                    <div class="input-field">
                         <label for="project-status">status</label>
                         <select id="project-status">
-                            <option value="completed">completed</option>
-                            <option value="in-progress">in progress</option>
-                            <option value="planned">planned</option>
+                            <option value="Complete">Complete</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Planning">Planning</option>
                         </select>
+                    </div>
+                    <div class="input-field">
+                        <label>
+                            <input type="checkbox" id="project-featured"> 
+                            Featured project (show prominently)
+                        </label>
+                    </div>
+                    <div class="input-field">
+                        <label>project image</label>
+                        <div class="image-upload-section">
+                            <input type="file" id="project-image" accept="image/*" style="display: none;" onchange="handleProjectImageUpload(event)">
+                            <button class="upload-button" onclick="document.getElementById('project-image').click()">choose image</button>
+                            <button class="remove-button" onclick="removeProjectImage()">remove image</button>
+                        </div>
+                        <div id="project-image-preview" class="image-preview" style="display: none;">
+                            <img id="project-preview-img" alt="Project preview">
+                            <div class="image-controls">
+                                <button onclick="changeProjectImage()">change</button>
+                                <button onclick="removeProjectImage()">remove</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="button-group">
                         <button class="save-button" onclick="saveProject()">save project</button>
+                        <button class="update-button" onclick="updateProject()" style="display: none;">update project</button>
                         <button class="clear-button" onclick="clearProjectForm()">clear form</button>
                     </div>
+                    <input type="hidden" id="project-edit-id">
                 </div>
                 <div class="input-box">
                     <div class="box-title">existing projects</div>
@@ -1474,14 +1509,69 @@
                     fileInput.click();
                 }
             });
+
+            // Initialize project image upload
+            const projectPreview = document.getElementById('project-image-preview');
+            const projectFileInput = document.getElementById('project-image');
+            
+            if (projectPreview && projectFileInput) {
+                projectPreview.addEventListener('click', function(e) {
+                    if (e.target === projectPreview || e.target.classList.contains('upload-text')) {
+                        projectFileInput.click();
+                    }
+                });
+            }
+        }
+
+        // Project image handling
+        let currentProjectImage = null;
+
+        function handleProjectImageUpload(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('Image size should be less than 10MB');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentProjectImage = e.target.result;
+                    const preview = document.getElementById('project-image-preview');
+                    const img = document.getElementById('project-preview-img');
+                    
+                    preview.style.display = 'block';
+                    img.src = currentProjectImage;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                console.log('No valid file selected');
+            }
+        }
+
+        function removeProjectImage() {
+            currentProjectImage = null;
+            const preview = document.getElementById('project-image-preview');
+            preview.style.display = 'none';
+            document.getElementById('project-image').value = '';
+        }
+
+        function changeProjectImage() {
+            document.getElementById('project-image').click();
         }
 
         async function saveProject() {
             const name = document.getElementById('project-name').value;
             const desc = document.getElementById('project-desc').value;
+            const content = document.getElementById('project-content').value;
             const tech = document.getElementById('project-tech').value;
             const github = document.getElementById('project-github').value;
+            const live = document.getElementById('project-live').value;
+            const blog = document.getElementById('project-blog').value;
             const status = document.getElementById('project-status').value;
+            const featured = document.getElementById('project-featured').checked;
             
             if (!name || !desc) {
                 alert('Please fill in project name and description');
@@ -1491,9 +1581,14 @@
             const project = {
                 name: name,
                 description: desc,
+                content: content || desc,
                 technologies: tech.split(',').map(t => t.trim()).filter(t => t),
                 githubUrl: github || null,
-                status: status
+                liveUrl: live || null,
+                blogUrl: blog || null,
+                status: status,
+                featured: featured,
+                image: currentProjectImage
             };
             
             try {
@@ -1517,12 +1612,120 @@
             }
         }
 
+        async function updateProject() {
+            const id = document.getElementById('project-edit-id').value;
+            const name = document.getElementById('project-name').value;
+            const desc = document.getElementById('project-desc').value;
+            const content = document.getElementById('project-content').value;
+            const tech = document.getElementById('project-tech').value;
+            const github = document.getElementById('project-github').value;
+            const live = document.getElementById('project-live').value;
+            const blog = document.getElementById('project-blog').value;
+            const status = document.getElementById('project-status').value;
+            const featured = document.getElementById('project-featured').checked;
+            
+            if (!id || !name || !desc) {
+                alert('Please fill in project name and description');
+                return;
+            }
+            
+            const project = {
+                id: id,
+                name: name,
+                description: desc,
+                content: content || desc,
+                technologies: tech.split(',').map(t => t.trim()).filter(t => t),
+                githubUrl: github || null,
+                liveUrl: live || null,
+                blogUrl: blog || null,
+                status: status,
+                featured: featured,
+                image: currentProjectImage
+            };
+            
+            try {
+                const response = await fetch('/api/update-project', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(project)
+                });
+                
+                if (response.ok) {
+                    alert('Project updated successfully!');
+                    clearProjectForm();
+                    loadExistingProjects();
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to update project: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('Error updating project:', error);
+                alert('Error updating project - check console');
+            }
+        }
+
+        async function editProject(projectId) {
+            try {
+                const response = await fetch('/api/get-projects');
+                const projects = await response.json();
+                const project = projects.find(p => p.id === projectId);
+                
+                if (!project) {
+                    alert('Project not found');
+                    return;
+                }
+                
+                // Populate form fields
+                document.getElementById('project-name').value = project.title || project.name || '';
+                document.getElementById('project-desc').value = project.description || '';
+                document.getElementById('project-content').value = project.content || project.description || '';
+                document.getElementById('project-tech').value = (project.tech || project.technologies || []).join(', ');
+                document.getElementById('project-github').value = project.links?.github || '';
+                document.getElementById('project-live').value = project.links?.live || '';
+                document.getElementById('project-blog').value = project.links?.blog || '';
+                document.getElementById('project-status').value = project.status || 'Complete';
+                document.getElementById('project-featured').checked = Boolean(project.featured);
+                document.getElementById('project-edit-id').value = project.id;
+                
+                // Handle project image
+                if (project.image) {
+                    currentProjectImage = project.image;
+                    const preview = document.getElementById('project-image-preview');
+                    const img = document.getElementById('project-preview-img');
+                    img.src = project.image;
+                    preview.style.display = 'block';
+                } else {
+                    removeProjectImage();
+                }
+                
+                // Switch UI to edit mode
+                document.querySelector('.save-button').style.display = 'none';
+                document.querySelector('.update-button').style.display = 'inline-block';
+                
+            } catch (error) {
+                console.error('Error loading project for edit:', error);
+                alert('Error loading project - check console');
+            }
+        }
+
         function clearProjectForm() {
             document.getElementById('project-name').value = '';
-            document.getElementById('project-tech').value = '';
             document.getElementById('project-desc').value = '';
+            document.getElementById('project-content').value = '';
+            document.getElementById('project-tech').value = '';
             document.getElementById('project-github').value = '';
-            document.getElementById('project-status').value = 'completed';
+            document.getElementById('project-live').value = '';
+            document.getElementById('project-blog').value = '';
+            document.getElementById('project-status').value = 'Complete';
+            document.getElementById('project-featured').checked = false;
+            document.getElementById('project-edit-id').value = '';
+            
+            // Reset image
+            removeProjectImage();
+            
+            // Switch UI back to create mode
+            document.querySelector('.save-button').style.display = 'inline-block';
+            document.querySelector('.update-button').style.display = 'none';
         }
 
         async function loadExistingPosts() {
