@@ -684,7 +684,7 @@ p {
     box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
     border: 2px solid #ffd700;
     position: relative;
-    transform: rotate(-2deg);
+    transform: rotate(0deg);
     animation: featuredPulse 2s ease-in-out infinite;
 }
 
@@ -696,11 +696,11 @@ p {
 
 @keyframes featuredPulse {
     0%, 100% { 
-        transform: rotate(-2deg) scale(1);
+        transform: rotate(0deg) scale(1);
         box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
     }
     50% { 
-        transform: rotate(-2deg) scale(1.05);
+        transform: rotate(0deg) scale(1.05);
         box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
     }
 }
@@ -845,7 +845,7 @@ p {
     box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
     border: 2px solid #ffd700;
     position: relative;
-    transform: rotate(-2deg);
+    transform: rotate(0deg);
     animation: featuredPulse 2s ease-in-out infinite;
 }
 
