@@ -15,7 +15,7 @@ function generateId(title) {
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
-            const { name, description, technologies, status, githubUrl } = req.body;
+            const { name, description, content, technologies, status, githubUrl, liveUrl, blogUrl, image, featured } = req.body;
             
             if (!name || !description) {
                 return res.status(400).json({ error: 'Name and description are required' });
@@ -29,14 +29,16 @@ export default async function handler(req, res) {
                 id: generateId(name),
                 title: name,
                 description: description,
-                content: description,
+                content: content || description,
                 tech: Array.isArray(technologies) ? technologies : (technologies ? technologies.split(',').map(t => t.trim()).filter(t => t) : []),
                 status: status || 'Complete',
-                featured: false,
+                featured: Boolean(featured),
                 links: {
-                    github: githubUrl || null
+                    ...(githubUrl && { github: githubUrl }),
+                    ...(liveUrl && { live: liveUrl }),
+                    ...(blogUrl && { blog: blogUrl })
                 },
-                image: null
+                image: image || null
             };
 
             // Add to beginning of array (newest first)

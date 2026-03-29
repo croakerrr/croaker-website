@@ -38,9 +38,19 @@ function createProjectCard(project) {
         `<span class="tech-tag">${tech}</span>`
     ).join('');
     
+    // Handle project image or use placeholder
+    const imageHtml = project.image 
+        ? `<img src="${project.image}" alt="${project.title}" class="project-img">`
+        : `<div class="project-placeholder">
+             <div class="placeholder-icon">📁</div>
+             <div class="placeholder-text">${project.title}</div>
+           </div>`;
+    
     card.innerHTML = `
         <div class="project-image">
+            ${imageHtml}
             <div class="project-status status-${statusClass}">${project.status}</div>
+            ${project.featured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
         </div>
         <div class="project-info">
             <h3>${project.title}</h3>
@@ -57,24 +67,57 @@ function createProjectCard(project) {
 function openProjectModal(project) {
     const modal = document.getElementById('project-modal');
     document.getElementById('modal-project-title').textContent = project.title;
-    document.getElementById('modal-tech').textContent = project.tech.join(' • ');
-    document.getElementById('modal-project-content').innerHTML = project.content.replace(/\n/g, '<br><br>');
     
-    // Render links
+    // Handle tech field (could be 'tech' or 'technologies')
+    const techArray = project.tech || project.technologies || [];
+    document.getElementById('modal-tech').textContent = techArray.join(' • ');
+    
+    // Use content field if available, otherwise fall back to description
+    const content = project.content || project.description || 'No detailed description available.';
+    document.getElementById('modal-project-content').innerHTML = content.replace(/\n/g, '<br><br>');
+    
+    // Handle project image in modal
+    const modalImage = document.getElementById('modal-project-image');
+    if (project.image) {
+        modalImage.src = project.image;
+        modalImage.style.display = 'block';
+        modalImage.alt = project.title;
+    } else {
+        modalImage.style.display = 'none';
+    }
+    
+    // Render links with better fallbacks
     const linksContainer = document.getElementById('modal-links');
     linksContainer.innerHTML = '';
     
-    if (project.links.github) {
-        linksContainer.innerHTML += `<a href="${project.links.github}" target="_blank" rel="noopener noreferrer" class="project-link">GitHub</a>`;
+    const githubUrl = project.links?.github || project.githubUrl;
+    const liveUrl = project.links?.live || project.liveUrl;
+    const blogUrl = project.links?.blog || project.blogUrl;
+    
+    if (githubUrl) {
+        linksContainer.innerHTML += `<a href="${githubUrl}" target="_blank" rel="noopener noreferrer" class="project-link">GitHub</a>`;
     }
-    if (project.links.live) {
-        linksContainer.innerHTML += `<a href="${project.links.live}" target="_blank" rel="noopener noreferrer" class="project-link">Live Demo</a>`;
+    if (liveUrl) {
+        linksContainer.innerHTML += `<a href="${liveUrl}" target="_blank" rel="noopener noreferrer" class="project-link">Live Demo</a>`;
     }
-    if (project.links.blog) {
-        linksContainer.innerHTML += `<a href="blog.html#${project.links.blog}" class="project-link">Related Blog Post</a>`;
+    if (blogUrl) {
+        // If it's a blog post ID, create a link to the blog page with that post
+        const blogLink = blogUrl.startsWith('http') 
+            ? blogUrl 
+            : `/pages/blog.html#${blogUrl}`;
+        linksContainer.innerHTML += `<a href="${blogLink}" class="project-link" ${!blogUrl.startsWith('http') ? '' : 'target="_blank" rel="noopener noreferrer"'}>Related Blog Post</a>`;
     }
     
     document.getElementById('modal-status').textContent = project.status;
+    
+    // Show featured badge in modal if applicable
+    const featuredBadge = document.getElementById('modal-featured-badge');
+    if (project.featured) {
+        featuredBadge.style.display = 'block';
+        featuredBadge.textContent = '⭐ Featured Project';
+    } else {
+        featuredBadge.style.display = 'none';
+    }
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

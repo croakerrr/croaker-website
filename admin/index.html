@@ -1675,14 +1675,14 @@
                     return;
                 }
                 
-                // Populate form fields
+                // Populate form fields with proper field mapping
                 document.getElementById('project-name').value = project.title || project.name || '';
                 document.getElementById('project-desc').value = project.description || '';
                 document.getElementById('project-content').value = project.content || project.description || '';
                 document.getElementById('project-tech').value = (project.tech || project.technologies || []).join(', ');
-                document.getElementById('project-github').value = project.links?.github || '';
-                document.getElementById('project-live').value = project.links?.live || '';
-                document.getElementById('project-blog').value = project.links?.blog || '';
+                document.getElementById('project-github').value = project.links?.github || project.githubUrl || '';
+                document.getElementById('project-live').value = project.links?.live || project.liveUrl || '';
+                document.getElementById('project-blog').value = project.links?.blog || project.blogUrl || '';
                 document.getElementById('project-status').value = project.status || 'Complete';
                 document.getElementById('project-featured').checked = Boolean(project.featured);
                 document.getElementById('project-edit-id').value = project.id;
