@@ -63,13 +63,19 @@ class PageTransition {
             themeToggle.style.opacity = '0';
         }
         
-        // Trigger slide in animation
+        // Trigger slide in animation and logo animation
         this.overlay.classList.add('active');
+        
+        // Start logo animation immediately
+        const logo = this.overlay.querySelector('.croaker-logo-transition');
+        if (logo) {
+            logo.style.animation = 'croakerFadeGrow 1.0s ease-in-out';
+        }
         
         // Navigate after animation completes
         setTimeout(() => {
             window.location.href = href;
-        }, 250); // Half of the transition duration
+        }, 500); // Wait for full animation
     }
 
     handlePageLoad() {
@@ -83,6 +89,12 @@ class PageTransition {
             themeToggle.style.transition = 'all 0.2s ease';
         }
         
+        // Start logo animation on page load too
+        const logo = this.overlay.querySelector('.croaker-logo-transition');
+        if (logo) {
+            logo.style.animation = 'croakerFadeGrow 1.0s ease-in-out';
+        }
+        
         // Slide out overlay on page load
         setTimeout(() => {
             this.overlay.classList.add('exit');
@@ -91,6 +103,10 @@ class PageTransition {
             setTimeout(() => {
                 this.overlay.classList.remove('exit');
                 this.overlay.style.transform = '';
+                // Reset logo animation
+                if (logo) {
+                    logo.style.animation = '';
+                }
             }, 500);
         }, 50);
     }
