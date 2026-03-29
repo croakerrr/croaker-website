@@ -56,25 +56,15 @@ class PageTransition {
     }
 
     navigateToPage(href) {
-        // Different approach: disable all CSS animations temporarily to prevent rendering artifacts
-        const style = document.createElement('style');
-        style.id = 'disable-animations';
-        style.textContent = `
-            *, *::before, *::after {
-                animation-duration: 0s !important;
-                animation-delay: 0s !important;
-                transition-duration: 0s !important;
-                transition-delay: 0s !important;
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Hide theme toggle only
+        // Hide potentially problematic elements including filter dots
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
-            themeToggle.style.opacity = '0';
-            themeToggle.style.pointerEvents = 'none';
+            themeToggle.style.visibility = 'hidden';
         }
+        
+        // Hide any other potential sources of flashing circles
+        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .filter-dot, .nav-logo, .nav-logo-large');
+        problematicElements.forEach(el => el.style.visibility = 'hidden');
         
         // Trigger slide in animation
         this.overlay.classList.add('active');
@@ -96,19 +86,15 @@ class PageTransition {
         // Start with overlay covering screen, then slide out
         this.overlay.style.transform = 'translateX(0)';
         
-        // Remove animation disabling style if it exists
-        const disableStyle = document.getElementById('disable-animations');
-        if (disableStyle) {
-            disableStyle.remove();
-        }
-        
         // Restore theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
-            themeToggle.style.opacity = '1';
-            themeToggle.style.pointerEvents = 'auto';
-            themeToggle.style.transition = 'all 0.2s ease';
+            themeToggle.style.visibility = 'visible';
         }
+        
+        // Restore other elements
+        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .filter-dot, .nav-logo, .nav-logo-large');
+        problematicElements.forEach(el => el.style.visibility = 'visible');
         
         // Start logo animation on page load too
         const logo = this.overlay.querySelector('.croaker-logo-transition');
@@ -122,6 +108,7 @@ class PageTransition {
             
             // Reset overlay state after exit animation
             setTimeout(() => {
+                this.overlay.classList.remove('active');
                 this.overlay.classList.remove('exit');
                 this.overlay.style.transform = '';
                 // Reset logo animation after it completes
@@ -155,7 +142,7 @@ window.addEventListener('pageshow', (e) => {
         
         // Ensure theme toggle is visible
         if (themeToggle) {
-            themeToggle.style.opacity = '1';
+            themeToggle.style.visibility = 'visible';
         }
     }
 });
