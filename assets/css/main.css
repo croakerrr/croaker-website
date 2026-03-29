@@ -846,7 +846,6 @@ p {
     border: 2px solid #ffd700;
     position: relative;
     transform: rotate(0deg);
-    animation: featuredPulse 2s ease-in-out infinite;
 }
 
 .modal-featured-badge::before {
