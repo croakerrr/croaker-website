@@ -305,41 +305,6 @@
             background: #e55555;
         }
 
-        .advanced-tag-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .tag-groups {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .tag-group {
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 10px;
-            background: #f8f8f8;
-        }
-
-        .tag-group-title {
-            font-size: 11px;
-            font-weight: bold;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .tag-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
         .image-upload-area {
             position: relative;
         }
@@ -423,29 +388,6 @@
 
         .remove-image-btn:hover {
             background: #e55555;
-        }
-
-        .filter-selectors {
-            margin: 15px 0;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: #f9f9f9;
-        }
-
-        .filter-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-
-        .filter-selectors .input-field {
-            margin-bottom: 0;
-        }
-
-        .filter-selectors label {
-            font-weight: bold;
-            color: #333;
         }
 
         select {
@@ -609,87 +551,15 @@
                         </div>
                     </div>
                     <div class="input-field">
-                        <label>tags & categories</label>
-                        <div class="advanced-tag-selector">
-                            <div class="tag-groups">
-                                <div class="tag-group">
-                                    <span class="tag-group-title">languages</span>
-                                    <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="addTag('javascript')">javascript</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('python')">python</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('java')">java</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('css')">css</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('html')">html</button>
-                                    </div>
-                                </div>
-                                <div class="tag-group">
-                                    <span class="tag-group-title">frameworks</span>
-                                    <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="addTag('react')">react</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('spring')">spring</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('node')">node</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('framework')">framework</button>
-                                    </div>
-                                </div>
-                                <div class="tag-group">
-                                    <span class="tag-group-title">topics</span>
-                                    <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="addTag('algorithms')">algorithms</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('data-science')">data-science</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('database')">database</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('api')">api</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('responsive')">responsive</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('performance')">performance</button>
-                                    </div>
-                                </div>
-                                <div class="tag-group">
-                                    <span class="tag-group-title">context</span>
-                                    <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="addTag('learning')">learning</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('coursework')">coursework</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('portfolio')">portfolio</button>
-                                        <button type="button" class="tag-btn" onclick="addTag('theory')">theory</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="text" id="blog-tags" placeholder="Selected tags appear here, or type custom tags...">
-                            <button type="button" class="clear-tags-btn" onclick="clearTags()">clear all</button>
-                        </div>
-                    </div>
-                    <div class="input-field">
                         <label for="blog-date">date</label>
                         <input type="date" id="blog-date">
                     </div>
-                    <div class="filter-selectors">
-                        <div class="filter-row">
-                            <div class="input-field">
-                                <label for="blog-year">year</label>
-                                <select id="blog-year">
-                                    <option value="">auto-detect</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
-                                </select>
-                            </div>
-                            <div class="input-field">
-                                <label for="blog-language">language</label>
-                                <select id="blog-language">
-                                    <option value="">auto-detect</option>
-                                    <option value="web technologies">web technologies</option>
-                                    <option value="java">java</option>
-                                    <option value="python">python</option>
-                                </select>
-                            </div>
-                            <div class="input-field">
-                                <label for="blog-category">category</label>
-                                <select id="blog-category">
-                                    <option value="">auto-detect</option>
-                                    <option value="university">university</option>
-                                    <option value="project-update">project-update</option>
-                                    <option value="misc">misc</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="input-field">
+                        <label for="blog-tags">tags (comma-separated)</label>
+                        <input type="text" id="blog-tags" placeholder="javascript, react, learning, university">
+                        <small style="color: var(--fg-light); font-size: 12px; margin-top: 5px; display: block;">
+                            Add tags like: javascript, python, java, react, algorithms, university, project, etc.
+                        </small>
                     </div>
                     <div class="input-field">
                         <label class="checkbox-label">
@@ -816,9 +686,6 @@
             const content = document.getElementById('blog-content').value;
             const tags = document.getElementById('blog-tags').value;
             const date = document.getElementById('blog-date').value;
-            const yearOverride = document.getElementById('blog-year').value;
-            const languageOverride = document.getElementById('blog-language').value;
-            const categoryOverride = document.getElementById('blog-category').value;
             
             if (!title || !content) {
                 alert('Please fill in title and content');
@@ -834,9 +701,9 @@
                 date: formatDate(date),
                 excerpt: content.substring(0, 150) + (content.length > 150 ? '...' : ''),
                 author: "croaker",
-                year: yearOverride ? parseInt(yearOverride) : new Date(date).getFullYear(),
-                language: languageOverride || determineLanguage(tagArray),
-                category: categoryOverride || determineCategory(tagArray),
+                year: new Date(date).getFullYear(),
+                language: determineLanguage(tagArray),
+                category: determineCategory(tagArray),
                 image: selectedImageData,
                 pinned: document.getElementById('blog-pinned').checked
             };
@@ -937,9 +804,6 @@
             document.getElementById('blog-content').value = '';
             document.getElementById('blog-tags').value = '';
             document.getElementById('blog-date').value = '';
-            document.getElementById('blog-year').value = '';
-            document.getElementById('blog-language').value = '';
-            document.getElementById('blog-category').value = '';
             document.getElementById('blog-pinned').checked = false;
             
             // Clear editing state
@@ -951,16 +815,15 @@
             
             // Reset button text and style
             const saveButton = document.querySelector('.save-button');
-            saveButton.textContent = 'save post';
-            saveButton.style.background = '';
+            if (saveButton) {
+                saveButton.textContent = 'save post';
+                saveButton.style.background = '';
+            }
             
-            // Hide cancel edit button
-            document.getElementById('cancel-edit-btn').style.display = 'none';
+            // Hide cancel edit button if it exists
+            const cancelBtn = document.getElementById('cancel-edit-btn');
+            if (cancelBtn) cancelBtn.style.display = 'none';
             
-            // Clear all selected tag buttons
-            document.querySelectorAll('.tag-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
             // Clear image
             removeImage();
         }
@@ -969,35 +832,6 @@
             if (confirm('Are you sure you want to cancel editing? Any changes will be lost.')) {
                 clearBlogForm();
             }
-        }
-
-        // Tag selector functions
-        function addTag(tagName) {
-            const tagsInput = document.getElementById('blog-tags');
-            const tagBtn = event.target;
-            
-            let currentTags = tagsInput.value ? tagsInput.value.split(',').map(t => t.trim()).filter(t => t) : [];
-            
-            if (tagBtn.classList.contains('selected')) {
-                // Remove tag
-                currentTags = currentTags.filter(tag => tag !== tagName);
-                tagBtn.classList.remove('selected');
-            } else {
-                // Add tag
-                if (!currentTags.includes(tagName)) {
-                    currentTags.push(tagName);
-                }
-                tagBtn.classList.add('selected');
-            }
-            
-            tagsInput.value = currentTags.join(', ');
-        }
-
-        function clearTags() {
-            document.getElementById('blog-tags').value = '';
-            document.querySelectorAll('.tag-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
         }
 
         // Image upload functions
@@ -1257,7 +1091,8 @@
                 saveButton.style.background = '#4a9eff';
                 
                 // Show cancel edit button
-                document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+                const cancelBtn = document.getElementById('cancel-edit-btn');
+                if (cancelBtn) cancelBtn.style.display = 'inline-block';
                 
                 alert(`Loaded post "${post.title}" for editing`);
                 
