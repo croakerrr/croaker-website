@@ -112,6 +112,9 @@
             <div class="modal-tags" id="homepage-modal-tags"></div>
             <div class="modal-content-text" id="homepage-modal-content"></div>
             <div class="modal-author" id="homepage-modal-author"></div>
+            <div class="modal-actions">
+                <button id="view-full-post-btn" class="modal-action-btn">View Full Post</button>
+            </div>
         </div>
     </div>
 </div>
@@ -129,6 +132,9 @@
             <div class="modal-tags" id="homepage-project-modal-tech"></div>
             <div class="modal-content-text" id="homepage-project-modal-content"></div>
             <div class="modal-links" id="homepage-project-modal-links"></div>
+            <div class="modal-actions">
+                <button id="view-full-project-btn" class="modal-action-btn">View Full Project</button>
+            </div>
         </div>
     </div>
 </div>
@@ -247,7 +253,6 @@ function renderHomepagePost(post, containerId, postType) {
         <div class="homepage-post-excerpt">${post.excerpt}</div>
         ${imageHTML}
         ${tagsHTML}
-        <button class="view-full-btn" onclick="event.stopPropagation(); viewFullPost('${post.id}')">view full post</button>
     `;
     
     // Add click handler to open modal
@@ -277,7 +282,6 @@ function renderHomepageProject(project, containerId, projectType) {
         <div class="homepage-post-meta">${project.status || 'Complete'}</div>
         <div class="homepage-post-excerpt">${project.description}</div>
         ${imageHTML}
-        <button class="view-full-btn" onclick="event.stopPropagation(); viewFullProject('${project.id}')">view full project</button>
     `;
     
     // Add click handler to open modal
@@ -303,6 +307,13 @@ function openHomepagePostModal(post) {
     
     // Remove tags from homepage modals
     document.getElementById('homepage-modal-tags').innerHTML = '';
+    
+    // Set up view full post button
+    const viewFullBtn = document.getElementById('view-full-post-btn');
+    viewFullBtn.onclick = () => {
+        closeHomepageModal();
+        viewFullPost(post.id);
+    };
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -355,6 +366,13 @@ function openHomepageProjectModal(project) {
         linksHTML += '</div>';
     }
     document.getElementById('homepage-project-modal-links').innerHTML = linksHTML;
+    
+    // Set up view full project button
+    const viewFullBtn = document.getElementById('view-full-project-btn');
+    viewFullBtn.onclick = () => {
+        closeHomepageProjectModal();
+        viewFullProject(project.id);
+    };
     
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';

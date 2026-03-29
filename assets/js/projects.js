@@ -22,7 +22,16 @@ function renderProjects() {
     const container = document.getElementById('projects-grid');
     container.innerHTML = '';
     
-    projectsData.forEach(project => {
+    // Sort projects: featured first, then by order in array
+    const sortedProjects = [...projectsData].sort((a, b) => {
+        // Featured projects come first
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        // Otherwise maintain original order
+        return 0;
+    });
+    
+    sortedProjects.forEach(project => {
         const projectCard = createProjectCard(project);
         container.appendChild(projectCard);
     });
@@ -50,7 +59,7 @@ function createProjectCard(project) {
         <div class="project-image">
             ${imageHtml}
             <div class="project-status status-${statusClass}">${project.status}</div>
-            ${project.featured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
+            ${project.featured ? '<div class="featured-badge">FEATURED</div>' : ''}
         </div>
         <div class="project-info">
             <h3>${project.name || project.title}</h3>
@@ -116,7 +125,7 @@ function openProjectModal(project) {
     const featuredBadge = document.getElementById('modal-featured-badge');
     if (project.featured) {
         featuredBadge.style.display = 'block';
-        featuredBadge.textContent = '⭐ Featured Project';
+        featuredBadge.textContent = 'FEATURED PROJECT';
     } else {
         featuredBadge.style.display = 'none';
     }
