@@ -1457,9 +1457,6 @@ body.light-mode .post-container.recent-project {
     opacity: 0.9;
     padding-right: 90px; /* Make space for the photo */
     padding-bottom: 10px; /* Make space for the photo */
-    /* Debug border to see if the element is working */
-    border: 1px solid red;
-    max-height: calc(1.3 * 0.7rem * 4); /* Force max height */
 }
 
 .homepage-post-image {
@@ -1753,7 +1750,6 @@ body.light-mode .view-full-btn:hover {
         height: 100vh !important;
         height: 100dvh !important; /* Dynamic viewport height for mobile */
     }
-}
     
     /* Smaller image popup on mobile */
     .image-popup-content {
@@ -1790,10 +1786,8 @@ body.light-mode .view-full-btn:hover {
         text-overflow: ellipsis !important;
         padding-right: 10px;
         padding-bottom: 5px;
-        /* Debug border for mobile */
-        border: 1px solid blue;
-        max-height: calc(1.2 * 0.65rem * 3); /* Force max height */
     }
+}
 
     .post-badge {
         font-size: 0.55rem;
@@ -2436,6 +2430,26 @@ body.modal-open {
     line-height: 1.7;
     color: var(--fg-light);
     margin-bottom: 2rem;
+    /* Always limit modal content to encourage view full usage */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Apply same truncation to all modal content types */
+.modal-body #homepage-modal-content,
+.modal-body #homepage-project-modal-content {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--fg-light);
+    margin-bottom: 2rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .modal-body #modal-content p {
