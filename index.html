@@ -139,6 +139,19 @@
     </div>
 </div>
 
+<!-- Image Popup Modal -->
+<div id="image-popup-modal" class="image-popup-modal" onclick="closeImagePopup()">
+    <div class="image-popup-content" onclick="event.stopPropagation()">
+        <div class="image-popup-header">
+            <span id="image-popup-title"></span>
+            <button onclick="closeImagePopup()" class="close-modal-btn">×</button>
+        </div>
+        <div class="image-popup-body">
+            <img id="image-popup-img" src="" alt="">
+        </div>
+    </div>
+</div>
+
 </main>
 
 </body>
@@ -242,7 +255,7 @@ function renderHomepagePost(post, containerId, postType) {
     container.className = `post-container ${badgeInfo[postType].class}`;
     
     const imageHTML = post.image ? 
-        `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}"></div>` : '';
+        `<div class="homepage-post-image"><img src="${post.image}" alt="${post.title}" onclick="openImagePopup('${post.image}', '${post.title}', event)"></div>` : '';
     
     const tagsHTML = '';
     
@@ -274,7 +287,7 @@ function renderHomepageProject(project, containerId, projectType) {
     container.className = `post-container ${badgeInfo[projectType].class}`;
     
     const imageHTML = project.image ? 
-        `<div class="homepage-post-image"><img src="${project.image}" alt="${project.name}"></div>` : '';
+        `<div class="homepage-post-image"><img src="${project.image}" alt="${project.name}" onclick="openImagePopup('${project.image}', '${project.name || project.title || 'Project'}', event)"></div>` : '';
     
     container.innerHTML = `
         <div class="post-badge ${badgeInfo[projectType].class}">${badgeInfo[projectType].text}</div>
@@ -406,6 +419,26 @@ function viewFullProject(projectId) {
     } else {
         window.location.href = url;
     }
+}
+
+function openImagePopup(imageSrc, imageTitle, event) {
+    event.stopPropagation(); // Prevent opening the post/project modal
+    const modal = document.getElementById('image-popup-modal');
+    const img = document.getElementById('image-popup-img');
+    const title = document.getElementById('image-popup-title');
+    
+    img.src = imageSrc;
+    img.alt = imageTitle;
+    title.textContent = imageTitle;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImagePopup() {
+    const modal = document.getElementById('image-popup-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
 }
 </script>
 

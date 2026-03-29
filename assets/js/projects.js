@@ -59,10 +59,12 @@ function createProjectCard(project) {
         <div class="project-image">
             ${imageHtml}
             <div class="project-status status-${statusClass}">${project.status}</div>
-            ${project.featured ? '<div class="featured-badge">FEATURED</div>' : ''}
         </div>
         <div class="project-info">
-            <h3>${project.name || project.title}</h3>
+            <div class="project-title-row">
+                <h3>${project.name || project.title}</h3>
+                ${project.featured ? '<div class="featured-badge-inline">FEATURED</div>' : ''}
+            </div>
             <p>${project.description}</p>
             <div class="project-tech">
                 ${techTags}
