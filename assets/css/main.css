@@ -1175,7 +1175,7 @@ body.light-mode .homepage-posts-section {
     padding: 1.5rem;
     transition: all 0.3s ease;
     cursor: pointer;
-    aspect-ratio: 1;
+    aspect-ratio: 1.1;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -1198,7 +1198,7 @@ body.light-mode .homepage-posts-section {
 .post-container .homepage-post-title {
     font-family: 'Caveat', cursive;
     font-weight: 700;
-    font-size: 1.7rem;
+    font-size: 2rem;
 }
 
 .post-container .homepage-post-meta {
@@ -1422,7 +1422,7 @@ body.light-mode .post-container.recent-project {
 }
 
 .homepage-post-title {
-    font-size: 1rem;
+    font-size: 2rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     line-height: 1.4;
@@ -1467,7 +1467,7 @@ body.light-mode .post-container.recent-project {
     text-overflow: ellipsis;
     opacity: 0.9;
     padding-right: 40px; /* Reduced from 110px to extend text width */
-    padding-bottom: 15px; /* Keep for image clearance */
+    padding-bottom: 5px; /* Reduced from 15px to show more text */
 }
 
 .homepage-post-image {
@@ -1779,7 +1779,7 @@ body.light-mode .view-full-btn:hover {
     }
 
     .homepage-post-title {
-        font-size: 0.85rem;
+        font-size: 1.2rem;
         margin-top: 1.5rem;
         -webkit-line-clamp: 2;
     }
@@ -1795,7 +1795,7 @@ body.light-mode .view-full-btn:hover {
         -webkit-line-clamp: 8; /* Increased from 7 for mobile */
         text-overflow: ellipsis;
         padding-right: 10px;
-        padding-bottom: 5px;
+        padding-bottom: 3px;
     }
 }
 
