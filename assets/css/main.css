@@ -1702,7 +1702,6 @@ body.light-mode .view-full-btn:hover {
         font-size: 14px !important;
         line-height: 1.5 !important;
         max-height: none !important;
-        overflow: visible !important;
         /* Limit to 3 lines with ellipsis */
         display: -webkit-box !important;
         -webkit-line-clamp: 3 !important;
@@ -1781,7 +1780,10 @@ body.light-mode .view-full-btn:hover {
     .homepage-post-excerpt {
         font-size: 0.65rem;
         line-height: 1.2;
+        display: -webkit-box;
         -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         text-overflow: ellipsis;
         padding-right: 10px;
         padding-bottom: 5px;
