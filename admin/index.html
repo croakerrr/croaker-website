@@ -999,23 +999,55 @@
                 'css': 'web technologies',
                 'html': 'web technologies',
                 'react': 'web technologies',
-                'node': 'web technologies'
+                'node': 'web technologies',
+                'typescript': 'web technologies',
+                'vue': 'web technologies',
+                'angular': 'web technologies',
+                'sass': 'web technologies',
+                'scss': 'web technologies',
+                'bootstrap': 'web technologies',
+                'tailwind': 'web technologies',
+                'express': 'web technologies',
+                'nextjs': 'web technologies',
+                'next': 'web technologies',
+                'svelte': 'web technologies',
+                'php': 'web technologies',
+                'laravel': 'web technologies',
+                'django': 'python',
+                'flask': 'python',
+                'pandas': 'python',
+                'numpy': 'python',
+                'spring': 'java',
+                'kotlin': 'java',
+                'scala': 'java',
+                'c++': 'java',
+                'c#': 'java',
+                'rust': 'java',
+                'go': 'java',
+                'swift': 'java',
+                'dart': 'java',
+                'flutter': 'java'
             };
             
             // Check custom language tags first
             for (const tag of tags) {
                 if (customLanguageTags.has(tag.toLowerCase())) {
-                    // If it's a custom language tag, determine the mapping
+                    // If it's a custom language tag, determine the mapping based on expanded keywords
                     const lower = tag.toLowerCase();
-                    if (lower.includes('javascript') || lower.includes('css') || lower.includes('html') || lower.includes('react') || lower.includes('node')) {
-                        return 'web technologies';
-                    } else if (lower.includes('python')) {
-                        return 'python';
-                    } else if (lower.includes('java')) {
-                        return 'java';
-                    } else {
-                        return 'misc'; // Default for unrecognized custom language tags
+                    
+                    // Check against expanded language mappings
+                    for (const [key, value] of Object.entries(languageMap)) {
+                        if (lower.includes(key)) return value;
                     }
+                    
+                    // Fallback to web technologies for most programming-related terms
+                    if (lower.includes('js') || lower.includes('frontend') || lower.includes('backend') || 
+                        lower.includes('web') || lower.includes('framework') || lower.includes('library')) {
+                        return 'web technologies';
+                    }
+                    
+                    // Default for unrecognized custom language tags
+                    return 'web technologies';
                 }
             }
             
@@ -1040,21 +1072,80 @@
                 'coursework': 'university',
                 'project': 'project-update',
                 'portfolio': 'project-update',
-                'learning': 'university'
+                'learning': 'university',
+                'assignment': 'university',
+                'homework': 'university',
+                'exam': 'university',
+                'study': 'university',
+                'course': 'university',
+                'degree': 'university',
+                'semester': 'university',
+                'module': 'university',
+                'lecture': 'university',
+                'tutorial': 'university',
+                'lab': 'university',
+                'research': 'university',
+                'thesis': 'university',
+                'dissertation': 'university',
+                'internship': 'project-update',
+                'job': 'project-update',
+                'work': 'project-update',
+                'career': 'project-update',
+                'startup': 'project-update',
+                'freelance': 'project-update',
+                'client': 'project-update',
+                'business': 'project-update',
+                'app': 'project-update',
+                'website': 'project-update',
+                'deployment': 'project-update',
+                'launch': 'project-update',
+                'release': 'project-update',
+                'update': 'project-update',
+                'feature': 'project-update',
+                'bug': 'project-update',
+                'fix': 'project-update',
+                'personal': 'misc',
+                'hobby': 'misc',
+                'fun': 'misc',
+                'experiment': 'misc',
+                'random': 'misc',
+                'thoughts': 'misc',
+                'reflection': 'misc',
+                'life': 'misc',
+                'travel': 'misc',
+                'food': 'misc',
+                'gaming': 'misc',
+                'music': 'misc',
+                'art': 'misc',
+                'design': 'misc',
+                'ux': 'misc',
+                'ui': 'misc'
             };
             
             // Check custom topic tags first
             for (const tag of tags) {
                 if (customTopicTags.has(tag.toLowerCase())) {
                     const lower = tag.toLowerCase();
-                    // Map custom topic tags to categories
-                    if (lower.includes('university') || lower.includes('coursework') || lower.includes('learning')) {
-                        return 'university';
-                    } else if (lower.includes('project') || lower.includes('portfolio')) {
-                        return 'project-update';
-                    } else {
-                        return 'misc'; // Default for unrecognized custom topic tags
+                    
+                    // Check against expanded category mappings
+                    for (const [key, value] of Object.entries(categoryMap)) {
+                        if (lower.includes(key)) return value;
                     }
+                    
+                    // Smart defaults based on common patterns
+                    if (lower.includes('uni') || lower.includes('school') || lower.includes('class') || 
+                        lower.includes('education') || lower.includes('academic')) {
+                        return 'university';
+                    }
+                    
+                    if (lower.includes('project') || lower.includes('work') || lower.includes('dev') || 
+                        lower.includes('build') || lower.includes('create') || lower.includes('app') || 
+                        lower.includes('site') || lower.includes('code')) {
+                        return 'project-update';
+                    }
+                    
+                    // Default to misc for unrecognized custom topic tags
+                    return 'misc';
                 }
             }
             
@@ -1725,11 +1816,6 @@
             loadLanguageTagsList();
             updateTagButtons();
             
-            // Trigger blog filter refresh if we're on blog page
-            if (typeof setupFilters === 'function') {
-                setupFilters();
-            }
-            
             // Clear input
             input.value = '';
             
@@ -1755,11 +1841,6 @@
             loadTopicTagsList();
             updateTagButtons();
             
-            // Trigger blog filter refresh if we're on blog page
-            if (typeof setupFilters === 'function') {
-                setupFilters();
-            }
-            
             // Clear input
             input.value = '';
             
@@ -1777,11 +1858,6 @@
                 loadLanguageTagsList();
                 updateTagButtons();
                 
-                // Trigger blog filter refresh if we're on blog page
-                if (typeof setupFilters === 'function') {
-                    setupFilters();
-                }
-                
                 alert(`Deleted "${language}" from language tags`);
             }
         }
@@ -1796,11 +1872,6 @@
                 // Refresh the display
                 loadTopicTagsList();
                 updateTagButtons();
-                
-                // Trigger blog filter refresh if we're on blog page
-                if (typeof setupFilters === 'function') {
-                    setupFilters();
-                }
                 
                 alert(`Deleted "${topic}" from topic tags`);
             }
