@@ -1639,6 +1639,7 @@ body.light-mode .view-full-btn:hover {
         height: auto !important;
         top: 50% !important;
         transform: translate(-50%, -50%) scale(0.9) !important;
+        overflow-y: auto !important;
     }
     
     .modal-content.active {
