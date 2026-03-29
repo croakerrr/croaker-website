@@ -1694,6 +1694,7 @@ body.light-mode .view-full-btn:hover {
         height: 100vh !important;
         height: 100dvh !important; /* Dynamic viewport height for mobile */
     }
+}
     
     /* Smaller image popup on mobile */
     .image-popup-content {
