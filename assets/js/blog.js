@@ -36,6 +36,34 @@ function isNewestPost(post) {
   return post.id === newestPost.id;
 }
 
+function setupFilters() {
+  // Extract unique values, with fallback to original blog defaults when no posts exist
+  const years = allPosts.length > 0 ? 
+    [...new Set(allPosts.map(p => p.year))].sort((a, b) => b - a) : 
+    [2026];
+    
+  // Get predefined and custom language tags
+  const predefinedLanguages = ['web technologies', 'java', 'python'];
+  const customLanguageTags = JSON.parse(localStorage.getItem('customLanguageTags') || '[]');
+  const postLanguages = allPosts.length > 0 ?
+    allPosts.map(p => p.language).filter(lang => lang && lang.trim()) : [];
+  
+  const languages = [...new Set([...predefinedLanguages, ...customLanguageTags, ...postLanguages])].sort();
+    
+  // Get predefined and custom topic tags  
+  const predefinedCategories = ['university', 'project-update', 'misc'];
+  const customTopicTags = JSON.parse(localStorage.getItem('customTopicTags') || '[]');
+  const postCategories = allPosts.length > 0 ?
+    allPosts.map(p => p.category).filter(cat => cat && cat.trim()) : [];
+    
+  const categories = [...new Set([...predefinedCategories, ...customTopicTags, ...postCategories])].sort();
+  
+  // Create filter options
+  createFilterOptions('year-options', years, 'year');
+  createFilterOptions('language-options', languages, 'language');
+  createFilterOptions('category-options', categories, 'category');
+}
+
 async function loadBlogPosts() {
   try {
     const response = await fetch('/api/get-posts');
@@ -44,23 +72,8 @@ async function loadBlogPosts() {
     const blogList = document.getElementById('blog-list');
     if (!blogList) return;
     
-    // Extract unique values, with fallback to original blog defaults when no posts exist
-    const years = allPosts.length > 0 ? 
-      [...new Set(allPosts.map(p => p.year))].sort((a, b) => b - a) : 
-      [2026];
-      
-    const languages = allPosts.length > 0 ?
-      [...new Set(allPosts.map(p => p.language).filter(lang => lang && lang.trim()))].sort() :
-      ['web technologies', 'java', 'python'];
-      
-    const categories = allPosts.length > 0 ?
-      [...new Set(allPosts.map(p => p.category).filter(cat => cat && cat.trim()))].sort() :
-      ['university', 'project-update', 'misc'];
-    
-    // Create filter options
-    createFilterOptions('year-options', years, 'year');
-    createFilterOptions('language-options', languages, 'language');
-    createFilterOptions('category-options', categories, 'category');
+    // Setup filters
+    setupFilters();
     
     // Sort options event listeners
     document.querySelectorAll('#sort-options [data-sort]').forEach(btn => {
@@ -369,6 +382,14 @@ function renderPosts() {
 // Initialize modal functionality
 document.addEventListener('DOMContentLoaded', () => {
   loadBlogPosts();
+  
+  // Listen for localStorage changes (when tags are added from admin panel)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'customLanguageTags' || e.key === 'customTopicTags') {
+      // Refresh filters when custom tags change
+      setupFilters();
+    }
+  });
   
   // Modal functionality
   const modal = document.getElementById('post-modal');

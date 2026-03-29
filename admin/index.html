@@ -1725,6 +1725,11 @@
             loadLanguageTagsList();
             updateTagButtons();
             
+            // Trigger blog filter refresh if we're on blog page
+            if (typeof setupFilters === 'function') {
+                setupFilters();
+            }
+            
             // Clear input
             input.value = '';
             
@@ -1750,6 +1755,11 @@
             loadTopicTagsList();
             updateTagButtons();
             
+            // Trigger blog filter refresh if we're on blog page
+            if (typeof setupFilters === 'function') {
+                setupFilters();
+            }
+            
             // Clear input
             input.value = '';
             
@@ -1767,6 +1777,11 @@
                 loadLanguageTagsList();
                 updateTagButtons();
                 
+                // Trigger blog filter refresh if we're on blog page
+                if (typeof setupFilters === 'function') {
+                    setupFilters();
+                }
+                
                 alert(`Deleted "${language}" from language tags`);
             }
         }
@@ -1781,6 +1796,11 @@
                 // Refresh the display
                 loadTopicTagsList();
                 updateTagButtons();
+                
+                // Trigger blog filter refresh if we're on blog page
+                if (typeof setupFilters === 'function') {
+                    setupFilters();
+                }
                 
                 alert(`Deleted "${topic}" from topic tags`);
             }
