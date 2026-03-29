@@ -12,8 +12,38 @@ class Navigation {
 
     // Initialise the navigation system
     init() {
+        this.createMobileToggle();
         this.createNavigation();
         this.setupEventListeners();
+    }
+
+    // Create mobile navigation toggle button
+    createMobileToggle() {
+        // Create mobile toggle button
+        const mobileToggle = document.createElement('button');
+        mobileToggle.className = 'mobile-nav-toggle';
+        mobileToggle.id = 'mobile-nav-toggle';
+        mobileToggle.setAttribute('aria-label', 'Toggle navigation menu');
+        mobileToggle.innerHTML = `
+            <svg viewBox="0 0 24 24">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        `;
+
+        // Create backdrop for mobile
+        const backdrop = document.createElement('div');
+        backdrop.className = 'mobile-nav-backdrop';
+        backdrop.id = 'mobile-nav-backdrop';
+
+        // Add to body
+        document.body.appendChild(mobileToggle);
+        document.body.appendChild(backdrop);
+
+        // Store references
+        this.mobileToggle = mobileToggle;
+        this.backdrop = backdrop;
     }
 
     // Build the navigation sidebar and inject into the DOM
@@ -102,6 +132,56 @@ class Navigation {
                 localStorage.setItem('theme', isLight ? 'light' : 'dark');
             });
         }
+
+        // Mobile navigation toggle functionality
+        this.mobileToggle.addEventListener('click', () => {
+            this.toggleMobileNav();
+        });
+
+        // Close mobile nav when clicking backdrop
+        this.backdrop.addEventListener('click', () => {
+            this.closeMobileNav();
+        });
+
+        // Close mobile nav when clicking navigation links on mobile
+        this.sidebar.querySelectorAll('a[href]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    this.closeMobileNav();
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                this.closeMobileNav();
+            }
+        });
+    }
+
+    // Toggle mobile navigation
+    toggleMobileNav() {
+        const isOpen = this.sidebar.classList.contains('mobile-open');
+        if (isOpen) {
+            this.closeMobileNav();
+        } else {
+            this.openMobileNav();
+        }
+    }
+
+    // Open mobile navigation
+    openMobileNav() {
+        this.sidebar.classList.add('mobile-open');
+        this.backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close mobile navigation
+    closeMobileNav() {
+        this.sidebar.classList.remove('mobile-open');
+        this.backdrop.classList.remove('active');
+        document.body.style.overflow = '';
     }
 
     // Determine the correct base path based on current location
