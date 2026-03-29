@@ -308,15 +308,12 @@ function openHomepagePostModal(post) {
     document.getElementById('homepage-modal-title').textContent = post.title;
     document.getElementById('homepage-modal-author').textContent = `by ${post.author}`;
     
-    // Handle content with optional image
-    let contentHTML = post.content.replace(/\\n/g, '</p><p>');
-    contentHTML = '<p>' + contentHTML + '</p>';
+    // For ellipsis to work, we need plain text content, not HTML elements
+    // Convert content to plain text by removing HTML and replacing \\n with spaces
+    let plainTextContent = post.content.replace(/\\n/g, ' ');
     
-    if (post.image) {
-        contentHTML = '<div class="blog-post-image"><img src="' + post.image + '" alt="' + post.title + '"></div>' + contentHTML;
-    }
-    
-    document.getElementById('homepage-modal-content').innerHTML = contentHTML;
+    // Use textContent instead of innerHTML for line clamping to work
+    document.getElementById('homepage-modal-content').textContent = plainTextContent;
     
     // Remove tags from homepage modals
     document.getElementById('homepage-modal-tags').innerHTML = '';

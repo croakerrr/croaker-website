@@ -3590,4 +3590,13 @@ main {
         text-overflow: ellipsis !important;
         line-height: 1.5 !important;
     }
+    
+    /* Force desktop sticky notes ellipsis with high specificity */
+    .homepage-post-excerpt {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 4 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
 }
