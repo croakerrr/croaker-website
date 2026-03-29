@@ -84,6 +84,18 @@
                 <!-- Recent post will be loaded here -->
             </div>
         </div>
+        
+        <div id="featured-project-section" class="post-section" style="display: none;">
+            <div id="featured-project-container" class="post-container">
+                <!-- Featured project will be loaded here -->
+            </div>
+        </div>
+        
+        <div id="recent-project-section" class="post-section" style="display: none;">
+            <div id="recent-project-container" class="post-container">
+                <!-- Recent project will be loaded here -->
+            </div>
+        </div>
     </div>
 </div>
 
@@ -115,47 +127,80 @@
 // Homepage posts functionality
 async function loadHomepagePosts() {
     try {
-        const response = await fetch('/api/get-posts');
-        const posts = await response.json();
+        const [postsResponse, projectsResponse] = await Promise.all([
+            fetch('/api/get-posts'),
+            fetch('/api/get-projects')
+        ]);
         
-        if (!posts || posts.length === 0) return;
+        const posts = await postsResponse.json();
+        const projects = await projectsResponse.json();
         
-        // Find pinned post (most recent pinned post)
-        const pinnedPost = posts.find(post => post.pinned);
-        
-        // Find most recent post (that's not pinned) by sorting by date
-        const nonPinnedPosts = posts.filter(post => !post.pinned);
-        let recentPost = null;
-        
-        if (nonPinnedPosts.length > 0) {
-            // Sort by date and take the most recent
-            recentPost = nonPinnedPosts.reduce((newest, current) => {
-                const parseDate = (dateString) => {
-                    if (!dateString) return new Date(0);
-                    const [day, month, year] = dateString.split('/');
-                    return new Date(year, month - 1, day);
-                };
-                
-                const newestDate = parseDate(newest.date);
-                const currentDate = parseDate(current.date);
-                return currentDate > newestDate ? current : newest;
-            });
+        // Handle blog posts
+        if (posts && posts.length > 0) {
+            // Find pinned post (most recent pinned post)
+            const pinnedPost = posts.find(post => post.pinned);
+            
+            // Find most recent post (that's not pinned) by sorting by date
+            const nonPinnedPosts = posts.filter(post => !post.pinned);
+            let recentPost = null;
+            
+            if (nonPinnedPosts.length > 0) {
+                // Sort by date and take the most recent
+                recentPost = nonPinnedPosts.reduce((newest, current) => {
+                    const parseDate = (dateString) => {
+                        if (!dateString) return new Date(0);
+                        const [day, month, year] = dateString.split('/');
+                        return new Date(year, month - 1, day);
+                    };
+                    
+                    const newestDate = parseDate(newest.date);
+                    const currentDate = parseDate(current.date);
+                    return currentDate > newestDate ? current : newest;
+                });
+            }
+            
+            // Show pinned post section if there's a pinned post
+            if (pinnedPost) {
+                document.getElementById('pinned-post-section').style.display = 'block';
+                renderHomepagePost(pinnedPost, 'pinned-post-container', 'pinned');
+            }
+            
+            // Show recent post section if there's a recent post
+            if (recentPost) {
+                document.getElementById('recent-post-section').style.display = 'block';
+                renderHomepagePost(recentPost, 'recent-post-container', 'recent');
+            }
         }
         
-        // Show pinned post section if there's a pinned post
-        if (pinnedPost) {
-            document.getElementById('pinned-post-section').style.display = 'block';
-            renderHomepagePost(pinnedPost, 'pinned-post-container', 'pinned');
-        }
-        
-        // Show recent post section if there's a recent post
-        if (recentPost) {
-            document.getElementById('recent-post-section').style.display = 'block';
-            renderHomepagePost(recentPost, 'recent-post-container', 'recent');
+        // Handle projects
+        if (projects && projects.length > 0) {
+            // Find featured project (most recent featured project)
+            const featuredProject = projects.find(project => project.featured);
+            
+            // Find most recent project (that's not featured) by sorting by creation order (newest first)
+            const nonFeaturedProjects = projects.filter(project => !project.featured);
+            let recentProject = null;
+            
+            if (nonFeaturedProjects.length > 0) {
+                // Take the first (most recent) non-featured project
+                recentProject = nonFeaturedProjects[0];
+            }
+            
+            // Show featured project section if there's a featured project
+            if (featuredProject) {
+                document.getElementById('featured-project-section').style.display = 'block';
+                renderHomepageProject(featuredProject, 'featured-project-container', 'featured-project');
+            }
+            
+            // Show recent project section if there's a recent project
+            if (recentProject) {
+                document.getElementById('recent-project-section').style.display = 'block';
+                renderHomepageProject(recentProject, 'recent-project-container', 'recent-project');
+            }
         }
         
     } catch (error) {
-        console.error('Error loading homepage posts:', error);
+        console.error('Error loading homepage content:', error);
     }
 }
 
@@ -164,8 +209,10 @@ function renderHomepagePost(post, containerId, postType) {
     
     // Define badge text and class for each post type
     const badgeInfo = {
-        pinned: { text: 'PINNED', class: 'pinned' },
-        recent: { text: 'NEW POST', class: 'recent' }
+        pinned: { text: 'PINNED BLOG', class: 'pinned' },
+        recent: { text: 'NEW BLOG', class: 'recent' },
+        'featured-project': { text: 'PINNED PROJECT', class: 'featured-project' },
+        'recent-project': { text: 'NEW PROJECT', class: 'recent-project' }
     };
     
     // Add the sticky note color class to the container
@@ -187,6 +234,41 @@ function renderHomepagePost(post, containerId, postType) {
     
     // Add click handler to open modal
     container.onclick = () => openHomepagePostModal(post);
+}
+
+function renderHomepageProject(project, containerId, projectType) {
+    const container = document.getElementById(containerId);
+    
+    // Define badge text and class for each post type
+    const badgeInfo = {
+        pinned: { text: 'PINNED BLOG', class: 'pinned' },
+        recent: { text: 'NEW BLOG', class: 'recent' },
+        'featured-project': { text: 'PINNED PROJECT', class: 'featured-project' },
+        'recent-project': { text: 'NEW PROJECT', class: 'recent-project' }
+    };
+    
+    // Add the sticky note color class to the container
+    container.className = `post-container ${badgeInfo[projectType].class}`;
+    
+    const imageHTML = project.image ? 
+        `<div class="homepage-post-image"><img src="${project.image}" alt="${project.name}"></div>` : '';
+    
+    container.innerHTML = `
+        <div class="post-badge ${badgeInfo[projectType].class}">${badgeInfo[projectType].text}</div>
+        <div class="homepage-post-title">${project.name}</div>
+        <div class="homepage-post-meta">${project.status || 'Complete'}</div>
+        <div class="homepage-post-excerpt">${project.description}</div>
+        ${imageHTML}
+    `;
+    
+    // Add click handler to open modal (for now just navigate to projects page)
+    container.onclick = () => {
+        if (window.pageTransition) {
+            window.pageTransition.navigateToPage('pages/projects.html');
+        } else {
+            window.location.href = 'pages/projects.html';
+        }
+    };
 }
 
 function openHomepagePostModal(post) {
