@@ -305,6 +305,87 @@
             background: #e55555;
         }
 
+        .tag-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tag-groups {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .tag-group {
+            border: 1px solid var(--fg-light);
+            border-radius: 6px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tag-group-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--fg-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag-btn {
+            background: transparent;
+            border: 1px solid var(--fg-light);
+            color: var(--fg-light);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .tag-btn:hover {
+            background: var(--fg-light);
+            color: var(--bg);
+        }
+
+        .tag-btn.selected {
+            background: var(--fg);
+            color: var(--bg);
+            border-color: var(--fg);
+        }
+
+        .tag-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .clear-tags-btn,
+        .custom-tag-btn {
+            background: transparent;
+            border: 1px solid var(--fg-light);
+            color: var(--fg-light);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-tags-btn:hover,
+        .custom-tag-btn:hover {
+            background: var(--fg-light);
+            color: var(--bg);
+        }
+
         .image-upload-area {
             position: relative;
         }
@@ -555,16 +636,46 @@
                         <input type="date" id="blog-date">
                     </div>
                     <div class="input-field">
-                        <label for="blog-tags">tags (comma-separated)</label>
-                        <input type="text" id="blog-tags" placeholder="javascript, react, learning, university">
-                        <small style="color: var(--fg-light); font-size: 12px; margin-top: 5px; display: block;">
-                            Add tags like: javascript, python, java, react, algorithms, university, project, etc.
-                        </small>
+                        <label for="blog-tags">tags</label>
+                        <div class="tag-selector">
+                            <div class="tag-groups">
+                                <div class="tag-group">
+                                    <span class="tag-group-title">languages</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'javascript')">javascript</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'python')">python</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'java')">java</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'css')">css</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'html')">html</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'react')">react</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'node')">node</button>
+                                    </div>
+                                </div>
+                                <div class="tag-group">
+                                    <span class="tag-group-title">topics</span>
+                                    <div class="tag-buttons">
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'university')">university</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'coursework')">coursework</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'learning')">learning</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'project')">project</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'portfolio')">portfolio</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'algorithms')">algorithms</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'database')">database</button>
+                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'api')">api</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" id="blog-tags" placeholder="Selected tags will appear here" readonly>
+                            <div class="tag-actions">
+                                <button type="button" class="clear-tags-btn" onclick="clearAllTags()">clear all</button>
+                                <button type="button" class="custom-tag-btn" onclick="addCustomTag()">add custom</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="input-field">
                         <label class="checkbox-label">
                             <input type="checkbox" id="blog-pinned">
-                            <span class="checkbox-text">📌 pin this post (appears in homepage featured section)</span>
+                            <span class="checkbox-text">📌 pin this post</span>
                         </label>
                     </div>
                     <div class="button-group">
@@ -806,6 +917,11 @@
             document.getElementById('blog-date').value = '';
             document.getElementById('blog-pinned').checked = false;
             
+            // Clear all selected tag buttons
+            document.querySelectorAll('.tag-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
             // Clear editing state
             const blogForm = document.getElementById('blog-form');
             if (blogForm.dataset.editingId) {
@@ -831,6 +947,47 @@
         function cancelEdit() {
             if (confirm('Are you sure you want to cancel editing? Any changes will be lost.')) {
                 clearBlogForm();
+            }
+        }
+
+        // Tag management functions
+        function toggleTag(button, tagName) {
+            const tagsInput = document.getElementById('blog-tags');
+            let currentTags = tagsInput.value ? tagsInput.value.split(', ').filter(t => t.trim()) : [];
+            
+            if (button.classList.contains('selected')) {
+                // Remove tag
+                currentTags = currentTags.filter(tag => tag !== tagName);
+                button.classList.remove('selected');
+            } else {
+                // Add tag
+                if (!currentTags.includes(tagName)) {
+                    currentTags.push(tagName);
+                }
+                button.classList.add('selected');
+            }
+            
+            tagsInput.value = currentTags.join(', ');
+        }
+
+        function clearAllTags() {
+            document.getElementById('blog-tags').value = '';
+            document.querySelectorAll('.tag-btn.selected').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+        }
+
+        function addCustomTag() {
+            const customTag = prompt('Enter a custom tag:');
+            if (customTag && customTag.trim()) {
+                const tagsInput = document.getElementById('blog-tags');
+                let currentTags = tagsInput.value ? tagsInput.value.split(', ').filter(t => t.trim()) : [];
+                
+                const trimmedTag = customTag.trim();
+                if (!currentTags.includes(trimmedTag)) {
+                    currentTags.push(trimmedTag);
+                    tagsInput.value = currentTags.join(', ');
+                }
             }
         }
 
@@ -1057,6 +1214,19 @@
                 document.getElementById('blog-content').value = post.content || '';
                 document.getElementById('blog-tags').value = post.tags ? post.tags.join(', ') : '';
                 
+                // Set tag buttons based on existing tags
+                document.querySelectorAll('.tag-btn.selected').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                if (post.tags) {
+                    post.tags.forEach(tag => {
+                        const button = document.querySelector(`[onclick*="'${tag}'"]`);
+                        if (button) {
+                            button.classList.add('selected');
+                        }
+                    });
+                }
+                
                 // Set date if it exists
                 if (post.date) {
                     const dateParts = post.date.split('/');
@@ -1067,10 +1237,6 @@
                     }
                 }
                 
-                // Set other fields
-                document.getElementById('blog-year').value = post.year || '';
-                document.getElementById('blog-language').value = post.language || '';
-                document.getElementById('blog-category').value = post.category || '';
                 document.getElementById('blog-pinned').checked = post.pinned || false;
                 
                 // Handle image if it exists
