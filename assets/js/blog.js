@@ -164,7 +164,9 @@ function openPostModal(post) {
   
   // Handle content with optional image
   if (modalContent) {
-    let contentHTML = post.content.replace(/\n/g, '</p><p>');
+    let contentHTML = post.content
+      .replace(/\n\n+/g, '</p><p>') // Convert double+ newlines to paragraph breaks
+      .replace(/\n/g, '<br>'); // Convert single newlines to line breaks
     contentHTML = '<p>' + contentHTML + '</p>';
     
     if (post.image) {
