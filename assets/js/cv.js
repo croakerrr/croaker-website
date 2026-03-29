@@ -5,37 +5,14 @@ const cvData = {
         title: "BSc Computer Science (with a year in industry)",
         company: "University of Kent",
         dates: "2025 - 2029",
-        content: `
-            <p>Currently pursuing a comprehensive computer science degree with an integrated industrial placement year. The program covers fundamental areas including programming, algorithms, data structures, software engineering, and machine learning.</p>
-            
-            <p><strong>Key modules:</strong> Object-Oriented Programming, Web Development, Database Systems, Computer Networks, Artificial Intelligence, Human-Computer Interaction</p>
-            
-            <p><strong>Expected graduation:</strong> First Class Honours with industry experience</p>
-            
-            <p><strong>Industrial placement year:</strong> Planned for 2027-2028, providing real-world experience and industry connections to complement academic learning.</p>
-        `
+        content: ``
     },
     experience: {
         logo: "../images/outlier-logo.png", 
         title: "AI Data Trainer",
         company: "Outlier AI",
         dates: "2025 - present",
-        content: `
-            <p>Specialising in Reinforcement Learning from Human Feedback (RLHF) techniques to improve AI model performance and alignment. Working with large language models to enhance their reasoning capabilities and reduce harmful outputs.</p>
-            
-            <p><strong>Key responsibilities:</strong></p>
-            <ul>
-                <li>Training AI models using human feedback loops and preference learning</li>
-                <li>Implementing RLHF protocols to align model behaviour with human values</li>
-                <li>Evaluating model outputs for accuracy, safety, and ethical compliance</li>
-                <li>Collaborating with research teams to develop improved training methodologies</li>
-                <li>Contributing to data annotation and quality assurance processes</li>
-            </ul>
-            
-            <p><strong>Technical skills applied:</strong> Python, PyTorch, Transformers, Reinforcement Learning, Natural Language Processing, Model Fine-tuning</p>
-            
-            <p><strong>Impact:</strong> Contributing to the development of safer, more aligned AI systems that better understand and respond to human intentions and values.</p>
-        `
+        content: ``
     }
 };
 

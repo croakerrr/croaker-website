@@ -56,14 +56,20 @@ class PageTransition {
     }
 
     navigateToPage(href) {
-        // Hide potentially problematic elements including filter dots
+        // Immediately hide all potential flash-causing elements
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
             themeToggle.style.visibility = 'hidden';
         }
         
-        // Hide any other potential sources of flashing circles
-        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .filter-dot, .nav-logo, .nav-logo-large');
+        // Hide filter dots specifically (these are likely causing the circular flash)
+        const filterDots = document.querySelectorAll('.filter-dot');
+        filterDots.forEach(dot => {
+            dot.style.display = 'none';
+        });
+        
+        // Hide other potentially problematic circular elements
+        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .nav-logo, .nav-logo-large, .close-modal-btn');
         problematicElements.forEach(el => el.style.visibility = 'hidden');
         
         // Trigger slide in animation
@@ -72,7 +78,6 @@ class PageTransition {
         // Start logo animation immediately
         const logo = this.overlay.querySelector('.croaker-logo-transition');
         if (logo) {
-            // Allow only the logo animation
             logo.style.animation = 'croakerSmoothWobble 1.2s ease-out';
         }
         
@@ -92,8 +97,14 @@ class PageTransition {
             themeToggle.style.visibility = 'visible';
         }
         
+        // Restore filter dots specifically
+        const filterDots = document.querySelectorAll('.filter-dot');
+        filterDots.forEach(dot => {
+            dot.style.display = '';
+        });
+        
         // Restore other elements
-        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .filter-dot, .nav-logo, .nav-logo-large');
+        const problematicElements = document.querySelectorAll('.search-container, .filter-container, .nav-logo, .nav-logo-large, .close-modal-btn');
         problematicElements.forEach(el => el.style.visibility = 'visible');
         
         // Start logo animation on page load too

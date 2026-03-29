@@ -160,7 +160,7 @@ function openPostModal(post) {
       { value: post.year.toString(), type: 'year' },
       { value: post.language, type: 'language' }, 
       { value: post.category, type: 'topic' }
-    ];
+    ].filter(tag => tag.value && tag.value !== 'null' && tag.value !== null && tag.value.trim() !== '' && tag.value.toLowerCase() !== 'null');
     
     const tagsHTML = filterTags.map(tag => {
       const tagColor = getTagColor(tag.value, tag.type);
@@ -328,7 +328,7 @@ function renderPosts() {
       { value: post.year.toString(), type: 'year' },
       { value: post.language, type: 'language' }, 
       { value: post.category, type: 'topic' }
-    ].filter(tag => tag.value && tag.value !== 'null' && tag.value.trim() !== '');
+    ].filter(tag => tag.value && tag.value !== 'null' && tag.value !== null && tag.value.trim() !== '' && tag.value.toLowerCase() !== 'null');
     
     const tagsHTML = filterTags.map(tag => {
       const tagColor = getTagColor(tag.value, tag.type);

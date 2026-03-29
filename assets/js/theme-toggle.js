@@ -12,22 +12,39 @@ const sunIcon = `<circle cx="12" cy="12" r="5"></circle>
 const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
 
 function updateIcon() {
-  const svg = document.querySelector('#theme-toggle svg');
-  const isLight = document.body.classList.contains('light-mode');
-  svg.innerHTML = isLight ? moonIcon : sunIcon;
+  try {
+    const svg = document.querySelector('#theme-toggle svg');
+    if (svg) {
+      const isLight = document.body.classList.contains('light-mode');
+      svg.innerHTML = isLight ? moonIcon : sunIcon;
+    }
+  } catch (error) {
+    // Ignore errors when theme-toggle element doesn't exist (using navigation system instead)
+  }
 }
 
 // Check if user has a saved preference
- const savedTheme = localStorage.getItem('theme') || 'dark';
- if (savedTheme === 'light') {
-   document.body.classList.add('light-mode');
- }
-updateIcon();
+try {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  }
+  updateIcon();
+} catch (error) {
+  // Ignore theme toggle errors
+}
 
 // Toggle when button clicked
- document.getElementById('theme-toggle').addEventListener('click', () => {
-   document.body.classList.toggle('light-mode');
-   const isLight = document.body.classList.contains('light-mode');
-   localStorage.setItem('theme', isLight ? 'light' : 'dark');
-   updateIcon();
- });
+try {
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateIcon();
+    });
+  }
+} catch (error) {
+  // Ignore errors - navigation system will handle theme toggle
+}
