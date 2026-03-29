@@ -2316,7 +2316,7 @@ body.light-mode .blog-post:hover .blog-post-thumbnail img {
 }
 
 .modal-backdrop {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -2471,9 +2471,8 @@ body.light-mode .modal-footer {
     font-size: 13px;
     padding: 0.4rem 0.8rem;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--fg);
     font-weight: 500;
+    /* Remove the generic background and color so the specific tag colors work */
 }
 
 .modal-author {
@@ -3504,7 +3503,7 @@ main {
 /* Desktop modal backdrop fix */
 @media (min-width: 769px) {
     .modal-backdrop {
-        position: absolute !important;
+        position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
