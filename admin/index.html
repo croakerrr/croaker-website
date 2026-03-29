@@ -362,6 +362,49 @@
             border-color: var(--fg);
         }
 
+        .tag-btn.custom-tag-btn {
+            position: relative;
+            padding-right: 20px;
+            border-color: #4a90e2;
+            color: #4a90e2;
+        }
+
+        .tag-btn.custom-tag-btn:hover {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .tag-btn.custom-tag-btn.selected {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .remove-tag-btn {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            color: currentColor;
+            border: none;
+            font-size: 10px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .remove-tag-btn:hover {
+            background: rgba(255, 255, 255, 0.6);
+            color: #ff4444;
+        }
+
         .tag-actions {
             display: flex;
             gap: 10px;
@@ -642,26 +685,13 @@
                                 <div class="tag-group">
                                     <span class="tag-group-title">languages</span>
                                     <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'javascript')">javascript</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'python')">python</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'java')">java</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'css')">css</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'html')">html</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'react')">react</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'node')">node</button>
+                                        <!-- Custom language tags will be added here -->
                                     </div>
                                 </div>
                                 <div class="tag-group">
                                     <span class="tag-group-title">topics</span>
                                     <div class="tag-buttons">
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'university')">university</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'coursework')">coursework</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'learning')">learning</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'project')">project</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'portfolio')">portfolio</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'algorithms')">algorithms</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'database')">database</button>
-                                        <button type="button" class="tag-btn" onclick="toggleTag(this, 'api')">api</button>
+                                        <!-- Custom topic tags will be added here -->
                                     </div>
                                 </div>
                             </div>
@@ -780,6 +810,7 @@
             document.getElementById('admin-area').style.display = 'block';
             loadExistingPosts();
             loadExistingProjects();
+            initializeCustomTags();
         }
 
         function showSection(section) {
@@ -872,6 +903,10 @@
             return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
         }
         
+        // Custom tag management
+        let customLanguageTags = new Set();
+        let customTopicTags = new Set();
+        
         function determineLanguage(tags) {
             const languageMap = {
                 'javascript': 'web technologies',
@@ -883,6 +918,24 @@
                 'node': 'web technologies'
             };
             
+            // Check custom language tags first
+            for (const tag of tags) {
+                if (customLanguageTags.has(tag.toLowerCase())) {
+                    // If it's a custom language tag, determine the mapping
+                    const lower = tag.toLowerCase();
+                    if (lower.includes('javascript') || lower.includes('css') || lower.includes('html') || lower.includes('react') || lower.includes('node')) {
+                        return 'web technologies';
+                    } else if (lower.includes('python')) {
+                        return 'python';
+                    } else if (lower.includes('java')) {
+                        return 'java';
+                    } else {
+                        return 'misc'; // Default for unrecognized custom language tags
+                    }
+                }
+            }
+            
+            // Then check predefined mappings
             for (const tag of tags) {
                 const lower = tag.toLowerCase();
                 for (const [key, value] of Object.entries(languageMap)) {
@@ -901,6 +954,22 @@
                 'learning': 'university'
             };
             
+            // Check custom topic tags first
+            for (const tag of tags) {
+                if (customTopicTags.has(tag.toLowerCase())) {
+                    const lower = tag.toLowerCase();
+                    // Map custom topic tags to categories
+                    if (lower.includes('university') || lower.includes('coursework') || lower.includes('learning')) {
+                        return 'university';
+                    } else if (lower.includes('project') || lower.includes('portfolio')) {
+                        return 'project-update';
+                    } else {
+                        return 'misc'; // Default for unrecognized custom topic tags
+                    }
+                }
+            }
+            
+            // Then check predefined mappings
             for (const tag of tags) {
                 const lower = tag.toLowerCase();
                 for (const [key, value] of Object.entries(categoryMap)) {
@@ -908,6 +977,144 @@
                 }
             }
             return 'misc';
+        }
+
+        function isLanguageTag(tag) {
+            const languageKeywords = ['javascript', 'python', 'java', 'css', 'html', 'react', 'node', 'php', 'c++', 'c#', 'go', 'rust', 'swift', 'kotlin', 'typescript', 'vue', 'angular', 'sql', 'mongodb', 'express', 'django', 'flask', 'spring', 'laravel'];
+            const lower = tag.toLowerCase();
+            return languageKeywords.some(keyword => lower.includes(keyword));
+        }
+
+        function addCustomTagToGroup(tag, isLanguage = null) {
+            // Auto-detect if not specified
+            if (isLanguage === null) {
+                isLanguage = isLanguageTag(tag);
+            }
+            
+            if (isLanguage) {
+                if (!customLanguageTags.has(tag)) {
+                    customLanguageTags.add(tag);
+                    addTagButton('languages', tag);
+                }
+            } else {
+                if (!customTopicTags.has(tag)) {
+                    customTopicTags.add(tag);
+                    addTagButton('topics', tag);
+                }
+            }
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('customLanguageTags', JSON.stringify([...customLanguageTags]));
+            localStorage.setItem('customTopicTags', JSON.stringify([...customTopicTags]));
+        }
+
+        function addTagButton(groupType, tag) {
+            // Find the tag group by title text
+            const tagGroups = document.querySelectorAll('.tag-group');
+            let targetGroup = null;
+            
+            for (let group of tagGroups) {
+                const title = group.querySelector('.tag-group-title');
+                if (title && title.textContent.trim() === groupType) {
+                    targetGroup = group;
+                    break;
+                }
+            }
+            
+            if (!targetGroup) return;
+            
+            const tagButtons = targetGroup.querySelector('.tag-buttons');
+            
+            // Check if tag already exists
+            if (tagButtons.querySelector(`[data-tag="${tag}"]`)) return;
+            
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'tag-btn custom-tag-btn';
+            button.setAttribute('data-tag', tag);
+            button.textContent = tag;
+            button.onclick = function() { toggleTag(this, tag); };
+            
+            // Add remove button
+            const removeBtn = document.createElement('span');
+            removeBtn.className = 'remove-tag-btn';
+            removeBtn.textContent = '×';
+            removeBtn.onclick = function(e) { 
+                e.stopPropagation(); 
+                removeCustomTag(tag, groupType); 
+            };
+            
+            button.appendChild(removeBtn);
+            tagButtons.appendChild(button);
+        }
+
+        function removeCustomTag(tag, groupType) {
+            // Remove from sets
+            if (groupType === 'languages') {
+                customLanguageTags.delete(tag);
+            } else {
+                customTopicTags.delete(tag);
+            }
+            
+            // Remove button from UI
+            const button = document.querySelector(`[data-tag="${tag}"]`);
+            if (button) button.remove();
+            
+            // Remove from selected tags if selected
+            const tagsInput = document.getElementById('blog-tags');
+            let currentTags = tagsInput.value ? tagsInput.value.split(', ').filter(t => t.trim()) : [];
+            currentTags = currentTags.filter(t => t !== tag);
+            tagsInput.value = currentTags.join(', ');
+            
+            // Update localStorage
+            localStorage.setItem('customLanguageTags', JSON.stringify([...customLanguageTags]));
+            localStorage.setItem('customTopicTags', JSON.stringify([...customTopicTags]));
+        }
+
+        function initializeCustomTags() {
+            // Load custom tags from localStorage and populate the UI
+            loadCustomTags();
+        }
+
+        function loadCustomTags() {
+            // Load from localStorage
+            const savedLanguageTags = JSON.parse(localStorage.getItem('customLanguageTags') || '[]');
+            const savedTopicTags = JSON.parse(localStorage.getItem('customTopicTags') || '[]');
+            
+            savedLanguageTags.forEach(tag => {
+                customLanguageTags.add(tag);
+                addTagButton('languages', tag);
+            });
+            
+            savedTopicTags.forEach(tag => {
+                customTopicTags.add(tag);
+                addTagButton('topics', tag);
+            });
+        }
+
+        function addCustomTag() {
+            const customTag = prompt('Enter a custom tag:');
+            if (customTag && customTag.trim()) {
+                const trimmedTag = customTag.trim().toLowerCase();
+                
+                // Add to selected tags
+                const tagsInput = document.getElementById('blog-tags');
+                let currentTags = tagsInput.value ? tagsInput.value.split(', ').filter(t => t.trim()) : [];
+                
+                if (!currentTags.includes(trimmedTag)) {
+                    currentTags.push(trimmedTag);
+                    tagsInput.value = currentTags.join(', ');
+                }
+                
+                // Add to appropriate group
+                addCustomTagToGroup(trimmedTag);
+                
+                // Select the new tag button
+                const newButton = document.querySelector(`[data-tag="${trimmedTag}"]`);
+                if (newButton && !newButton.classList.contains('selected')) {
+                    newButton.classList.add('selected');
+                }
+            }
         }
 
         function clearBlogForm() {
@@ -975,20 +1182,6 @@
             document.querySelectorAll('.tag-btn.selected').forEach(btn => {
                 btn.classList.remove('selected');
             });
-        }
-
-        function addCustomTag() {
-            const customTag = prompt('Enter a custom tag:');
-            if (customTag && customTag.trim()) {
-                const tagsInput = document.getElementById('blog-tags');
-                let currentTags = tagsInput.value ? tagsInput.value.split(', ').filter(t => t.trim()) : [];
-                
-                const trimmedTag = customTag.trim();
-                if (!currentTags.includes(trimmedTag)) {
-                    currentTags.push(trimmedTag);
-                    tagsInput.value = currentTags.join(', ');
-                }
-            }
         }
 
         // Image upload functions
@@ -1220,7 +1413,17 @@
                 });
                 if (post.tags) {
                     post.tags.forEach(tag => {
-                        const button = document.querySelector(`[onclick*="'${tag}'"]`);
+                        // First try to find by data-tag attribute (for custom tags)
+                        let button = document.querySelector(`[data-tag="${tag}"]`);
+                        // If not found, try the old onclick method (for any remaining old-style tags)
+                        if (!button) {
+                            button = document.querySelector(`[onclick*="'${tag}'"]`);
+                        }
+                        // If still not found, create the custom tag
+                        if (!button) {
+                            addCustomTagToGroup(tag);
+                            button = document.querySelector(`[data-tag="${tag}"]`);
+                        }
                         if (button) {
                             button.classList.add('selected');
                         }
