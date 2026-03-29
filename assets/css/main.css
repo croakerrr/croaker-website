@@ -1424,7 +1424,7 @@ body.light-mode .post-container.recent-project {
 .homepage-post-title {
     font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     line-height: 1.4;
     margin-top: 2rem;
     display: -webkit-box;
@@ -1451,7 +1451,7 @@ body.light-mode .post-container.recent-project {
 
 .homepage-post-meta {
     font-size: 0.7rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     opacity: 0.8;
     font-weight: 500;
 }
