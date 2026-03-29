@@ -2136,6 +2136,13 @@ body.light-mode .blog-post:hover {
     color: var(--fg-light);
     line-height: 1.4;
     margin-bottom: 1.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Clamp preview to 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    hyphens: auto;
 }
 
 .blog-post-footer {
@@ -2238,6 +2245,7 @@ body.light-mode .blog-tag[data-color="gray"] {
 /* Blog post layout */
 .blog-post-content {
     flex: 1;
+    min-width: 0; /* Allow content to shrink within flex container to prevent overflow */
 }
 
 .blog-post-thumbnail {
