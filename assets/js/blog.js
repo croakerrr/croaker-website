@@ -51,7 +51,7 @@ async function loadBlogPosts() {
       
     const languages = allPosts.length > 0 ?
       [...new Set(allPosts.map(p => p.language))].sort() :
-      ['web technologies', 'java', 'python', 'general'];
+      ['web technologies', 'java', 'python'];
       
     const categories = allPosts.length > 0 ?
       [...new Set(allPosts.map(p => p.category))].sort() :
