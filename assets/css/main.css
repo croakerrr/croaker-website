@@ -1449,14 +1449,17 @@ body.light-mode .post-container.recent-project {
     font-size: 0.7rem;
     line-height: 1.3;
     flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 4 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     opacity: 0.9;
     padding-right: 90px; /* Make space for the photo */
     padding-bottom: 10px; /* Make space for the photo */
+    /* Debug border to see if the element is working */
+    border: 1px solid red;
+    max-height: calc(1.3 * 0.7rem * 4); /* Force max height */
 }
 
 .homepage-post-image {
@@ -1780,13 +1783,16 @@ body.light-mode .view-full-btn:hover {
     .homepage-post-excerpt {
         font-size: 0.65rem;
         line-height: 1.2;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 3 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
         padding-right: 10px;
         padding-bottom: 5px;
+        /* Debug border for mobile */
+        border: 1px solid blue;
+        max-height: calc(1.2 * 0.65rem * 3); /* Force max height */
     }
 
     .post-badge {
