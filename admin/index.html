@@ -890,6 +890,7 @@
             loadExistingProjects();
             initializeCustomTags();
             loadTagManagement();
+            updateTagButtons();
         }
 
         function showSection(section) {
@@ -993,26 +994,26 @@
             }
             
             const languageMap = {
-                'javascript': 'web technologies',
+                'javascript': 'web-technologies',
                 'python': 'python', 
                 'java': 'java',
-                'css': 'web technologies',
-                'html': 'web technologies',
-                'react': 'web technologies',
-                'node': 'web technologies',
-                'typescript': 'web technologies',
-                'vue': 'web technologies',
-                'angular': 'web technologies',
-                'sass': 'web technologies',
-                'scss': 'web technologies',
-                'bootstrap': 'web technologies',
-                'tailwind': 'web technologies',
-                'express': 'web technologies',
-                'nextjs': 'web technologies',
-                'next': 'web technologies',
-                'svelte': 'web technologies',
-                'php': 'web technologies',
-                'laravel': 'web technologies',
+                'css': 'web-technologies',
+                'html': 'web-technologies',
+                'react': 'web-technologies',
+                'node': 'web-technologies',
+                'typescript': 'web-technologies',
+                'vue': 'web-technologies',
+                'angular': 'web-technologies',
+                'sass': 'web-technologies',
+                'scss': 'web-technologies',
+                'bootstrap': 'web-technologies',
+                'tailwind': 'web-technologies',
+                'express': 'web-technologies',
+                'nextjs': 'web-technologies',
+                'next': 'web-technologies',
+                'svelte': 'web-technologies',
+                'php': 'web-technologies',
+                'laravel': 'web-technologies',
                 'django': 'python',
                 'flask': 'python',
                 'pandas': 'python',
@@ -1040,14 +1041,14 @@
                         if (lower.includes(key)) return value;
                     }
                     
-                    // Fallback to web technologies for most programming-related terms
+                    // Fallback to web-technologies for most programming-related terms
                     if (lower.includes('js') || lower.includes('frontend') || lower.includes('backend') || 
                         lower.includes('web') || lower.includes('framework') || lower.includes('library')) {
-                        return 'web technologies';
+                        return 'web-technologies';
                     }
                     
                     // Default for unrecognized custom language tags
-                    return 'web technologies';
+                    return 'web-technologies';
                 }
             }
             
@@ -1761,7 +1762,7 @@
         
         function loadLanguageTagsList() {
             const container = document.getElementById('language-tags-list');
-            const predefinedLanguages = ['web technologies', 'python', 'java'];
+            const predefinedLanguages = ['web-technologies', 'python', 'java'];
             
             // Get custom languages from localStorage
             const customLanguages = Array.from(customLanguageTags);
@@ -1875,6 +1876,85 @@
                 
                 alert(`Deleted "${topic}" from topic tags`);
             }
+        }
+        
+        function updateTagButtons() {
+            // Clear existing buttons
+            const languageButtons = document.querySelector('.tag-group:first-child .tag-buttons');
+            const topicButtons = document.querySelector('.tag-group:last-child .tag-buttons');
+            
+            if (!languageButtons || !topicButtons) return;
+            
+            languageButtons.innerHTML = '';
+            topicButtons.innerHTML = '';
+            
+            // Add predefined language tags (cannot be deleted)
+            const predefinedLanguages = ['web-technologies', 'python', 'java'];
+            predefinedLanguages.forEach(lang => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'tag-btn';
+                button.setAttribute('data-tag', lang);
+                button.textContent = lang;
+                button.onclick = function() { toggleTag(this, lang); };
+                languageButtons.appendChild(button);
+            });
+            
+            // Add custom language tags (can be deleted)
+            customLanguageTags.forEach(lang => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'tag-btn custom-tag-btn';
+                button.setAttribute('data-tag', lang);
+                button.textContent = lang;
+                button.onclick = function() { toggleTag(this, lang); };
+                
+                // Add remove button for custom tags
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'remove-tag-btn';
+                removeBtn.textContent = '×';
+                removeBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    removeCustomTag(lang);
+                };
+                button.appendChild(removeBtn);
+                
+                languageButtons.appendChild(button);
+            });
+            
+            // Add predefined topic tags (cannot be deleted)  
+            const predefinedTopics = ['university', 'project-update', 'misc'];
+            predefinedTopics.forEach(topic => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'tag-btn';
+                button.setAttribute('data-tag', topic);
+                button.textContent = topic;
+                button.onclick = function() { toggleTag(this, topic); };
+                topicButtons.appendChild(button);
+            });
+            
+            // Add custom topic tags (can be deleted)
+            customTopicTags.forEach(topic => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'tag-btn custom-tag-btn';
+                button.setAttribute('data-tag', topic);
+                button.textContent = topic;
+                button.onclick = function() { toggleTag(this, topic); };
+                
+                // Add remove button for custom tags
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'remove-tag-btn';
+                removeBtn.textContent = '×';
+                removeBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    removeCustomTag(topic);
+                };
+                button.appendChild(removeBtn);
+                
+                topicButtons.appendChild(button);
+            });
         }
     </script>
 

@@ -44,7 +44,7 @@ function setupFilters() {
     
   // Only show predefined language and topic categories in filters
   // Custom tags get mapped to these predefined categories when used in posts
-  const languages = ['web technologies', 'java', 'python'];
+  const languages = ['web-technologies', 'java', 'python'];
   const categories = ['university', 'project-update', 'misc'];
   
   // Create filter options
@@ -341,9 +341,10 @@ function renderPosts() {
     // Check if post is pinned
     const pinnedLabel = post.pinned ? '<span class="pinned-post-badge">PINNED</span>' : '';
     
-    // Add thumbnail image if post has one
+    // Add thumbnail area - always present for consistent layout
     const thumbnailHTML = post.image ? 
-      '<div class="blog-post-thumbnail"><img src="' + post.image + '" alt="' + post.title + '"></div>' : '';
+      '<div class="blog-post-thumbnail"><img src="' + post.image + '" alt="' + post.title + '"></div>' : 
+      '<div class="blog-post-thumbnail blog-post-thumbnail-placeholder"></div>';
     
     postElement.innerHTML = '<div class="blog-post-content">' +
       '<div class="blog-post-header">' +

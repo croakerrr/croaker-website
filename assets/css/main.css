@@ -1737,6 +1737,12 @@ body.light-mode .blog-post-thumbnail {
     border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
+.blog-post-thumbnail-placeholder {
+    /* Invisible placeholder that maintains layout space */
+    opacity: 0;
+    pointer-events: none;
+}
+
 body.light-mode .blog-post-thumbnail img {
     border-color: rgba(0, 0, 0, 0.08);
     box-shadow: 
