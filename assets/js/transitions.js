@@ -56,28 +56,45 @@ class PageTransition {
     }
 
     navigateToPage(href) {
-        // Hide all potential circular elements during transition to prevent flash
+        // Comprehensive element hiding to prevent PC rendering artifacts
         const themeToggle = document.getElementById('theme-toggle');
         const mobileToggle = document.querySelector('.nav-toggle');
         const logoElements = document.querySelectorAll('.nav-logo, .nav-logo-large');
+        const sidebar = document.querySelector('.nav-sidebar-fixed');
+        const allButtons = document.querySelectorAll('button');
         
-        // Hide theme toggle and other elements
+        // Hide theme toggle and other elements aggressively
         if (themeToggle) {
-            themeToggle.style.transition = 'opacity 0.1s ease-out';
+            themeToggle.style.transition = 'none';
             themeToggle.style.opacity = '0';
             themeToggle.style.visibility = 'hidden';
+            themeToggle.style.display = 'none';
         }
         
         // Hide mobile toggle
         if (mobileToggle) {
             mobileToggle.style.opacity = '0';
             mobileToggle.style.visibility = 'hidden';
+            mobileToggle.style.display = 'none';
+        }
+        
+        // Hide entire sidebar temporarily
+        if (sidebar) {
+            sidebar.style.opacity = '0';
+            sidebar.style.visibility = 'hidden';
         }
         
         // Hide logo elements temporarily
         logoElements.forEach(logo => {
             logo.style.opacity = '0';
             logo.style.visibility = 'hidden';
+        });
+        
+        // Hide all buttons temporarily to prevent any circular artifacts
+        allButtons.forEach(btn => {
+            if (!btn.closest('.page-transition')) {
+                btn.style.opacity = '0';
+            }
         });
         
         // Trigger slide in animation and logo animation
@@ -99,25 +116,38 @@ class PageTransition {
         // Start with overlay covering screen, then slide out
         this.overlay.style.transform = 'translateX(0)';
         
-        // Ensure elements are visible on page load
+        // Restore all elements on page load
         const themeToggle = document.getElementById('theme-toggle');
         const mobileToggle = document.querySelector('.nav-toggle');
         const logoElements = document.querySelectorAll('.nav-logo, .nav-logo-large');
+        const sidebar = document.querySelector('.nav-sidebar-fixed');
+        const allButtons = document.querySelectorAll('button');
         
         if (themeToggle) {
             themeToggle.style.opacity = '1';
             themeToggle.style.visibility = 'visible';
+            themeToggle.style.display = '';
             themeToggle.style.transition = 'all 0.2s ease';
         }
         
         if (mobileToggle) {
             mobileToggle.style.opacity = '1';
             mobileToggle.style.visibility = 'visible';
+            mobileToggle.style.display = '';
+        }
+        
+        if (sidebar) {
+            sidebar.style.opacity = '1';
+            sidebar.style.visibility = 'visible';
         }
         
         logoElements.forEach(logo => {
             logo.style.opacity = '1';
             logo.style.visibility = 'visible';
+        });
+        
+        allButtons.forEach(btn => {
+            btn.style.opacity = '1';
         });
         
         // Start logo animation on page load too

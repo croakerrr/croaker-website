@@ -127,7 +127,18 @@ function openPostModal(post) {
   const modalTags = document.getElementById('modal-tags');
   const modalAuthor = document.getElementById('modal-author');
   
-  if (modalDate) modalDate.textContent = post.date;
+  if (modalDate) {
+    let dateHTML = post.date;
+    
+    // Add badges for pinned and newest posts
+    if (post.pinned) {
+      dateHTML = '<span class="pinned-post-badge">📌 PINNED</span>' + dateHTML;
+    } else if (isNewestPost(post)) {
+      dateHTML = '<span class="new-post-badge">✨ NEW POST</span>' + dateHTML;
+    }
+    
+    modalDate.innerHTML = dateHTML;
+  }
   if (modalTitle) modalTitle.textContent = post.title;
   
   // Handle content with optional image
