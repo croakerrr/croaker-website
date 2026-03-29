@@ -268,8 +268,20 @@ function renderHomepagePost(post, containerId, postType) {
         ${tagsHTML}
     `;
     
-    // Add click handler to open modal
-    container.onclick = () => openHomepagePostModal(post);
+    // Remove any existing click handlers to prevent conflicts
+    container.onclick = null;
+    container.removeEventListener('click', container._clickHandler);
+    
+    // Add click handler to open modal with proper event handling
+    container._clickHandler = (event) => {
+        // Don't open modal if clicking on image (it has its own handler)
+        if (event.target.tagName === 'IMG') {
+            return;
+        }
+        openHomepagePostModal(post);
+    };
+    
+    container.addEventListener('click', container._clickHandler);
 }
 
 function renderHomepageProject(project, containerId, projectType) {
@@ -297,8 +309,20 @@ function renderHomepageProject(project, containerId, projectType) {
         ${imageHTML}
     `;
     
-    // Add click handler to open modal
-    container.onclick = () => openHomepageProjectModal(project);
+    // Remove any existing click handlers to prevent conflicts
+    container.onclick = null;
+    container.removeEventListener('click', container._clickHandler);
+    
+    // Add click handler to open modal with proper event handling
+    container._clickHandler = (event) => {
+        // Don't open modal if clicking on image (it has its own handler)
+        if (event.target.tagName === 'IMG') {
+            return;
+        }
+        openHomepageProjectModal(project);
+    };
+    
+    container.addEventListener('click', container._clickHandler);
 }
 
 function openHomepagePostModal(post) {

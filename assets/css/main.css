@@ -1183,6 +1183,9 @@ body.light-mode .homepage-posts-section {
         0 2px 4px rgba(0, 0, 0, 0.1),
         0 8px 16px rgba(0, 0, 0, 0.1);
     transform: rotate(-1deg);
+    /* Ensure consistent pointer events */
+    pointer-events: auto;
+    user-select: none;
 }
 
 /* Corner fold effect */
@@ -1475,6 +1478,8 @@ body.light-mode .post-container.recent-project {
     transform: rotate(8deg);
     z-index: 2;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Ensure proper pointer events for image clicks */
+    pointer-events: auto;
 }
 
 .homepage-post-image:hover {
