@@ -735,7 +735,7 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+    z-index: 1002;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -941,7 +941,7 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+    z-index: 1002;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1604,6 +1604,16 @@ body.light-mode .view-full-btn:hover {
         min-height: 180px;
         transform: rotate(0deg);
         padding: 1rem;
+    }
+    
+    /* Hide tape effects on mobile */
+    .post-container::before {
+        display: none;
+    }
+    
+    .homepage-post-image::before,
+    .homepage-post-image::after {
+        display: none;
     }
     
     .post-container:nth-child(2) {
