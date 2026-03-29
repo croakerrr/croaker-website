@@ -179,6 +179,11 @@ function openPostModal(post) {
   
   modal.classList.add('active');
   document.body.classList.add('modal-open');
+  
+  // Set the hash in URL to reflect the current post (without triggering hashchange)
+  if (post.id && !window.location.hash.includes(post.id)) {
+    history.replaceState(null, null, window.location.pathname + window.location.search + '#' + post.id);
+  }
 }
 
 function closePostModal() {
@@ -188,6 +193,11 @@ function closePostModal() {
   
   // Remove padding compensation
   document.body.style.paddingRight = '';
+  
+  // Clear the hash from URL without triggering hashchange event
+  if (window.location.hash) {
+    history.replaceState(null, null, window.location.pathname + window.location.search);
+  }
 }
 
 function createFilterOptions(containerId, values, filterType) {
@@ -391,4 +401,35 @@ document.addEventListener('DOMContentLoaded', () => {
       closePostModal();
     }
   });
+
+  // Check for hash in URL to auto-open specific blog post
+  checkForPostHash();
+
+  // Listen for hash changes to open posts when navigating with browser back/forward
+  window.addEventListener('hashchange', checkForPostHash);
 });
+
+// Function to check if URL has a blog post hash and open that post
+function checkForPostHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#')) {
+    const postId = hash.substring(1);
+    // Wait a bit for posts to load, then try to open the modal
+    setTimeout(() => {
+      openPostModalById(postId);
+    }, 500);
+  }
+}
+
+// Function to open a specific blog post modal by ID
+function openPostModalById(postId) {
+  // Find the post with the matching ID
+  const postElements = document.querySelectorAll('.blog-post');
+  for (const element of postElements) {
+    if (element.dataset.postId === postId) {
+      // Trigger click on this post to open the modal
+      element.click();
+      break;
+    }
+  }
+}
