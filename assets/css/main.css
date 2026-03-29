@@ -1717,13 +1717,13 @@ body.light-mode .view-full-btn:hover {
     .modal-body #homepage-project-modal-content {
         font-size: 14px !important;
         line-height: 1.5 !important;
-        max-height: none !important;
-        /* Limit to 3 lines with ellipsis */
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        /* Allow full content on small screens with scroll if needed */
+        max-height: calc(100vh - 160px) !important;
+        display: block !important;
+        overflow-y: auto !important;
+        -webkit-line-clamp: unset !important;
+        -webkit-box-orient: unset !important;
+        text-overflow: unset !important;
     }
     
     .modal-actions {
