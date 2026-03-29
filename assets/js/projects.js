@@ -40,10 +40,10 @@ function createProjectCard(project) {
     
     // Handle project image or use placeholder
     const imageHtml = project.image 
-        ? `<img src="${project.image}" alt="${project.title}" class="project-img">`
+        ? `<img src="${project.image}" alt="${project.name || project.title}" class="project-img">`
         : `<div class="project-placeholder">
              <div class="placeholder-icon">📁</div>
-             <div class="placeholder-text">${project.title}</div>
+             <div class="placeholder-text">${project.name || project.title}</div>
            </div>`;
     
     card.innerHTML = `
@@ -53,7 +53,7 @@ function createProjectCard(project) {
             ${project.featured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
         </div>
         <div class="project-info">
-            <h3>${project.title}</h3>
+            <h3>${project.name || project.title}</h3>
             <p>${project.description}</p>
             <div class="project-tech">
                 ${techTags}
@@ -66,7 +66,7 @@ function createProjectCard(project) {
 
 function openProjectModal(project) {
     const modal = document.getElementById('project-modal');
-    document.getElementById('modal-project-title').textContent = project.title;
+    document.getElementById('modal-project-title').textContent = project.name || project.title;
     
     // Handle tech field (could be 'tech' or 'technologies')
     const techArray = project.tech || project.technologies || [];
@@ -83,7 +83,7 @@ function openProjectModal(project) {
     if (project.image) {
         modalImage.src = project.image;
         modalImage.style.display = 'block';
-        modalImage.alt = project.title;
+        modalImage.alt = project.name || project.title;
     } else {
         modalImage.style.display = 'none';
     }

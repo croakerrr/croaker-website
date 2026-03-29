@@ -1379,11 +1379,11 @@ body.light-mode .post-container.recent-project {
 }
 
 .homepage-post-excerpt {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    font-size: 0.7rem;
+    line-height: 1.3;
     flex: 1;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     opacity: 0.9;

@@ -116,6 +116,23 @@
     </div>
 </div>
 
+<!-- Project Modal for Homepage -->
+<div id="homepage-project-modal" class="post-modal">
+    <div class="modal-backdrop" onclick="closeHomepageProjectModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button onclick="closeHomepageProjectModal()" class="close-modal-btn">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-date" id="homepage-project-modal-status"></div>
+            <h1 class="modal-title" id="homepage-project-modal-title"></h1>
+            <div class="modal-tags" id="homepage-project-modal-tech"></div>
+            <div class="modal-content-text" id="homepage-project-modal-content"></div>
+            <div class="modal-links" id="homepage-project-modal-links"></div>
+        </div>
+    </div>
+</div>
+
 </main>
 
 </body>
@@ -255,20 +272,14 @@ function renderHomepageProject(project, containerId, projectType) {
     
     container.innerHTML = `
         <div class="post-badge ${badgeInfo[projectType].class}">${badgeInfo[projectType].text}</div>
-        <div class="homepage-post-title">${project.name}</div>
+        <div class="homepage-post-title">${project.name || project.title || 'Untitled Project'}</div>
         <div class="homepage-post-meta">${project.status || 'Complete'}</div>
         <div class="homepage-post-excerpt">${project.description}</div>
         ${imageHTML}
     `;
     
-    // Add click handler to open modal (for now just navigate to projects page)
-    container.onclick = () => {
-        if (window.pageTransition) {
-            window.pageTransition.navigateToPage('pages/projects.html');
-        } else {
-            window.location.href = 'pages/projects.html';
-        }
-    };
+    // Add click handler to open modal
+    container.onclick = () => openHomepageProjectModal(project);
 }
 
 function openHomepagePostModal(post) {
@@ -297,6 +308,58 @@ function openHomepagePostModal(post) {
 
 function closeHomepageModal() {
     const modal = document.getElementById('homepage-post-modal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function openHomepageProjectModal(project) {
+    const modal = document.getElementById('homepage-project-modal');
+    
+    document.getElementById('homepage-project-modal-status').textContent = project.status || 'Complete';
+    document.getElementById('homepage-project-modal-title').textContent = project.name || project.title || 'Untitled Project';
+    
+    // Handle technologies as tags
+    let techHTML = '';
+    if (project.technologies && project.technologies.length > 0) {
+        techHTML = project.technologies.map(tech => 
+            `<span class="blog-tag">${tech.trim()}</span>`
+        ).join('');
+    }
+    document.getElementById('homepage-project-modal-tech').innerHTML = techHTML;
+    
+    // Handle content with optional image
+    let contentHTML = (project.content || project.description || '').replace(/\\n/g, '</p><p>');
+    contentHTML = '<p>' + contentHTML + '</p>';
+    
+    if (project.image) {
+        contentHTML = '<div class="blog-post-image"><img src="' + project.image + '" alt="' + (project.name || project.title || 'Project') + '"></div>' + contentHTML;
+    }
+    
+    document.getElementById('homepage-project-modal-content').innerHTML = contentHTML;
+    
+    // Handle project links
+    let linksHTML = '';
+    if (project.githubUrl || project.liveUrl || project.blogUrl) {
+        linksHTML = '<div class="project-links" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">';
+        if (project.githubUrl) {
+            linksHTML += `<a href="${project.githubUrl}" target="_blank" class="project-link" style="margin-right: 1rem;">GitHub Repository</a>`;
+        }
+        if (project.liveUrl) {
+            linksHTML += `<a href="${project.liveUrl}" target="_blank" class="project-link" style="margin-right: 1rem;">Live Demo</a>`;
+        }
+        if (project.blogUrl) {
+            linksHTML += `<a href="${project.blogUrl}" target="_blank" class="project-link">Related Blog Post</a>`;
+        }
+        linksHTML += '</div>';
+    }
+    document.getElementById('homepage-project-modal-links').innerHTML = linksHTML;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeHomepageProjectModal() {
+    const modal = document.getElementById('homepage-project-modal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
