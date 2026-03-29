@@ -1616,6 +1616,21 @@ body.light-mode .view-full-btn:hover {
         display: none;
     }
     
+    /* Hide images completely on mobile sticky notes */
+    .homepage-post-image {
+        display: none;
+    }
+    
+    /* Remove image space padding on mobile */
+    .homepage-post-excerpt {
+        padding-right: 0;
+        padding-bottom: 5px;
+    }
+    
+    .homepage-post-tags {
+        padding-right: 0;
+    }
+    
     .post-container:nth-child(2) {
         transform: rotate(0deg);
     }
