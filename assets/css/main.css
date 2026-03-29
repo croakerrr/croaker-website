@@ -1631,6 +1631,49 @@ body.light-mode .view-full-btn:hover {
         padding-right: 0;
     }
     
+    /* Smaller modals on mobile */
+    .modal-content {
+        width: 85% !important;
+        max-width: 400px !important;
+        max-height: 60vh !important;
+        top: 30% !important;
+        transform: translate(-50%, -50%) scale(0.9) !important;
+    }
+    
+    .modal-content.active {
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
+    
+    .modal-body {
+        padding: 1.25rem !important;
+        overflow-y: auto;
+    }
+    
+    .modal-body h1 {
+        font-size: 20px !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .modal-body #modal-content,
+    .modal-body #modal-project-content,
+    .modal-body #homepage-modal-content,
+    .modal-body #homepage-project-modal-content {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        max-height: 30vh;
+        overflow-y: auto;
+    }
+    
+    /* Smaller image popup on mobile */
+    .image-popup-content {
+        max-width: 80% !important;
+        max-height: 50vh !important;
+    }
+    
+    .image-popup-body img {
+        max-height: 40vh !important;
+    }
+    
     .post-container:nth-child(2) {
         transform: rotate(0deg);
     }
