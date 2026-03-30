@@ -1272,8 +1272,11 @@ a:hover {
     width: 24px;
     height: 24px;
     display: block;
-    fill: currentColor;
-    stroke: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 /* If you want the PNG to adapt to dark mode inversion like the SVGs, use .invert-on-dark on the <img> */
