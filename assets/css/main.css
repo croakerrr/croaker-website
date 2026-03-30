@@ -1176,7 +1176,13 @@ a:hover {
     display: flex;
     justify-content: flex-start;
     gap: 2rem;
-    margin: 0.5rem 0 2rem 0;
+    /* reduced vertical margins to tighten spacing around lets-connect */
+    margin: 0.25rem 0 1rem 0;
+}
+
+/* Reduce bottom margin of the intro paragraph when followed by the lets-connect image */
+.title-logo-container + p {
+    margin-bottom: 0.25rem;
 }
 
 .social-link {
