@@ -562,8 +562,8 @@ h1 {
 
 /* "Let's connect" image above social icons */
 .lets-connect-container {
-    margin-top: 0.25rem; /* reduced gap above */
-    margin-bottom: 0.25rem; /* reduced gap below */
+    margin-top: 0.125rem; /* halved again */
+    margin-bottom: 0.125rem; /* halved again */
     display: block;
 }
 
