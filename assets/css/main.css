@@ -526,6 +526,12 @@ h1 {
     height: 60px;
 }
 
+/* Smaller variant for CV title to avoid pixelation */
+.page-handwritten-cv {
+    height: 40px;
+    image-rendering: auto;
+}
+
 .main-logo {
     width: 120px;
     height: 120px;
@@ -533,7 +539,8 @@ h1 {
 }
 
 .light-mode .handwritten-title,
-.light-mode .page-handwritten {
+.light-mode .page-handwritten,
+.light-mode .page-handwritten-cv {
     filter: brightness(0) saturate(100%) invert(0%);
 }
 
