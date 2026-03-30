@@ -546,17 +546,17 @@ h1 {
 
 /* Sticky photo (above homepage posts) */
 .sticky-photo-container {
-    margin-bottom: 0.75rem;
+    margin-top: 0.5rem; /* sit under the section border */
+    margin-bottom: 0.5rem;
     display: block;
 }
 
 .sticky-photo {
-    height: 80px;
+    height: 40px; /* half of previous 80px */
     width: auto;
     display: block;
     object-fit: cover;
     border-radius: 6px;
-    /* removed drop shadow to match design */
     margin-left: 0; /* left aligned with main content */
 }
 
