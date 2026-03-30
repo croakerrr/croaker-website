@@ -496,13 +496,27 @@ h1 {
 /* TITLE WITH LOGOS */
 .title-logo-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     gap: 1.5rem;
     margin-bottom: 2rem;
     margin-left: -2rem;
     min-height: 120px;
-    width: fit-content;
+    width: 100%; /* allow handwritten logo to use available width */
+}
+
+/* Make the handwritten title responsive: allow it to grow and not be cropped */
+.title-logo-container .handwritten-title {
+    flex: 1 1 auto;
+    max-width: calc(100% - 140px);
+    height: auto;
+    max-height: 80px;
+    width: auto;
+}
+
+/* Ensure main logo keeps fixed width */
+.title-logo-container .main-logo {
+    flex: 0 0 120px;
 }
 
 .main-logo {
