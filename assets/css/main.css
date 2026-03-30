@@ -522,13 +522,18 @@ h1 {
     transition: filter 0.3s ease;
 }
 
+.page-handwritten {
+    height: 60px;
+}
+
 .main-logo {
     width: 120px;
     height: 120px;
     flex-shrink: 0;
 }
 
-.light-mode .handwritten-title {
+.light-mode .handwritten-title,
+.light-mode .page-handwritten {
     filter: brightness(0) saturate(100%) invert(0%);
 }
 
