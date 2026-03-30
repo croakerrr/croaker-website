@@ -572,19 +572,20 @@ h1 {
 }
 
 /* Force smaller sizes for specific page handwritten images */
+/* Use explicit class selector to ensure these target the blog and projects title images */
+.title-logo-container .handwritten-title.page-handwritten[src$="blog.png"],
 .title-logo-container img[src$="/blog.png"],
-.title-logo-container img[src$="blog.png"],
 .handwritten-title[src$="blog.png"] {
-    height: 28px !important;
-    max-height: 28px !important;
+    height: 48px !important;
+    max-height: 48px !important;
     width: auto !important;
 }
 
+.title-logo-container .handwritten-title.page-handwritten[src$="projects.png"],
 .title-logo-container img[src$="/projects.png"],
-.title-logo-container img[src$="projects.png"],
 .handwritten-title[src$="projects.png"] {
-    height: 28px !important;
-    max-height: 28px !important;
+    height: 48px !important;
+    max-height: 48px !important;
     width: auto !important;
 }
 
