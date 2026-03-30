@@ -1267,6 +1267,15 @@ a:hover {
     filter: none;
 }
 
+/* Inline SVG social icons: fill with currentColor so they adapt to theme */
+.social-svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+    fill: currentColor;
+    stroke: none;
+}
+
 /* If you want the PNG to adapt to dark mode inversion like the SVGs, use .invert-on-dark on the <img> */
 .invert-on-dark.social-img {
     filter: brightness(0) saturate(100%) invert(100%);
