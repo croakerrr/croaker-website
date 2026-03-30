@@ -561,6 +561,16 @@ h1 {
     filter: brightness(0) saturate(100%) invert(0%);
 }
 
+/* Cap handwritten title width to avoid oversized uploads pushing layout */
+.title-logo-container .handwritten-title,
+.handwritten-title {
+    max-width: 420px !important;
+    height: auto !important;
+    max-height: 80px !important;
+    width: auto !important;
+    display: block;
+}
+
 /* Sticky photo (above homepage posts) */
 .sticky-photo-container {
     margin-top: 0.5rem; /* sit under the section border */
