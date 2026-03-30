@@ -1277,6 +1277,8 @@ a:hover {
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
+    overflow: visible; /* allow strokes to extend beyond viewBox without clipping */
+    vector-effect: non-scaling-stroke; /* keep stroke thickness consistent */
 }
 
 /* If you want the PNG to adapt to dark mode inversion like the SVGs, use .invert-on-dark on the <img> */
