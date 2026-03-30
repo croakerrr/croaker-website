@@ -544,6 +544,52 @@ h1 {
     filter: brightness(0) saturate(100%) invert(0%);
 }
 
+/* Sticky photo (above homepage posts) */
+.sticky-photo-container {
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.sticky-photo {
+    height: 120px;
+    width: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    margin-left: 0; /* left aligned with main content */
+}
+
+/* "Let's connect" image above social icons */
+.lets-connect-container {
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.lets-connect-img {
+    height: 48px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    margin-left: 0; /* left aligned */
+}
+
+/* Ensure dark/light inversion for these images if they are monochrome */
+.sticky-photo,
+.lets-connect-img {
+    filter: none; /* leave color as-is by default */
+}
+
+/* If you want them to invert like handwritten titles, add .invert-on-dark */
+.invert-on-dark {
+    filter: brightness(0) saturate(100%) invert(100%);
+    transition: filter 0.3s ease;
+}
+
+.light-mode .invert-on-dark {
+    filter: brightness(0) saturate(100%) invert(0%);
+}
+
 h2 {
     font-size: 14px;
     font-weight: 400;
