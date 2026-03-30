@@ -509,9 +509,15 @@ h1 {
 .homepage-name {
     font-family: var(--font);
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.25rem; /* mobile-friendly base */
     margin: 0 0 0.25rem 0;
     letter-spacing: 0.5px;
+    color: var(--fg); /* theme-aware: white in dark, black in light */
+}
+n@media (min-width: 900px) {
+    .homepage-name {
+        font-size: 2rem; /* larger on desktop */
+    }
 }
 
 .homepage-tagline {
