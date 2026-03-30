@@ -612,17 +612,18 @@ h1 {
 
 /* "Let's connect" image above social icons */
 .lets-connect-container {
-    margin-top: 0.125rem; /* halved again */
-    margin-bottom: 0.125rem; /* halved again */
+    margin-top: 0.25rem; /* move down slightly from text above */
+    margin-bottom: 0rem; /* reduce gap to social icons below */
     display: block;
 }
 
 .lets-connect-img {
-    height: 20px;
+    height: 28px; /* slightly larger */
     width: auto;
     display: block;
     object-fit: contain;
     margin-left: 0; /* left aligned */
+    margin-bottom: 0.125rem; /* small spacing below image */
 }
 
 /* Ensure dark/light inversion for these images if they are monochrome */
@@ -1227,7 +1228,7 @@ a:hover {
     justify-content: flex-start;
     gap: 2rem;
     /* reduced vertical margins to tighten spacing around lets-connect */
-    margin: 0.25rem 0 1rem 0;
+    margin: 0.125rem 0 1rem 0; /* slightly tighter to bring icons closer */
 }
 
 /* Reduce bottom margin of the intro paragraph when followed by the lets-connect image */
@@ -1265,6 +1266,7 @@ a:hover {
     display: block;
     object-fit: contain;
     filter: none;
+    vertical-align: middle; /* keep baseline alignment consistent */
 }
 
 /* Inline SVG social icons: fill with currentColor so they adapt to theme */
