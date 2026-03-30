@@ -571,6 +571,28 @@ h1 {
     display: block;
 }
 
+/* Force smaller sizes for specific page handwritten images */
+.title-logo-container img[src$="/blog.png"],
+.title-logo-container img[src$="blog.png"],
+.handwritten-title[src$="blog.png"] {
+    height: 28px !important;
+    max-height: 28px !important;
+    width: auto !important;
+}
+
+.title-logo-container img[src$="/projects.png"],
+.title-logo-container img[src$="projects.png"],
+.handwritten-title[src$="projects.png"] {
+    height: 28px !important;
+    max-height: 28px !important;
+    width: auto !important;
+}
+
+/* Fallback: keep previous page-handwritten rule if selector misses */
+.page-handwritten {
+    height: 36px;
+}
+
 /* Sticky photo (above homepage posts) */
 .sticky-photo-container {
     margin-top: 0.5rem; /* sit under the section border */
